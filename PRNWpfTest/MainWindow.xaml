@@ -6,7 +6,29 @@
         xmlns:local="clr-namespace:PRNWpfTest"
         mc:Ignorable="d"
         Title="MainWindow" Height="450" Width="800">
-    <Grid>
-        
-    </Grid>
+    <DockPanel>
+        <Menu>
+            
+        </Menu>
+        <TabControl>
+            <TabItem Header="Исходные данные">
+                
+            </TabItem>
+            <TabItem Header="Процесс сжатия">
+                
+            </TabItem>
+            <TabItem Header="Процесс распаковки">
+                
+            </TabItem>
+            <TabItem Header="Оценка производительности">
+                
+            </TabItem>
+            <TabItem Header="Визуализация">
+                
+            </TabItem>
+        </TabControl>
+        <StatusBar>
+            
+        </StatusBar>
+    </DockPanel>
 </Window>
