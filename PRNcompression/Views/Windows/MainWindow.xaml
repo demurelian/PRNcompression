@@ -4,14 +4,20 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:PRNcompression"
+        xmlns:vm="clr-namespace:PRNcompression.ViewModels"
         mc:Ignorable="d"
         Title="PRNcompression" Height="450" Width="650">
+    <Window.DataContext>
+        <vm:MainWindowViewModel/>
+    </Window.DataContext>
     <DockPanel>
         <Menu DockPanel.Dock="Top">
 
         </Menu>
         <StatusBar DockPanel.Dock="Bottom">
-
+            <StatusBarItem>
+                <TextBlock Text="{Binding ProgramStatus}"/>
+            </StatusBarItem>
         </StatusBar>
         <TabControl>
             <TabItem Header="Исходные данные">
