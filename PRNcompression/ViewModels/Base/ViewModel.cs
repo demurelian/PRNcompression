@@ -3,7 +3,7 @@ using System.Runtime.CompilerServices;
 
 namespace PRNcompression.ViewModels.Base
 {
-    internal abstract class ViewModel
+    internal abstract class ViewModel : INotifyPropertyChanged
     {
         public event PropertyChangedEventHandler PropertyChanged;
         protected virtual void OnPropertyChanged([CallerMemberName] string PropertyName = null)
