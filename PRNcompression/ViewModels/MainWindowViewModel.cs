@@ -13,12 +13,26 @@ namespace PRNcompression.ViewModels
             set => Set(ref _ProgramStatus, value);
         }
 
+        private string _ByteNumberStr = "OK";
+        public string ByteNumberStr
+        {
+            get => _ByteNumberStr;
+            set
+            {
+                if (ValidateByteNumberStr(value))
+                    Set(ref _ByteNumberStr, value);
+                else
+
+            }
+        }
+
         public ICommand GenerateDataCommand { get; }
         private bool CanGenerateDataCommandExecute(object p) => true;
         private void OnGenerateDataCommandExecute(object p)
         {
             ProgramStatus = "GenerateData Executed";
         }
+
 
         public MainWindowViewModel() 
         {

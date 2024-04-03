@@ -39,7 +39,8 @@
                             </Grid.ColumnDefinitions>
                             <TextBlock Padding="5" Grid.Column="0" Text="Размер данных:"
                                        Foreground="Blue"/>
-                            <TextBox Padding="5" Grid.Column="1" Foreground="Blue"/>
+                            <TextBox Padding="5" Grid.Column="1" Foreground="Blue"
+                                     Text="{Binding ByteNumberStr}"/>
                             <TextBlock Padding="5" Foreground="Blue"
                                        Grid.Column="2" Text="Байт" 
                                        HorizontalAlignment="Right"/>
