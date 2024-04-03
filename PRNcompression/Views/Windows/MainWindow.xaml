@@ -22,7 +22,7 @@
                         <ColumnDefinition Width="1*"/>
                     </Grid.ColumnDefinitions>
                     <StackPanel Grid.Column="1">
-                        <TextBlock HorizontalAlignment="Center"
+                        <TextBlock HorizontalAlignment="Center" Foreground="Blue"
                                    FontWeight="Bold" FontSize="18"
                                    Text="Генерация исходных данных"/>
                         <Grid Margin="0,2,0,0">
@@ -31,18 +31,20 @@
                                 <ColumnDefinition Width="*"/>
                                 <ColumnDefinition Width="35"/>
                             </Grid.ColumnDefinitions>
-                            <TextBlock Padding="5" Grid.Column="0" Text="Размер данных:"/>
+                            <TextBlock Padding="5" Grid.Column="0" Text="Размер данных:"
+                                       Foreground="Blue"/>
                             <TextBox Padding="5" Grid.Column="1"/>
-                            <TextBlock Padding="5"
+                            <TextBlock Padding="5" Foreground="Blue"
                                        Grid.Column="2" Text="Байт" 
                                        HorizontalAlignment="Right"/>
                         </Grid>
-                        <Button Margin="0,5,0,0"
+                        <Button Margin="0,5,0,0" Style="{StaticResource CustomButton}"
                                 Height="25" Content="Сгенерировать"/>
                         <TextBlock Margin="0,10,0,0"
                                    HorizontalAlignment="Center" Text="ИЛИ"
+                                   Foreground="Blue"
                                    FontWeight="Bold" FontSize="18"/>
-                        <Button Margin="0,10,0,0" Height="25"
+                        <Button Margin="0,10,0,0" Height="25" Style="{StaticResource CustomButton}"
                                 Content="Выбор файла с данными"/>
                     </StackPanel>
                     <StackPanel Grid.Column="1">
