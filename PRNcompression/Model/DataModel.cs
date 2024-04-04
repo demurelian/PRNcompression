@@ -8,9 +8,9 @@ namespace PRNcompression.Model
         public byte[] resultData { get; set; }
         public byte[] GenerateBytes(int size)
         {
-            byte[] byteArray = new byte[size];
-            new Random().NextBytes(byteArray);
-            return byteArray;
+            initialData = new byte[size];
+            new Random().NextBytes(initialData);
+            return initialData;
         }
 
         public DataModel() { }
