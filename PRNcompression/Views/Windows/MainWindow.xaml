@@ -55,7 +55,36 @@
                                    FontWeight="Bold" FontSize="18"/>
                         <Button Margin="0,10,0,0" Height="25" Style="{StaticResource CustomButton}"
                                 Content="Выбор файла с данными"/>
-                        <GroupBox Grid.Column="1" Height="200" Header="Директории">
+                        <Grid>
+                            <StackPanel>
+                                <GroupBox Grid.Column="1" Height="200" Header="Директории">
+                                    <GroupBox.Resources>
+                                        <HierarchicalDataTemplate DataType="{x:Type vm:DiskViewModel}"
+                                              ItemsSource="{Binding DirectoryItems}">
+                                            <StackPanel Orientation="Horizontal">
+                                                <fa:ImageAwesome Height="12" Icon="HddOutline" Foreground="LightBlue" Margin="0,0,3,0"/>
+                                                <TextBlock Text="{Binding Name}" />
+                                            </StackPanel>
+                                        </HierarchicalDataTemplate>
+                                        <HierarchicalDataTemplate DataType="{x:Type vm:DirectoryViewModel}"
+                                              ItemsSource="{Binding DirectoryItems}">
+                                            <StackPanel Orientation="Horizontal">
+                                                <fa:ImageAwesome Height="12" Icon="Folder" Foreground="Gold" Margin="0,0,3,0"/>
+                                                <TextBlock Text="{Binding Name}"/>
+                                            </StackPanel>
+                                        </HierarchicalDataTemplate>
+                                        <DataTemplate DataType="{x:Type vm:FileViewModel}">
+                                            <StackPanel Orientation="Horizontal">
+                                                <fa:ImageAwesome Height="12" Icon="File" Foreground="LightGray"/>
+                                                <TextBlock Text="{Binding Name}"/>
+                                            </StackPanel>
+                                        </DataTemplate>
+                                    </GroupBox.Resources>
+                                    <TreeView ItemsSource="{Binding Disks}"/>
+                                </GroupBox>
+                            </StackPanel>
+                        </Grid>
+                        <!--<GroupBox Grid.Column="1" Height="200" Header="Директории">
                             <GroupBox.Resources>
                                 <HierarchicalDataTemplate DataType="{x:Type vm:DirectoryViewModel}"
                                       ItemsSource="{Binding DirectoryItems}">
@@ -72,7 +101,7 @@
                                 </DataTemplate>
                             </GroupBox.Resources>
                             <TreeView ItemsSource="{Binding DiskRootDir.DirectoryItems}"/>
-                        </GroupBox>
+                        </GroupBox>-->
                     </StackPanel>
                     
                 </Grid>

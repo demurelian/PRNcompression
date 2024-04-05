@@ -8,18 +8,23 @@ using System.Windows.Data;
 using System.ComponentModel;
 using System.Collections;
 using System.Collections.Generic;
+using static PRNcompression.ViewModels.DirectoryViewModel;
+using System.IO;
+using System;
 
 namespace PRNcompression.ViewModels
 {
     internal class MainWindowViewModel : ViewModel
     {
-        public DirectoryViewModel DiskRootDir { get; } = new DirectoryViewModel("d:\\");
-        private DirectoryViewModel _SelectedDirectory;
-        public DirectoryViewModel SelectedDirectory
-        {
-            get => _SelectedDirectory;
-            set => Set(ref _SelectedDirectory, value);
-        }
+        public ObservableCollection<DiskViewModel> Disks { get; set; }
+
+        //public DirectoryViewModel DiskRootDir { get; } = new DirectoryViewModel("d:\\");
+        //private DirectoryViewModel _SelectedDirectory;
+        //public DirectoryViewModel SelectedDirectory
+        //{
+        //    get => _SelectedDirectory;
+        //    set => Set(ref _SelectedDirectory, value);
+        //}
 
         private IEnumerable<byte> _InitialBytes;
         public IEnumerable<byte> InitialBytes
@@ -60,6 +65,37 @@ namespace PRNcompression.ViewModels
         public MainWindowViewModel() 
         {
             GenerateDataCommand = new LambdaCommand(OnGenerateDataCommandExecute, CanGenerateDataCommandExecute);
+            Disks = new ObservableCollection<DiskViewModel>();
+
+            // Simulating some data (replace with your logic)
+            foreach (var drive in DriveInfo.GetDrives())
+            {
+                var diskViewModel = new DiskViewModel(drive.Name);
+                try
+                {
+                    foreach (var directory in drive.RootDirectory.GetDirectories())
+                    {
+                        var directoryViewModel = new DirectoryViewModel(directory.Name);
+                        try
+                        {
+                            foreach (var file in directory.GetFiles())
+                            {
+                                directoryViewModel.DirectoryItems.Add(new FileViewModel(file.Name));
+                            }
+                        }
+                        catch (UnauthorizedAccessException UAE)
+                        {
+
+                        }
+                        diskViewModel.DirectoryItems.Add(directoryViewModel);
+                    }
+                }
+                catch (UnauthorizedAccessException UAE)
+                {
+
+                }
+                Disks.Add(diskViewModel);
+            }
         }
     }
 }
