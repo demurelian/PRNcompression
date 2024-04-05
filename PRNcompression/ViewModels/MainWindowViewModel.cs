@@ -2,13 +2,31 @@
 using PRNcompression.ViewModels.Base;
 using PRNcompression.Services;
 using System.Windows.Input;
+using System.Collections.ObjectModel;
 using PRNcompression.Model;
+using System.Windows.Data;
+using System.ComponentModel;
+using System.Collections;
+using System.Collections.Generic;
 
 namespace PRNcompression.ViewModels
 {
     internal class MainWindowViewModel : ViewModel
     {
-        private DataModel _DataModel;
+        public DirectoryViewModel DiskRootDir { get; } = new DirectoryViewModel("d:\\");
+        private DirectoryViewModel _SelectedDirectory;
+        public DirectoryViewModel SelectedDirectory
+        {
+            get => _SelectedDirectory;
+            set => Set(ref _SelectedDirectory, value);
+        }
+
+        private IEnumerable<byte> _InitialBytes;
+        public IEnumerable<byte> InitialBytes
+        {
+            get => _InitialBytes;
+            private set => Set(ref _InitialBytes, value);
+        }
 
         private string _ProgramStatus = "OK";
         public string ProgramStatus
@@ -31,8 +49,8 @@ namespace PRNcompression.ViewModels
             var generate_size = ValidationHelper.ValidateByteNumberString(_ByteNumberStr);
             if (generate_size > 0)
             {
-                _DataModel.GenerateBytes(generate_size);
-                //ProgramStatus = "GenerateData Executed";
+                InitialBytes = DataModel.GenerateBytes(generate_size);
+                ProgramStatus = "Data Generated";
             } else
             {
                 ProgramStatus = "Wrong Number";
@@ -42,7 +60,6 @@ namespace PRNcompression.ViewModels
         public MainWindowViewModel() 
         {
             GenerateDataCommand = new LambdaCommand(OnGenerateDataCommandExecute, CanGenerateDataCommandExecute);
-            _DataModel = new DataModel();
         }
     }
 }

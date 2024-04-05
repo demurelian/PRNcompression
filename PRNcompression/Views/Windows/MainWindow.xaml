@@ -4,7 +4,8 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:PRNcompression"
-        xmlns:vm="clr-namespace:PRNcompression.ViewModels"
+        xmlns:vm="clr-namespace:PRNcompression.ViewModels" 
+        xmlns:fa="http://schemas.fontawesome.io/icons/"
         mc:Ignorable="d"
         Title="PRNcompression" Height="450" Width="650">
     <Window.DataContext>
@@ -12,7 +13,7 @@
     </Window.DataContext>
     <DockPanel>
         <Menu DockPanel.Dock="Top">
-
+            
         </Menu>
         <StatusBar DockPanel.Dock="Bottom">
             <StatusBarItem>
@@ -54,9 +55,26 @@
                                    FontWeight="Bold" FontSize="18"/>
                         <Button Margin="0,10,0,0" Height="25" Style="{StaticResource CustomButton}"
                                 Content="Выбор файла с данными"/>
+                        <GroupBox Grid.Column="1" Height="200" Header="Директории">
+                            <GroupBox.Resources>
+                                <HierarchicalDataTemplate DataType="{x:Type vm:DirectoryViewModel}"
+                                      ItemsSource="{Binding DirectoryItems}">
+                                    <StackPanel Orientation="Horizontal">
+                                        <fa:ImageAwesome Height="12" Icon="Folder" Foreground="Gold" Margin="0,0,3,0"/>
+                                        <TextBlock Text="{Binding Name}"/>
+                                    </StackPanel>
+                                </HierarchicalDataTemplate>
+                                <DataTemplate DataType="{x:Type vm:FileViewModel}">
+                                    <StackPanel Orientation="Horizontal">
+                                        <fa:ImageAwesome Height="12" Icon="File" Foreground="LightGray"/>
+                                        <TextBlock Text="{Binding Name}"/>
+                                    </StackPanel>
+                                </DataTemplate>
+                            </GroupBox.Resources>
+                            <TreeView ItemsSource="{Binding DiskRootDir.DirectoryItems}"/>
+                        </GroupBox>
                     </StackPanel>
-                    <StackPanel Grid.Column="1">
-                    </StackPanel>
+                    
                 </Grid>
             </TabItem>
             <TabItem Header="Процесс сжатия">
@@ -69,7 +87,11 @@
 
             </TabItem>
             <TabItem Header="Визуализация">
-
+                <DataGrid ItemsSource="{Binding InitialBytes}" RowHeight="20">
+                    <DataGrid.Columns>
+                        <DataGridTextColumn Header="Value" Binding="{Binding}"/>
+                    </DataGrid.Columns>
+                </DataGrid>
             </TabItem>
         </TabControl>
     </DockPanel>

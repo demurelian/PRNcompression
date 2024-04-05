@@ -6,29 +6,16 @@
         xmlns:local="clr-namespace:PRNWpfTest"
         mc:Ignorable="d"
         Title="TEST" Height="450" Width="800">
-    <DockPanel>
-        <Menu>
-            
-        </Menu>
-        <TabControl>
-            <TabItem Header="Исходные данные">
-                
-            </TabItem>
-            <TabItem Header="Процесс сжатия">
-                
-            </TabItem>
-            <TabItem Header="Процесс распаковки">
-                
-            </TabItem>
-            <TabItem Header="Оценка производительности">
-                
-            </TabItem>
-            <TabItem Header="Визуализация">
-                
-            </TabItem>
-        </TabControl>
-        <StatusBar>
-            
-        </StatusBar>
-    </DockPanel>
+    <Grid>
+        <TreeView Name="fileTreeView" ItemsSource="{Binding}">
+            <TreeView.Resources>
+                <HierarchicalDataTemplate DataType="{x:Type local:FileSystemItem}" ItemsSource="{Binding Children}">
+                    <StackPanel Orientation="Horizontal">
+                        <Image Width="16" Height="16" Margin="0,0,5,0" Source="{Binding Icon}" />
+                        <TextBlock Text="{Binding Name}" />
+                    </StackPanel>
+                </HierarchicalDataTemplate>
+            </TreeView.Resources>
+        </TreeView>
+    </Grid>
 </Window>
