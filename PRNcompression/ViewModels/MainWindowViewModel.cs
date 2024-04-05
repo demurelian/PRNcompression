@@ -11,20 +11,41 @@ using System.Collections.Generic;
 using static PRNcompression.ViewModels.DirectoryViewModel;
 using System.IO;
 using System;
+using System.Windows;
 
 namespace PRNcompression.ViewModels
 {
     internal class MainWindowViewModel : ViewModel
     {
-        public ObservableCollection<DiskViewModel> Disks { get; set; }
+        private ObservableCollection<DirectoryViewModel> _Disks;
+        public ObservableCollection<DirectoryViewModel> Disks
+        {
+            get => _Disks;
+            set => Set(ref _Disks, value);
+        }
 
         //public DirectoryViewModel DiskRootDir { get; } = new DirectoryViewModel("d:\\");
-        //private DirectoryViewModel _SelectedDirectory;
-        //public DirectoryViewModel SelectedDirectory
-        //{
-        //    get => _SelectedDirectory;
-        //    set => Set(ref _SelectedDirectory, value);
-        //}
+        
+        
+        private FileViewModel _SelectedFile;
+        public FileViewModel SelectedFile
+        {
+            get => SelectedFile;
+            set
+            {
+                Set(ref _SelectedFile, value);
+                ProgramStatus = _SelectedFile.Name;
+            }
+        }
+
+        public ICommand FileSelectedCommand { get; }
+        private bool CanFileSelectedCommandExecute(object p) => true;
+        private void OnFileSelectedCommandExecute(object p)
+        {
+            if (p is FileViewModel selectedFile)
+                SelectedFile = selectedFile;
+            ProgramStatus = "Selected " + SelectedFile.Name;
+        }
 
         private IEnumerable<byte> _InitialBytes;
         public IEnumerable<byte> InitialBytes
@@ -65,36 +86,14 @@ namespace PRNcompression.ViewModels
         public MainWindowViewModel() 
         {
             GenerateDataCommand = new LambdaCommand(OnGenerateDataCommandExecute, CanGenerateDataCommandExecute);
-            Disks = new ObservableCollection<DiskViewModel>();
+            FileSelectedCommand = new LambdaCommand(OnFileSelectedCommandExecute, CanFileSelectedCommandExecute);
+            Disks = new ObservableCollection<DirectoryViewModel>();
 
             // Simulating some data (replace with your logic)
             foreach (var drive in DriveInfo.GetDrives())
             {
-                var diskViewModel = new DiskViewModel(drive.Name);
-                try
-                {
-                    foreach (var directory in drive.RootDirectory.GetDirectories())
-                    {
-                        var directoryViewModel = new DirectoryViewModel(directory.Name);
-                        try
-                        {
-                            foreach (var file in directory.GetFiles())
-                            {
-                                directoryViewModel.DirectoryItems.Add(new FileViewModel(file.Name));
-                            }
-                        }
-                        catch (UnauthorizedAccessException UAE)
-                        {
-
-                        }
-                        diskViewModel.DirectoryItems.Add(directoryViewModel);
-                    }
-                }
-                catch (UnauthorizedAccessException UAE)
-                {
-
-                }
-                Disks.Add(diskViewModel);
+                var dir = new DirectoryViewModel(drive.Name);
+                Disks.Add(dir);
             }
         }
     }

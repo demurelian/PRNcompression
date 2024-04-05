@@ -1,4 +1,9 @@
-﻿using System.Windows;
+﻿using PRNcompression.ViewModels;
+using System;
+using System.Diagnostics.Eventing.Reader;
+using System.Linq.Expressions;
+using System.Windows;
+using System.Windows.Media.Media3D;
 
 namespace PRNcompression
 {
@@ -10,6 +15,19 @@ namespace PRNcompression
         public MainWindow()
         {
             InitializeComponent();
+        }
+
+        private void TreeView_SelectedItemChanged(object sender, RoutedPropertyChangedEventArgs<object> e)
+        {
+            try
+            {
+                var selectedItem = (FileViewModel)e.NewValue;
+                StatusTextBlock.Text = selectedItem.Path;
+            }
+            catch (InvalidCastException castEx)
+            {
+
+            }
         }
     }
 }
