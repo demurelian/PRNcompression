@@ -16,18 +16,5 @@ namespace PRNcompression
         {
             InitializeComponent();
         }
-
-        private void TreeView_SelectedItemChanged(object sender, RoutedPropertyChangedEventArgs<object> e)
-        {
-            try
-            {
-                var selectedItem = (FileViewModel)e.NewValue;
-                FilePathText.Text = selectedItem.Path;
-            }
-            catch (InvalidCastException castEx)
-            {
-                FilePathText.Text = null;
-            }
-        }
     }
 }
