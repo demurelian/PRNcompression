@@ -17,7 +17,10 @@
         </Menu>
         <StatusBar DockPanel.Dock="Bottom">
             <StatusBarItem>
-                <TextBlock x:Name="StatusTextBlock" Text="{Binding ProgramStatus}"/>
+                <TextBlock x:Name="StatusText" Text="{Binding ProgramStatus, Mode=TwoWay}"/>
+            </StatusBarItem>
+            <StatusBarItem>
+                <TextBlock x:Name="FilePathText" Text="{Binding FilePath, Mode=TwoWay}"/>
             </StatusBarItem>
         </StatusBar>
         <TabControl>
@@ -77,7 +80,7 @@
                                     <TreeView ItemsSource="{Binding Disks}" SelectedItemChanged="TreeView_SelectedItemChanged"/>
                                 </GroupBox>
                                 <Button Height="25" Style="{StaticResource CustomButton}"
-                                        Content="Выбрать"/>
+                                        Content="Выбрать" Command="{Binding FileSelectedCommand}"/>
                             </StackPanel>
                         </Grid>
                     </StackPanel>

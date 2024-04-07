@@ -12,20 +12,38 @@ using static PRNcompression.ViewModels.DirectoryViewModel;
 using System.IO;
 using System;
 using System.Windows;
+using PRNcompression.Infrastructure;
 
 namespace PRNcompression.ViewModels
 {
     internal class MainWindowViewModel : ViewModel
     {
+        private string _ProgramStatus = "OK";
+        public string ProgramStatus
+        {
+            get => _ProgramStatus;
+            set => Set(ref _ProgramStatus, value);
+        }
+        private int _Progress;
+        public int Progress
+        {
+            get => _Progress;
+            set => Set(ref _Progress, value);
+        }
+        private string _FilePath = null;
+        public string FilePath
+        {
+            get => _FilePath;
+            set => Set(ref _FilePath, value);
+        }
+
         private ObservableCollection<DirectoryViewModel> _Disks;
         public ObservableCollection<DirectoryViewModel> Disks
         {
             get => _Disks;
             set => Set(ref _Disks, value);
         }
-
         //public DirectoryViewModel DiskRootDir { get; } = new DirectoryViewModel("d:\\");
-        
         
         private FileViewModel _SelectedFile;
         public FileViewModel SelectedFile
@@ -42,9 +60,11 @@ namespace PRNcompression.ViewModels
         private bool CanFileSelectedCommandExecute(object p) => true;
         private void OnFileSelectedCommandExecute(object p)
         {
-            if (p is FileViewModel selectedFile)
-                SelectedFile = selectedFile;
-            ProgramStatus = "Selected " + SelectedFile.Name;
+            if (FilePath != null)
+            {
+                var file = new FileInfo(FilePath);
+                
+            }
         }
 
         private IEnumerable<byte> _InitialBytes;
@@ -52,13 +72,6 @@ namespace PRNcompression.ViewModels
         {
             get => _InitialBytes;
             private set => Set(ref _InitialBytes, value);
-        }
-
-        private string _ProgramStatus = "OK";
-        public string ProgramStatus
-        {
-            get => _ProgramStatus;
-            set => Set(ref _ProgramStatus, value);
         }
 
         private string _ByteNumberStr;

@@ -22,11 +22,11 @@ namespace PRNcompression
             try
             {
                 var selectedItem = (FileViewModel)e.NewValue;
-                StatusTextBlock.Text = selectedItem.Path;
+                FilePathText.Text = selectedItem.Path;
             }
             catch (InvalidCastException castEx)
             {
-
+                FilePathText.Text = null;
             }
         }
     }
