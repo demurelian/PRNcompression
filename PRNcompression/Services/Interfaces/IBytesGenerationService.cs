@@ -2,7 +2,7 @@
 
 namespace PRNcompression.Services.Interfaces
 {
-    internal interface IBytesGenerationService
+    interface IBytesGenerationService
     {
         IEnumerable<byte> GenerateBytes(string byteNumStr);
     }

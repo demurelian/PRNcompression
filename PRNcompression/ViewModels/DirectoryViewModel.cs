@@ -1,62 +1,12 @@
 ﻿using PRNcompression.ViewModels.Base;
 using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
 
 namespace PRNcompression.ViewModels
 {
-    //public class ItemViewModel
-    //{
-    //    public string Name { get; set; }
-    //}
-
-    //internal class DiskViewModel : DirectoryViewModel
-    //{
-    //    string DiskName;
-
-    //    public DiskViewModel(string name)
-    //    {
-    //        DiskName = name;
-    //        _DirectoryInfo = new DirectoryInfo(name);
-    //    }
-    //}
-
-    //public class DirectoryViewModel : ItemViewModel
-    //{
-    //    public ObservableCollection<ItemViewModel> DirectoryItems { get; set; }
-
-    //    public DirectoryViewModel(string name)
-    //    {
-    //        Name = name;
-    //        DirectoryItems = new ObservableCollection<ItemViewModel>();
-    //    }
-    //    public static IEnumerable<DirectoryViewModel> SubDirectories(DirectoryInfo directoryInfo)
-    //    {
-    //        try
-    //        {
-    //            return directoryInfo
-    //                .EnumerateDirectories()
-    //                .Select(dir => new DirectoryViewModel(dir.FullName));
-    //        }
-    //        catch (UnauthorizedAccessException e)
-    //        {
-    //            Debug.WriteLine(e);
-    //        }
-    //        return Enumerable.Empty<DirectoryViewModel>();
-    //    }
-    //}
-
-    //public class FileViewModel : ItemViewModel
-    //{
-    //    public FileViewModel(string name)
-    //    {
-    //        Name = name;
-    //    }
-    //}
-
     class DirectoryViewModel : ViewModel
     {
         private readonly DirectoryInfo _DirectoryInfo;
