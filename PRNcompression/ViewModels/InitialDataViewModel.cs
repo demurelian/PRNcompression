@@ -1,6 +1,6 @@
 ﻿using PRNcompression.Infrastructure.Commands;
-using PRNcompression.Model;
 using PRNcompression.Services;
+using PRNcompression.Services.Interfaces;
 using PRNcompression.ViewModels.Base;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -12,6 +12,7 @@ namespace PRNcompression.ViewModels
     internal class InitialDataViewModel : ViewModel
     {
         MainWindowViewModel MainModel;
+        IBytesGenerationService _BytesGenerationService;
 
         private ObservableCollection<DirectoryViewModel> _Disks;
         public ObservableCollection<DirectoryViewModel> Disks
@@ -49,20 +50,12 @@ namespace PRNcompression.ViewModels
         private bool CanGenerateDataCommandExecute(object p) => true;
         private void OnGenerateDataCommandExecute(object p)
         {
-            var generate_size = ValidationHelper.ValidateByteNumberString(_ByteNumberStr);
-            if (generate_size > 0)
-            {
-                InitialBytes = DataModel.GenerateBytes(generate_size);
-                MainModel.ProgramStatus = "Data Generated";
-            }
-            else
-            {
-                MainModel.ProgramStatus = "Wrong Number";
-            }
+            InitialBytes = _BytesGenerationService.GenerateBytes(_ByteNumberStr);
         }
 
         public InitialDataViewModel()
         {
+            _BytesGenerationService = new BytesGenerationService();
             GenerateDataCommand = new LambdaCommand(OnGenerateDataCommandExecute, CanGenerateDataCommandExecute);
             FileSelectedCommand = new LambdaCommand(OnFileSelectedCommandExecute, CanFileSelectedCommandExecute);
             Disks = new ObservableCollection<DirectoryViewModel>();

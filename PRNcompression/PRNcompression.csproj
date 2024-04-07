@@ -79,7 +79,10 @@
     </Compile>
     <Compile Include="Infrastructure\Commands\Base\Command.cs" />
     <Compile Include="Infrastructure\Commands\LambdaCommand.cs" />
-    <Compile Include="Model\DataModel.cs" />
+    <Compile Include="Services\BytesFromBinService.cs" />
+    <Compile Include="Services\BytesGenerationService.cs" />
+    <Compile Include="Services\Interfaces\IBytesFromBinService.cs" />
+    <Compile Include="Services\Interfaces\IBytesGenerationService.cs" />
     <Compile Include="Services\ValidationHelper.cs" />
     <Compile Include="ViewModels\Base\ViewModel.cs" />
     <Compile Include="ViewModels\DirectoryViewModel.cs" />
@@ -119,6 +122,7 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Data\" />
+    <Folder Include="Model\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
