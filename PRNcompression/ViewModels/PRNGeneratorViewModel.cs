@@ -19,7 +19,7 @@ namespace PRNcompression.ViewModels
         {
             int result = -1;
             var size = ValidationHelper.ValidateNumberString(BitNumStr);
-            if (size > 0)
+            if (size > 0 && size < 32)
                 result = _PRNGenerationService.PRNGeneration(SelectedType.Key, size);
             ResultStr = result.ToString();
         }

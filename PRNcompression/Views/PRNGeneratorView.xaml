@@ -45,7 +45,7 @@
             <TextBlock Text="Типы ПРЧ и их структура:" HorizontalAlignment="Center" FontWeight="Bold"/>
             <DataGrid ItemsSource="{Binding TypesDiscriptions}" AutoGenerateColumns="False" Margin="0,5,0,0">
                 <DataGrid.Columns>
-                    <DataGridTextColumn Header="Тип ПРЧ" Binding="{Binding Key}" Width="*" TextBlock.TextAlignment="Center">
+                    <DataGridTextColumn IsReadOnly="True" Header="Тип ПРЧ" Binding="{Binding Key}" Width="*" TextBlock.TextAlignment="Center">
                         <DataGridTextColumn.HeaderStyle>
                             <Style TargetType="{x:Type DataGridColumnHeader}">
                                 <Setter Property="HorizontalContentAlignment" Value="Center"/>
@@ -57,7 +57,7 @@
                             </Style>
                         </DataGridTextColumn.ElementStyle>
                     </DataGridTextColumn>
-                    <DataGridTextColumn Header="Вид ПРЧ" Binding="{Binding Value}" Width="*">
+                    <DataGridTextColumn IsReadOnly="True" Header="Вид ПРЧ" Binding="{Binding Value}" Width="*" CanUserSort="False">
                         <DataGridTextColumn.HeaderStyle>
                             <Style TargetType="{x:Type DataGridColumnHeader}">
                                 <Setter Property="HorizontalContentAlignment" Value="Center"/>
