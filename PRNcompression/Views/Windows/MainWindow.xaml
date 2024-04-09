@@ -8,7 +8,8 @@
         xmlns:vm="clr-namespace:PRNcompression.ViewModels" 
         xmlns:fa="http://schemas.fontawesome.io/icons/"
         mc:Ignorable="d"
-        Title="PRNcompression" Height="450" Width="650">
+        Title="PRNcompression" Height="600" Width="800"
+        WindowStartupLocation="CenterScreen">
     <Window.DataContext>
         <vm:MainWindowViewModel/>
     </Window.DataContext>
@@ -25,24 +26,11 @@
             </StatusBarItem>
         </StatusBar>
         <TabControl>
-            <TabItem Header="Исходные данные">
+            <!--<TabItem Header="Исходные данные">
                 <views:InitialDataView/>
-            </TabItem>
-            <TabItem Header="Процесс сжатия">
-
-            </TabItem>
-            <TabItem Header="Процесс распаковки">
-
-            </TabItem>
-            <TabItem Header="Оценка производительности">
-
-            </TabItem>
-            <TabItem Header="Визуализация">
-                <DataGrid ItemsSource="{Binding InitialBytes}" RowHeight="20">
-                    <DataGrid.Columns>
-                        <DataGridTextColumn Header="Value" Binding="{Binding}"/>
-                    </DataGrid.Columns>
-                </DataGrid>
+            </TabItem>-->
+            <TabItem Header="Генератор ПРЧ">
+                <views:PRNGeneratorView/>
             </TabItem>
         </TabControl>
     </DockPanel>

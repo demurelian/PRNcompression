@@ -9,7 +9,7 @@ namespace PRNcompression.Services
     {
         public IEnumerable<byte> GenerateBytes(string byteNumStr)
         {
-            var generate_size = ValidationHelper.ValidateByteNumberString(byteNumStr);
+            var generate_size = ValidationHelper.ValidateNumberString(byteNumStr);
             if(generate_size > 0)
             {
                 var byte_arr = new byte[generate_size];

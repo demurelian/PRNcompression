@@ -6,7 +6,7 @@ namespace PRNcompression.Services
     {
         /// <summary>byte number string validation</summary>
         /// <returns>byte array size or -1 if validation failed</returns>
-        public static int ValidateByteNumberString(string byteNumberStr)
+        public static int ValidateNumberString(string byteNumberStr)
         {
             try
             {
