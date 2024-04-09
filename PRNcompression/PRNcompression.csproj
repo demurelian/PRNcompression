@@ -87,6 +87,8 @@
     <Compile Include="Services\BytesGenerationService.cs" />
     <Compile Include="Services\Interfaces\IBytesFromBinService.cs" />
     <Compile Include="Services\Interfaces\IBytesGenerationService.cs" />
+    <Compile Include="Services\Interfaces\IPRNGenerationService.cs" />
+    <Compile Include="Services\PRNGenerationService.cs" />
     <Compile Include="Services\ValidationHelper.cs" />
     <Compile Include="ViewModels\Base\ViewModel.cs" />
     <Compile Include="ViewModels\DirectoryViewModel.cs" />

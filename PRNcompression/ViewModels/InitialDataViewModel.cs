@@ -12,7 +12,7 @@ namespace PRNcompression.ViewModels
     internal class InitialDataViewModel : ViewModel
     {
         MainWindowViewModel MainModel;
-        IBytesGenerationService _BytesGenerationService;
+        private IBytesGenerationService _BytesGenerationService;
 
         private ObservableCollection<DirectoryViewModel> _Disks;
         public ObservableCollection<DirectoryViewModel> Disks

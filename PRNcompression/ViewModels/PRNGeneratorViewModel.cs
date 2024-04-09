@@ -1,5 +1,6 @@
 ﻿using PRNcompression.Infrastructure.Commands;
 using PRNcompression.Services;
+using PRNcompression.Services.Interfaces;
 using PRNcompression.ViewModels.Base;
 using System.Collections;
 using System.Collections.Generic;
@@ -11,22 +12,16 @@ namespace PRNcompression.ViewModels
 {
     internal class PRNGeneratorViewModel :  ViewModel
     {
+        private IPRNGenerationService _PRNGenerationService;
         public ICommand GeneratePRNCommand { get; }
         private bool CanGeneratePRNCommandExecute(object p) => true;
         private void OnGeneratePRNCommandExecute(object p)
         {
-            ResultStr = SelectedType.Key.ToString();
-            //var bitsNum = ValidationHelper.ValidateNumberString(BitNumStr);
-            //var bits = new BitArray(bitsNum);
-            //switch (TypeStr)
-            //{
-
-            //}
-            //for(int i = 0; i < bitsNum; i++)
-            //{
-            //    //bits.Set()
-            //}
-            //ResultStr = "555";
+            int result = -1;
+            var size = ValidationHelper.ValidateNumberString(BitNumStr);
+            if (size > 0)
+                result = _PRNGenerationService.PRNGeneration(SelectedType.Key, size);
+            ResultStr = result.ToString();
         }
 
         private string _BitNumStr;
@@ -59,6 +54,8 @@ namespace PRNcompression.ViewModels
 
         public PRNGeneratorViewModel()
         {
+            _PRNGenerationService = new PRNGenerationService();
+
             GeneratePRNCommand = new LambdaCommand(OnGeneratePRNCommandExecute, CanGeneratePRNCommandExecute);
 
             TypesDiscriptions = new Dictionary<byte, string>();
