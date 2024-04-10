@@ -11,7 +11,7 @@ namespace PRNcompression.Services
             try
             {
                 var x = int.Parse(byteNumberStr);
-                if (x <= 0) 
+                if (x < 0) 
                     return -1;
                 return x;
             }
