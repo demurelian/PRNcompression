@@ -29,8 +29,11 @@
             <!--<TabItem Header="Исходные данные">
                 <views:InitialDataView/>
             </TabItem>-->
-            <TabItem Header="Генератор ПРЧ">
+            <!--<TabItem Header="Генератор ПРЧ">
                 <views:PRNGeneratorView/>
+            </TabItem>-->
+            <TabItem Header="Визуализация поля">
+                <views:NumberFieldVisualizationView/>
             </TabItem>
         </TabControl>
     </DockPanel>
