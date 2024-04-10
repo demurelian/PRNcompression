@@ -20,7 +20,9 @@
             <TextBox Text="{Binding NumStr, Mode=TwoWay}"/>
             <Button Content="Отобразить" Command="{Binding VisualizeFromNumberCommand}"/>
         </StackPanel>
-        
+        <Grid Grid.Column="1">
+            <ContentControl Content="{Binding MyDataGrid}"/>
+        </Grid>
         <!--<DataGrid IsReadOnly="True" Grid.Column="1" AutoGenerateColumns="False" ItemsSource="{Binding Data}">
             <DataGrid.Columns>
                 --><!-- Столбец 0 --><!--
