@@ -11,14 +11,9 @@ using System.Windows.Media;
 
 namespace PRNcompression.ViewModels
 {
-    public class RowItem
+    public class RowInfo
     {
-        public ObservableCollection<DataItem> Columns { get; set; }
-
-        public RowItem()
-        {
-            Columns = new ObservableCollection<DataItem>();
-        }
+        public ObservableCollection<DataItem> Items { get; set; }
     }
 
     public class DataItem
@@ -43,11 +38,25 @@ namespace PRNcompression.ViewModels
             set => Set(ref _StartNumber, value);
         }
 
-        private ObservableCollection<RowItem> _Data;
-        public ObservableCollection<RowItem> Data
+        private ObservableCollection<RowInfo> _Data;
+        public ObservableCollection<RowInfo> Data
         {
             get => _Data;
             set => Set(ref _Data, value);
+        }
+
+        private ObservableCollection<int> _NumQuantities;
+        public ObservableCollection <int> NumQuantities
+        {
+            get => _NumQuantities;
+            set => Set(ref _NumQuantities, value);
+        }
+
+        private int _SelectedQuantity;
+        public int SelectedQuantity
+        {
+            get => _SelectedQuantity;
+            set => Set(ref _SelectedQuantity, value);
         }
 
         public ICommand VisualizeFromNumberCommand { get; }
@@ -55,53 +64,50 @@ namespace PRNcompression.ViewModels
         private void OnVisualizeFromNumberCommandExecute(object p)
         {
             StartNumber = ValidationHelper.ValidateNumberString(NumStr);
-            if (StartNumber >= 0)
+            if (SelectedQuantity > 0)
             {
-                Data = new ObservableCollection<RowItem>();
-
-                MyDataGrid = new DataGrid();
-                MyDataGrid.IsReadOnly = true;
-                MyDataGrid.AutoGenerateColumns = false;
-                MyDataGrid.ItemsSource = Data;
-
-                // Очищаем существующие столбцы в MyDataGrid
-                MyDataGrid.Columns.Clear();
-
-                for (int i = 0; i < 16; i++)
+                if (StartNumber >= 0)
                 {
-                    // Создаем новый шаблон столбца
-                    DataGridTemplateColumn column = new DataGridTemplateColumn();
-                    column.Width = new DataGridLength(1, DataGridLengthUnitType.Star);
-                    
-
-                    // Создаем ячейку шаблона
-                    DataTemplate cellTemplate = new DataTemplate();
-                    
-                    var row = new RowItem();
-
-                    // Создаем TextBlock для отображения значения из DataItem
-                    FrameworkElementFactory textBlockFactory = new FrameworkElementFactory(typeof(TextBlock));
-                    textBlockFactory.SetBinding(TextBlock.TextProperty, new Binding($"Columns[{i}].Value"));
-                    textBlockFactory.SetBinding(TextBlock.BackgroundProperty, new Binding($"Columns[{i}].Color"));
-
-                    for (int j = 0; j < 16; j++)
+                    Data = new ObservableCollection<RowInfo>();
+                    for (int i = 0; i < 16; i++)
                     {
-                        var tempItem = new DataItem
+                        var row = new RowInfo();
+                        row.Items = new ObservableCollection<DataItem>();
+                        for (int j = 0; j < SelectedQuantity / 16; j++)
                         {
-                            Value = StartNumber + i * 16 + j,
-                            Color = (i % 2 > 0) ? Brushes.LightCoral : Brushes.LightBlue
-                        };
-                        row.Columns.Add(tempItem);
-
-                        // Добавляем TextBlock в ячейку шаблона
-                        cellTemplate.VisualTree = textBlockFactory;
+                            var item = new DataItem
+                            {
+                                Value = StartNumber + (SelectedQuantity / 16) * i + j,
+                                Color = (i % 2 > 0) ? Brushes.LightCoral : Brushes.LightBlue
+                            };
+                            row.Items.Add(item);
+                        }
+                        Data.Add(row);
                     }
 
-                    // Устанавливаем шаблон для ячейки столбца
-                    column.CellTemplate = cellTemplate;
+                    MyDataGrid = new DataGrid();
+                    MyDataGrid.IsReadOnly = true;
+                    MyDataGrid.AutoGenerateColumns = false;
+                    MyDataGrid.ItemsSource = Data;
+                    //Создаем столбцы с шаблонами
+                    for (int i = 0; i < SelectedQuantity / 16; i++)
+                    {
+                        var templateColumn = new DataGridTemplateColumn();
 
-                    Data.Add(row);
-                    MyDataGrid.Columns.Add(column);
+                        // Создаем шаблон содержимого ячейки
+                        var cellTemplate = new DataTemplate();
+                        var textBlockFactory = new FrameworkElementFactory(typeof(TextBlock));
+                        textBlockFactory.SetBinding(TextBlock.TextProperty, new Binding(string.Format("Items[{0}].Value", i)));
+
+                        // Устанавливаем цвет фона из объекта DataItem
+                        var colorBinding = new Binding(string.Format("Items[{0}].Color", i));
+                        textBlockFactory.SetBinding(TextBlock.BackgroundProperty, colorBinding);
+
+                        cellTemplate.VisualTree = textBlockFactory;
+                        templateColumn.CellTemplate = cellTemplate;
+
+                        MyDataGrid.Columns.Add(templateColumn);
+                    }
                 }
             }
         }
@@ -115,27 +121,9 @@ namespace PRNcompression.ViewModels
 
         public NumberFieldVisualizationViewModel()
         {
+            NumQuantities = new ObservableCollection<int> { 256, 512, 1024 };
+
             VisualizeFromNumberCommand = new LambdaCommand(OnVisualizeFromNumberCommandExecute, CanVisualizeFromNumberCommandExecute);
-
-
-            
-
-            //// Создаем шаблон ячейки
-            //DataTemplate cellTemplate = new DataTemplate();
-
-            //// Создаем элемент управления TextBlock
-            //FrameworkElementFactory textBlockFactory = new FrameworkElementFactory(typeof(TextBlock));
-            //textBlockFactory.SetBinding(TextBlock.TextProperty, new Binding("Columns[0].Value"));
-            //textBlockFactory.SetBinding(TextBlock.BackgroundProperty, new Binding("Columns[0].Color"));
-
-            //// Добавляем созданный TextBlock в шаблон ячейки
-            //cellTemplate.VisualTree = textBlockFactory;
-
-            //// Устанавливаем шаблон ячейки для колонки
-            //templateColumn.CellTemplate = cellTemplate;
-
-            //// Добавляем колонку в DataGrid
-            //MyDataGrid.Columns.Add(templateColumn);
         }
     }
 }

@@ -12,10 +12,12 @@
     </UserControl.DataContext>
     <Grid>
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="1*"/>
-            <ColumnDefinition Width="7*"/>
+            <ColumnDefinition Width="2*"/>
+            <ColumnDefinition Width="13*"/>
         </Grid.ColumnDefinitions>
         <StackPanel Grid.Column="0">
+            <TextBlock Text="Отобразить чисел:"/>
+            <ComboBox ItemsSource="{Binding NumQuantities}" SelectedItem="{Binding SelectedQuantity}"/>
             <TextBlock Text="Стартовое число:"/>
             <TextBox Text="{Binding NumStr, Mode=TwoWay}"/>
             <Button Content="Отобразить" Command="{Binding VisualizeFromNumberCommand}"/>
@@ -23,137 +25,6 @@
         <Grid Grid.Column="1">
             <ContentControl Content="{Binding MyDataGrid}"/>
         </Grid>
-        <!--<DataGrid IsReadOnly="True" Grid.Column="1" AutoGenerateColumns="False" ItemsSource="{Binding Data}">
-            <DataGrid.Columns>
-                --><!-- Столбец 0 --><!--
-                <DataGridTemplateColumn Width="*">
-                    <DataGridTemplateColumn.CellTemplate>
-                        <DataTemplate>
-                            <TextBlock Text="{Binding Columns[0].Value}" Background="{Binding Columns[0].Color}" />
-                        </DataTemplate>
-                    </DataGridTemplateColumn.CellTemplate>
-                </DataGridTemplateColumn>
-                --><!-- Столбец 1 --><!--
-                <DataGridTemplateColumn Width="*">
-                    <DataGridTemplateColumn.CellTemplate>
-                        <DataTemplate>
-                            <TextBlock Text="{Binding Columns[1].Value}" Background="{Binding Columns[1].Color}" />
-                        </DataTemplate>
-                    </DataGridTemplateColumn.CellTemplate>
-                </DataGridTemplateColumn>
-                --><!-- Столбец 2 --><!-- 
-                <DataGridTemplateColumn Width="*">
-                    <DataGridTemplateColumn.CellTemplate>
-                        <DataTemplate>
-                            <TextBlock Text="{Binding Columns[2].Value}" Background="{Binding Columns[2].Color}" />
-                        </DataTemplate>
-                    </DataGridTemplateColumn.CellTemplate>
-                </DataGridTemplateColumn>
-                --><!-- Столбец 3 --><!-- 
-                <DataGridTemplateColumn Width="*">
-                    <DataGridTemplateColumn.CellTemplate>
-                        <DataTemplate>
-                            <TextBlock Text="{Binding Columns[3].Value}" Background="{Binding Columns[3].Color}" />
-                        </DataTemplate>
-                    </DataGridTemplateColumn.CellTemplate>
-                </DataGridTemplateColumn>
-                --><!-- Столбец 4 --><!-- 
-                <DataGridTemplateColumn Width="*">
-                    <DataGridTemplateColumn.CellTemplate>
-                        <DataTemplate>
-                            <TextBlock Text="{Binding Columns[4].Value}" Background="{Binding Columns[4].Color}" />
-                        </DataTemplate>
-                    </DataGridTemplateColumn.CellTemplate>
-                </DataGridTemplateColumn>
-                --><!-- Столбец 5 --><!--
-                <DataGridTemplateColumn Width="*">
-                    <DataGridTemplateColumn.CellTemplate>
-                        <DataTemplate>
-                            <TextBlock Text="{Binding Columns[5].Value}" Background="{Binding Columns[5].Color}" />
-                        </DataTemplate>
-                    </DataGridTemplateColumn.CellTemplate>
-                </DataGridTemplateColumn>
-                --><!-- Столбец 6 --><!--
-                <DataGridTemplateColumn Width="*">
-                    <DataGridTemplateColumn.CellTemplate>
-                        <DataTemplate>
-                            <TextBlock Text="{Binding Columns[6].Value}" Background="{Binding Columns[6].Color}" />
-                        </DataTemplate>
-                    </DataGridTemplateColumn.CellTemplate>
-                </DataGridTemplateColumn>
-                --><!-- Столбец 7 --><!--
-                <DataGridTemplateColumn Width="*">
-                    <DataGridTemplateColumn.CellTemplate>
-                        <DataTemplate>
-                            <TextBlock Text="{Binding Columns[7].Value}" Background="{Binding Columns[7].Color}" />
-                        </DataTemplate>
-                    </DataGridTemplateColumn.CellTemplate>
-                </DataGridTemplateColumn>
-                --><!-- Столбец 8 --><!--
-                <DataGridTemplateColumn Width="*">
-                    <DataGridTemplateColumn.CellTemplate>
-                        <DataTemplate>
-                            <TextBlock Text="{Binding Columns[8].Value}" Background="{Binding Columns[8].Color}" />
-                        </DataTemplate>
-                    </DataGridTemplateColumn.CellTemplate>
-                </DataGridTemplateColumn>
-                --><!-- Столбец 9 --><!--
-                <DataGridTemplateColumn Width="*">
-                    <DataGridTemplateColumn.CellTemplate>
-                        <DataTemplate>
-                            <TextBlock Text="{Binding Columns[9].Value}" Background="{Binding Columns[9].Color}" />
-                        </DataTemplate>
-                    </DataGridTemplateColumn.CellTemplate>
-                </DataGridTemplateColumn>
-                --><!-- Столбец 10 --><!--
-                <DataGridTemplateColumn Width="*">
-                    <DataGridTemplateColumn.CellTemplate>
-                        <DataTemplate>
-                            <TextBlock Text="{Binding Columns[10].Value}" Background="{Binding Columns[10].Color}" />
-                        </DataTemplate>
-                    </DataGridTemplateColumn.CellTemplate>
-                </DataGridTemplateColumn>
-                --><!-- Столбец 11 --><!--
-                <DataGridTemplateColumn Width="*">
-                    <DataGridTemplateColumn.CellTemplate>
-                        <DataTemplate>
-                            <TextBlock Text="{Binding Columns[11].Value}" Background="{Binding Columns[11].Color}" />
-                        </DataTemplate>
-                    </DataGridTemplateColumn.CellTemplate>
-                </DataGridTemplateColumn>
-                --><!-- Столбец 12 --><!--
-                <DataGridTemplateColumn Width="*">
-                    <DataGridTemplateColumn.CellTemplate>
-                        <DataTemplate>
-                            <TextBlock Text="{Binding Columns[12].Value}" Background="{Binding Columns[12].Color}" />
-                        </DataTemplate>
-                    </DataGridTemplateColumn.CellTemplate>
-                </DataGridTemplateColumn>
-                --><!-- Столбец 13 --><!--
-                <DataGridTemplateColumn Width="*">
-                    <DataGridTemplateColumn.CellTemplate>
-                        <DataTemplate>
-                            <TextBlock Text="{Binding Columns[13].Value}" Background="{Binding Columns[13].Color}" />
-                        </DataTemplate>
-                    </DataGridTemplateColumn.CellTemplate>
-                </DataGridTemplateColumn>
-                --><!-- Столбец 14 --><!--
-                <DataGridTemplateColumn Width="*">
-                    <DataGridTemplateColumn.CellTemplate>
-                        <DataTemplate>
-                            <TextBlock Text="{Binding Columns[14].Value}" Background="{Binding Columns[14].Color}" />
-                        </DataTemplate>
-                    </DataGridTemplateColumn.CellTemplate>
-                </DataGridTemplateColumn>
-                --><!-- Столбец 15 --><!--
-                <DataGridTemplateColumn Width="*">
-                    <DataGridTemplateColumn.CellTemplate>
-                        <DataTemplate>
-                            <TextBlock Text="{Binding Columns[15].Value}" Background="{Binding Columns[15].Color}" />
-                        </DataTemplate>
-                    </DataGridTemplateColumn.CellTemplate>
-                </DataGridTemplateColumn>
-            </DataGrid.Columns>
-        </DataGrid>-->
+       
     </Grid>
 </UserControl>
