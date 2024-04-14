@@ -2,8 +2,9 @@
 
 namespace PRNcompression.Services.Interfaces
 {
-    internal interface IPRNGenerationService
+    internal interface IPRNService
     {
         int PRNGeneration(byte type, int size);
+        int GetNumberType(int num);
     }
 }

@@ -12,7 +12,7 @@ namespace PRNcompression.ViewModels
 {
     internal class PRNGeneratorViewModel :  ViewModel
     {
-        private IPRNGenerationService _PRNGenerationService;
+        private IPRNService _PRNGenerationService;
         public ICommand GeneratePRNCommand { get; }
         private bool CanGeneratePRNCommandExecute(object p) => true;
         private void OnGeneratePRNCommandExecute(object p)
@@ -54,7 +54,7 @@ namespace PRNcompression.ViewModels
 
         public PRNGeneratorViewModel()
         {
-            _PRNGenerationService = new PRNGenerationService();
+            _PRNGenerationService = new PRNService();
 
             GeneratePRNCommand = new LambdaCommand(OnGeneratePRNCommandExecute, CanGeneratePRNCommandExecute);
 

@@ -21,6 +21,19 @@
             <TextBlock Text="Стартовое число:"/>
             <TextBox Text="{Binding NumStr, Mode=TwoWay}"/>
             <Button Content="Отобразить" Command="{Binding VisualizeFromNumberCommand}"/>
+            <TextBlock/>
+            <TextBlock Text="Сведения:"/>
+            <ListView ItemsSource="{Binding TypesInfo}">
+                <ListView.ItemTemplate>
+                    <DataTemplate>
+                        <StackPanel Orientation="Horizontal">
+                            <Rectangle Fill="{Binding Color}" Width="15" Height="15"/>
+                            <TextBlock Text="{Binding TypeNum, StringFormat={}{0}:}" Margin="5,0,0,0"/>
+                            <TextBlock Text="{Binding Quantity}" Margin="5,0,0,0"/>
+                        </StackPanel>
+                    </DataTemplate>
+                </ListView.ItemTemplate>
+            </ListView>
         </StackPanel>
         <Grid Grid.Column="1">
             <ContentControl Content="{Binding MyDataGrid}"/>
