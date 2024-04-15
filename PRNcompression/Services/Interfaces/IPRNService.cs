@@ -6,5 +6,6 @@ namespace PRNcompression.Services.Interfaces
     {
         int PRNGeneration(byte type, int size);
         int GetNumberType(int num);
+        byte[] PRNFieldGeneration(byte dimensionality);
     }
 }

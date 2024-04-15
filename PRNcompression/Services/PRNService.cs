@@ -1,6 +1,11 @@
 ﻿using PRNcompression.Services.Interfaces;
 using System;
 using System.Collections;
+using System.Collections.Generic;
+using System.IO.Packaging;
+using System.IO.Ports;
+using System.Windows.Documents;
+using System.Windows.Media;
 
 namespace PRNcompression.Services
 {
@@ -129,6 +134,157 @@ namespace PRNcompression.Services
                     break;
             }
             return arr[0];
+        }
+
+        /// <summary>Индекс в массиве = число</summary>
+        /// <returns>Тип ПРЧ по данному числу</returns>
+        public byte[] PRNFieldGeneration(byte dimensionality)
+        {
+            var types = new byte[(int)Math.Pow(2, dimensionality)];
+            var typesDictionary = new Dictionary<byte, IList<int>>();
+            IndependentGeneration(dimensionality, ref types, ref typesDictionary);
+            EvenGeneration(dimensionality, ref types, ref typesDictionary);
+            OddGeneration(dimensionality, ref types, ref typesDictionary);
+            return types;
+        }
+        public void IndependentGeneration(byte dimensionality, ref byte[] types, ref Dictionary<byte, IList<int>> typesDictionary)
+        {
+            //10 type
+            types[0] = 10;
+            typesDictionary.Add(10, new List<int> { 0 });
+            //8 type
+            types[1] = 8;
+            typesDictionary.Add(8, new List<int> { 1 });
+            //4 type: степени двойки
+            var size = Math.Pow(2, dimensionality);
+            var list4 = new List<int>();
+            for (int i = 1; i < size; i *= 2)
+            {
+                if (types[i] == 0)
+                    types[i] = 4;
+                list4.Add(i);
+            }
+            typesDictionary.Add(4, list4);
+            //9 type
+            var list9 = new List<int>();
+            for(int i = 1; i < dimensionality; i++)
+            {
+                var bits = new BitArray(dimensionality);
+                for (int j = i; j > 0; j--)
+                {
+                    bits.Set(j, true);
+                }
+                var x = new int[1];
+                bits.CopyTo(x, 0);
+                if (types[x[0]] == 0)
+                    types[x[0]] = 9;
+                list9.Add(x[0]);
+            }
+            typesDictionary.Add(9, list9);
+        }
+        public void EvenGeneration(byte dimensionality, ref byte[] types, ref Dictionary<byte, IList<int>> typesDictionary)
+        {
+            //1 type
+            var list1 = new List<int>();
+            for(int i = 1; i < dimensionality; i += 2)
+            {
+                var bits = new BitArray(dimensionality);
+                for (int j = i; j > 0; j -= 2)
+                {
+                    bits.Set(j, true);
+                }
+                var x = new int[1];
+                bits.CopyTo(x, 0);
+                if (types[x[0]] == 0)
+                    types[x[0]] = 1;
+                list1.Add(x[0]);
+            }
+            typesDictionary.Add(1, list1);
+            //5 type
+            var list5 = new List<int>();
+            for(int i = 1; i < dimensionality; i += 2)
+            {
+                var bits = new BitArray(dimensionality);
+                for (int j = i/2; j >=0; j--)
+                {
+                    bits.Set(j, true);
+                }
+                var x = new int[1];
+                bits.CopyTo(x, 0);
+                if (types[x[0]] == 0)
+                    types[x[0]] = 5;
+                list5.Add(x[0]);
+            }
+            typesDictionary.Add(5, list5);
+            //6 type
+            var list6 = new List<int>();
+            for(int i = 1;i < dimensionality; i += 2)
+            {
+                var bits = new BitArray(dimensionality);
+                for(int j = i; j > i/2; j--)
+                {
+                    bits.Set(j, true);
+                }
+                var x = new int[1];
+                bits.CopyTo(x, 0);
+                if (types[x[0]] == 0)
+                    types[x[0]] = 6;
+                list6.Add(x[0]);
+            }
+            typesDictionary.Add(6, list6);
+        }
+        
+        public void OddGeneration(byte dimensionality, ref byte[] types, ref Dictionary<byte, IList<int>> typesDictionary)
+        {
+            //2 type
+            var list2 = new List<int>();
+            for (int i = 0; i < dimensionality; i += 2)
+            {
+                var bits = new BitArray(dimensionality);
+                for (int j = i; j >= 0; j -= 2)
+                {
+                    bits.Set(j, true);
+                }
+                var x = new int[1];
+                bits.CopyTo(x, 0);
+                if (types[x[0]] == 0)
+                    types[x[0]] = 2;
+                list2.Add(x[0]);
+            }
+            typesDictionary.Add(2, list2);
+            //3 type
+            var list3 = new List<int>();
+            for (int i = 1; i < dimensionality; i++)
+            {
+                var bits = new BitArray(dimensionality);
+                bits.Set(i, false);
+                for (int j = i-1; j >= 0; j--)
+                {
+                    bits.Set(j, true);
+                }
+                var x = new int[1];
+                bits.CopyTo(x, 0);
+                if (types[x[0]] == 0)
+                    types[x[0]] = 3;
+                list3.Add(x[0]);
+            }
+            typesDictionary.Add(3, list3);
+            //7 type
+            var list7 = new List<int>();
+            for (int i = 0; i < dimensionality; i++)
+            {
+                var bits = new BitArray(dimensionality);
+                for (int j = i; j >= 0; j--)
+                {
+                    bits.Set(j, true);
+                }
+                var x = new int[1];
+                bits.CopyTo(x, 0);
+                if (types[x[0]] == 0)
+                    types[x[0]] = 7;
+                list7.Add(x[0]);
+            }
+            typesDictionary.Add(7, list7);
         }
     }
 }

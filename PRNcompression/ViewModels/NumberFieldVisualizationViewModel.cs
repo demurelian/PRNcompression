@@ -98,6 +98,7 @@ namespace PRNcompression.ViewModels
             {
                 if (StartNumber >= 0)
                 {
+                    var types = _PRNService.PRNFieldGeneration(8);
                     for (int i = 0; i < 16; i++)
                         TypesInfo[i].Quantity = 0;
 
@@ -108,8 +109,11 @@ namespace PRNcompression.ViewModels
                         row.Items = new ObservableCollection<DataItem>();
                         for (int j = 0; j < SelectedQuantity / 16; j++)
                         {
-                            var x = StartNumber + (SelectedQuantity / 16) * i + j;
-                            var prnType = _PRNService.GetNumberType(x);
+                            //var x = StartNumber + (SelectedQuantity / 16) * i + j;
+                            //var prnType = _PRNService.GetNumberType(x);
+                            var x = (SelectedQuantity / 16) * i + j;
+                            var prnType = types[x];
+                            //
                             TypesInfo[prnType].Quantity++;
                             var item = new DataItem
                             {
@@ -146,6 +150,7 @@ namespace PRNcompression.ViewModels
                     }
                 }
             }
+            _PRNService.PRNFieldGeneration(8);
         }
 
         private DataGrid _MyDataGrid;
@@ -164,7 +169,7 @@ namespace PRNcompression.ViewModels
 
         public NumberFieldVisualizationViewModel()
         {
-            NumQuantities = new ObservableCollection<int> { 64, 128, 256, 512, 1024, 2048, 4092, 8192 };
+            NumQuantities = new ObservableCollection<int> { 64, 128, 256, 512 };
 
             _PRNService = new PRNService();
 

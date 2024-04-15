@@ -16,8 +16,11 @@
             <ColumnDefinition Width="13*"/>
         </Grid.ColumnDefinitions>
         <StackPanel Grid.Column="0">
-            <TextBlock Text="Отобразить чисел:"/>
-            <ComboBox ItemsSource="{Binding NumQuantities}" SelectedItem="{Binding SelectedQuantity}"/>
+            <TextBlock Text="Размерность поля:"/>
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                <ComboBox ItemsSource="{Binding NumQuantities}" SelectedItem="{Binding SelectedQuantity}"/>
+                <TextBlock Padding="3" Margin ="5,0,0,0" Text="бит"/>
+            </StackPanel>
             <TextBlock Text="Стартовое число:"/>
             <TextBox Text="{Binding NumStr, Mode=TwoWay}"/>
             <Button Content="Отобразить" Command="{Binding VisualizeFromNumberCommand}"/>
