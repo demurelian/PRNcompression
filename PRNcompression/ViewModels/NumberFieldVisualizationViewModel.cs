@@ -81,7 +81,7 @@ namespace PRNcompression.ViewModels
         private bool CanVisualizeFromNumberCommandExecute(object p) => true;
         private void OnVisualizeFromNumberCommandExecute(object p)
         {
-            var fieldInfo = _PRNService.FieldCharacterization((byte)Dimensionality);
+            var fieldTypes = _PRNService.FieldCharacterization((byte)Dimensionality);
 
             var columnQuantity = (Dimensionality % 2 == 0) ? Math.Pow(2, Dimensionality / 2) : 2 * Math.Pow(2, Dimensionality / 2);
             var rowQuantity = Math.Pow(2, Dimensionality / 2);
@@ -99,7 +99,7 @@ namespace PRNcompression.ViewModels
                 {
                     var x = currNum;
                     currNum++;
-                    var prnType = fieldInfo.Types[x];
+                    var prnType = fieldTypes[x];
                     //
                     TypesInfo[prnType].Quantity++;
                     var item = new DataItem
