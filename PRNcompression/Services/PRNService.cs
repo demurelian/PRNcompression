@@ -151,6 +151,7 @@ namespace PRNcompression.Services
 
             return types;
         }
+
         public void IndependentGeneration(byte dimensionality, ref byte[] types)
         {
             //15 type
@@ -163,8 +164,7 @@ namespace PRNcompression.Services
             var size = Math.Pow(2, dimensionality);
             for (int i = 1; i < size; i *= 2)
             {
-                if (types[i] == 0)
-                    types[i] = 4;
+                types[i] = 4;
             }
 
             //9 type
@@ -177,8 +177,7 @@ namespace PRNcompression.Services
                 }
                 var x = new int[1];
                 bits.CopyTo(x, 0);
-                if (types[x[0]] == 0)
-                    types[x[0]] = 9;
+                types[x[0]] = 9;
             }
         }
         public void EvenGeneration(byte dimensionality, ref byte[] types)
@@ -193,8 +192,7 @@ namespace PRNcompression.Services
                 }
                 var x = new int[1];
                 bits.CopyTo(x, 0);
-                if (types[x[0]] == 0)
-                    types[x[0]] = 1;
+                types[x[0]] = 1;
             }
 
             //5 type
@@ -207,8 +205,7 @@ namespace PRNcompression.Services
                 }
                 var x = new int[1];
                 bits.CopyTo(x, 0);
-                if (types[x[0]] == 0)
-                    types[x[0]] = 5;
+                types[x[0]] = 5;
             }
 
             //6 type
@@ -221,8 +218,7 @@ namespace PRNcompression.Services
                 }
                 var x = new int[1];
                 bits.CopyTo(x, 0);
-                if (types[x[0]] == 0)
-                    types[x[0]] = 6;
+                types[x[0]] = 6;
             }
         }
         
@@ -238,12 +234,11 @@ namespace PRNcompression.Services
                 }
                 var x = new int[1];
                 bits.CopyTo(x, 0);
-                if (types[x[0]] == 0)
-                    types[x[0]] = 2;
+                types[x[0]] = 2;
             }
 
             //3 type
-            for (int i = 1; i < dimensionality; i++)
+            for (int i = 5; i < dimensionality; i++)
             {
                 var bits = new BitArray(dimensionality);
                 bits.Set(i, false);
@@ -253,12 +248,11 @@ namespace PRNcompression.Services
                 }
                 var x = new int[1];
                 bits.CopyTo(x, 0);
-                if (types[x[0]] == 0)
-                    types[x[0]] = 3;
+                types[x[0]] = 3;
             }
 
             //7 type
-            for (int i = 0; i < dimensionality; i++)
+            for (int i = dimensionality - 1; i < dimensionality; i++)
             {
                 var bits = new BitArray(dimensionality);
                 for (int j = i; j >= 0; j--)
@@ -267,8 +261,7 @@ namespace PRNcompression.Services
                 }
                 var x = new int[1];
                 bits.CopyTo(x, 0);
-                if (types[x[0]] == 0)
-                    types[x[0]] = 7;
+                types[x[0]] = 7;
             }
         }
 
@@ -286,8 +279,7 @@ namespace PRNcompression.Services
                 }
                 var x = new int[1];
                 bits.CopyTo(x, 0);
-                if (types[x[0]] == 0)
-                    types[x[0]] = 10;
+                types[x[0]] = 10;
             }
 
             //13 type
@@ -303,8 +295,7 @@ namespace PRNcompression.Services
                 }
                 var x = new int[1];
                 bits.CopyTo(x, 0);
-                if (types[x[0]] == 0)
-                    types[x[0]] = 13;
+                types[x[0]] = 13;
             }
 
             //11 type
@@ -320,8 +311,7 @@ namespace PRNcompression.Services
                 }
                 var x = new int[1];
                 bits.CopyTo(x, 0);
-                if (types[x[0]] == 0)
-                    types[x[0]] = 11;
+                types[x[0]] = 11;
             }
 
             //12 type
@@ -336,8 +326,8 @@ namespace PRNcompression.Services
                 }
                 var x = new int[1];
                 bits.CopyTo(x, 0);
-                if (types[x[0]] == 0)
-                    types[x[0]] = 12;
+
+                types[x[0]] = 12;
             }
 
             //14 type
@@ -352,8 +342,8 @@ namespace PRNcompression.Services
                 }
                 var x = new int[1];
                 bits.CopyTo(x, 0);
-                if (types[x[0]] == 0)
-                    types[x[0]] = 14;
+
+                types[x[0]] = 14;
             }
         }
     }
