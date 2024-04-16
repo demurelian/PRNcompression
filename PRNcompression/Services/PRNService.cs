@@ -4,6 +4,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.IO.Packaging;
 using System.IO.Ports;
+using System.Windows.Controls;
 using System.Windows.Documents;
 using System.Windows.Media;
 
@@ -138,20 +139,25 @@ namespace PRNcompression.Services
 
         /// <summary>Индекс в массиве = число</summary>
         /// <returns>Тип ПРЧ по данному числу</returns>
-        public byte[] PRNFieldGeneration(byte dimensionality)
+        public FieldInfo FieldCharacterization(byte dimensionality)
         {
+            var Info = new FieldInfo();
             var types = new byte[(int)Math.Pow(2, dimensionality)];
-            var typesDictionary = new Dictionary<byte, IList<int>>();
+            var typesDictionary = new Dictionary<byte, List<int>>();
             IndependentGeneration(dimensionality, ref types, ref typesDictionary);
             EvenGeneration(dimensionality, ref types, ref typesDictionary);
             OddGeneration(dimensionality, ref types, ref typesDictionary);
-            return types;
+            SupplementaryGeneration(dimensionality, ref types, ref typesDictionary);
+
+            Info.Types = types;
+            Info.TypesDictionary = typesDictionary;
+            return Info;
         }
-        public void IndependentGeneration(byte dimensionality, ref byte[] types, ref Dictionary<byte, IList<int>> typesDictionary)
+        public void IndependentGeneration(byte dimensionality, ref byte[] types, ref Dictionary<byte, List<int>> typesDictionary)
         {
-            //10 type
-            types[0] = 10;
-            typesDictionary.Add(10, new List<int> { 0 });
+            //15 type
+            types[0] = 15;
+            typesDictionary.Add(15, new List<int> { 0 });
             //8 type
             types[1] = 8;
             typesDictionary.Add(8, new List<int> { 1 });
@@ -182,7 +188,7 @@ namespace PRNcompression.Services
             }
             typesDictionary.Add(9, list9);
         }
-        public void EvenGeneration(byte dimensionality, ref byte[] types, ref Dictionary<byte, IList<int>> typesDictionary)
+        public void EvenGeneration(byte dimensionality, ref byte[] types, ref Dictionary<byte, List<int>> typesDictionary)
         {
             //1 type
             var list1 = new List<int>();
@@ -234,7 +240,7 @@ namespace PRNcompression.Services
             typesDictionary.Add(6, list6);
         }
         
-        public void OddGeneration(byte dimensionality, ref byte[] types, ref Dictionary<byte, IList<int>> typesDictionary)
+        public void OddGeneration(byte dimensionality, ref byte[] types, ref Dictionary<byte, List<int>> typesDictionary)
         {
             //2 type
             var list2 = new List<int>();
@@ -285,6 +291,102 @@ namespace PRNcompression.Services
                 list7.Add(x[0]);
             }
             typesDictionary.Add(7, list7);
+        }
+
+        public void SupplementaryGeneration(byte dimensionality, ref byte[] types, ref Dictionary<byte, List<int>> typesDictionary)
+        {
+            //10 type
+            var list10 = new List<int>();
+            for (int i = 3; i < dimensionality; i += 2)
+            {
+                var bits = new BitArray(dimensionality);
+                bits.Set(i, true);
+                bits.Set(0, true);
+                for (int j = i-1; j > 0; j--)
+                {
+                    bits.Set(j, false);
+                }
+                var x = new int[1];
+                bits.CopyTo(x, 0);
+                if (types[x[0]] == 0)
+                    types[x[0]] = 10;
+                list10.Add(x[0]);
+            }
+            typesDictionary.Add(10, list10);
+            //13 type
+            var list13 = new List<int>();
+            for (int i = 4; i < dimensionality; i += 2)
+            {
+                var bits = new BitArray(dimensionality);
+                bits.Set(i, true);
+                bits.Set(0, true);
+                for (int j = i - 1; j > 0; j--)
+                {
+                    bits.Set(j, false);
+                }
+                var x = new int[1];
+                bits.CopyTo(x, 0);
+                if (types[x[0]] == 0)
+                    types[x[0]] = 13;
+                list10.Add(x[0]);
+            }
+            typesDictionary.Add(13, list13);
+
+            //11 type
+            var list11 = new List<int>();
+            for(int i = 3; i < dimensionality; i++)
+            {
+                var bits = new BitArray(dimensionality);
+                bits.Set(i, true);
+                bits.Set(i-1, true);
+                bits.Set(0, true);
+                for(int j = i - 2; j > 0; j--)
+                {
+                    bits.Set(j, false);
+                }
+                var x = new int[1];
+                bits.CopyTo(x, 0);
+                if (types[x[0]] == 0)
+                    types[x[0]] = 11;
+                list11.Add(x[0]);
+            }
+            typesDictionary.Add(11, list11);
+            //12 type
+            var list12 = new List<int>();
+            for (int i = 3; i < dimensionality; i++)
+            {
+                var bits = new BitArray(dimensionality);
+                bits.Set(i, true);
+                bits.Set(i - 1, false);
+                for (int j = i - 2; j >= 0; j--)
+                {
+                    bits.Set(j, true);
+                }
+                var x = new int[1];
+                bits.CopyTo(x, 0);
+                if (types[x[0]] == 0)
+                    types[x[0]] = 12;
+                list12.Add(x[0]);
+            }
+            typesDictionary.Add(12, list12);
+            //14 type
+            var list14 = new List<int>();
+            for (int i = 4; i < dimensionality; i++)
+            {
+                var bits = new BitArray(dimensionality);
+                bits.Set(0, true);
+                bits.Set(1, false);
+                for (int j = i; j > 1; j--)
+                {
+                    bits.Set(j, true);
+                }
+                var x = new int[1];
+                bits.CopyTo(x, 0);
+                if (types[x[0]] == 0)
+                    types[x[0]] = 14;
+                list14.Add(x[0]);
+            }
+            typesDictionary.Add(14, list14);
         }
     }
 }

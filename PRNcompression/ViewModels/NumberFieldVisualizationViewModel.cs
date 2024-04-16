@@ -2,6 +2,7 @@
 using PRNcompression.Services;
 using PRNcompression.Services.Interfaces;
 using PRNcompression.ViewModels.Base;
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
@@ -54,19 +55,6 @@ namespace PRNcompression.ViewModels
     internal class NumberFieldVisualizationViewModel : ViewModel
     {
         private IPRNService _PRNService;
-        private string _NumStr;
-        public string NumStr
-        {
-            get => _NumStr;
-            set => Set(ref _NumStr, value);
-        }
-
-        private int _StartNumber;
-        public int StartNumber
-        {
-            get => _StartNumber;
-            set => Set(ref _StartNumber, value);
-        }
 
         private ObservableCollection<RowInfo> _Data;
         public ObservableCollection<RowInfo> Data
@@ -75,82 +63,78 @@ namespace PRNcompression.ViewModels
             set => Set(ref _Data, value);
         }
 
-        private ObservableCollection<int> _NumQuantities;
-        public ObservableCollection <int> NumQuantities
+        private ObservableCollection<int> _DimensionalityOptions;
+        public ObservableCollection <int> DimensionalityOptions
         {
-            get => _NumQuantities;
-            set => Set(ref _NumQuantities, value);
+            get => _DimensionalityOptions;
+            set => Set(ref _DimensionalityOptions, value);
         }
 
-        private int _SelectedQuantity;
-        public int SelectedQuantity
+        private int _Dimensionality;
+        public int Dimensionality
         {
-            get => _SelectedQuantity;
-            set => Set(ref _SelectedQuantity, value);
+            get => _Dimensionality;
+            set => Set(ref _Dimensionality, value);
         }
 
         public ICommand VisualizeFromNumberCommand { get; }
         private bool CanVisualizeFromNumberCommandExecute(object p) => true;
         private void OnVisualizeFromNumberCommandExecute(object p)
         {
-            StartNumber = ValidationHelper.ValidateNumberString(NumStr);
-            if (SelectedQuantity > 0)
+            var fieldInfo = _PRNService.FieldCharacterization((byte)Dimensionality);
+
+            var columnQuantity = (Dimensionality % 2 == 0) ? Math.Pow(2, Dimensionality / 2) : 2 * Math.Pow(2, Dimensionality / 2);
+            var rowQuantity = Math.Pow(2, Dimensionality / 2);
+
+            for (int i = 0; i <= 10; i++)
+                TypesInfo[i].Quantity = 0;
+
+            Data = new ObservableCollection<RowInfo>();
+            var currNum = 0;
+            for (int i = 0; i < columnQuantity; i++)
             {
-                if (StartNumber >= 0)
+                var row = new RowInfo();
+                row.Items = new ObservableCollection<DataItem>();
+                for (int j = 0; j <  rowQuantity; j++)
                 {
-                    var types = _PRNService.PRNFieldGeneration(8);
-                    for (int i = 0; i < 16; i++)
-                        TypesInfo[i].Quantity = 0;
-
-                    Data = new ObservableCollection<RowInfo>();
-                    for (int i = 0; i < 16; i++)
+                    var x = currNum;
+                    currNum++;
+                    var prnType = fieldInfo.Types[x];
+                    //
+                    TypesInfo[prnType].Quantity++;
+                    var item = new DataItem
                     {
-                        var row = new RowInfo();
-                        row.Items = new ObservableCollection<DataItem>();
-                        for (int j = 0; j < SelectedQuantity / 16; j++)
-                        {
-                            //var x = StartNumber + (SelectedQuantity / 16) * i + j;
-                            //var prnType = _PRNService.GetNumberType(x);
-                            var x = (SelectedQuantity / 16) * i + j;
-                            var prnType = types[x];
-                            //
-                            TypesInfo[prnType].Quantity++;
-                            var item = new DataItem
-                            {
-                                Value = x,
-                                Color = TypesInfo[prnType].Color,
-                            };
-                            row.Items.Add(item);
-                        }
-                        Data.Add(row);
-                    }
-
-                    MyDataGrid = new DataGrid();
-                    MyDataGrid.IsReadOnly = true;
-                    MyDataGrid.AutoGenerateColumns = false;
-                    MyDataGrid.ItemsSource = Data;
-                    //Создаем столбцы с шаблонами
-                    for (int i = 0; i < SelectedQuantity / 16; i++)
-                    {
-                        var templateColumn = new DataGridTemplateColumn();
-
-                        // Создаем шаблон содержимого ячейки
-                        var cellTemplate = new DataTemplate();
-                        var textBlockFactory = new FrameworkElementFactory(typeof(TextBlock));
-                        textBlockFactory.SetBinding(TextBlock.TextProperty, new Binding(string.Format("Items[{0}].Value", i)));
-
-                        // Устанавливаем цвет фона из объекта DataItem
-                        var colorBinding = new Binding(string.Format("Items[{0}].Color", i));
-                        textBlockFactory.SetBinding(TextBlock.BackgroundProperty, colorBinding);
-
-                        cellTemplate.VisualTree = textBlockFactory;
-                        templateColumn.CellTemplate = cellTemplate;
-
-                        MyDataGrid.Columns.Add(templateColumn);
-                    }
+                        Value = x,
+                        Color = TypesInfo[prnType].Color,
+                    };
+                    row.Items.Add(item);
                 }
+                Data.Add(row);
             }
-            _PRNService.PRNFieldGeneration(8);
+
+            MyDataGrid = new DataGrid();
+            MyDataGrid.IsReadOnly = true;
+            MyDataGrid.AutoGenerateColumns = false;
+            MyDataGrid.ItemsSource = Data;
+            //Создаем столбцы с шаблонами
+            for (int i = 0; i < rowQuantity; i++)
+            {
+                var templateColumn = new DataGridTemplateColumn();
+
+                // Создаем шаблон содержимого ячейки
+                var cellTemplate = new DataTemplate();
+                var textBlockFactory = new FrameworkElementFactory(typeof(TextBlock));
+                textBlockFactory.SetBinding(TextBlock.TextProperty, new Binding(string.Format("Items[{0}].Value", i)));
+
+                // Устанавливаем цвет фона из объекта DataItem
+                var colorBinding = new Binding(string.Format("Items[{0}].Color", i));
+                textBlockFactory.SetBinding(TextBlock.BackgroundProperty, colorBinding);
+
+                cellTemplate.VisualTree = textBlockFactory;
+                templateColumn.CellTemplate = cellTemplate;
+
+                MyDataGrid.Columns.Add(templateColumn);
+            }
         }
 
         private DataGrid _MyDataGrid;
@@ -169,7 +153,7 @@ namespace PRNcompression.ViewModels
 
         public NumberFieldVisualizationViewModel()
         {
-            NumQuantities = new ObservableCollection<int> { 64, 128, 256, 512 };
+            DimensionalityOptions = new ObservableCollection<int> { 8, 9, 10, 11, 12, 13, 14, 15, 16};
 
             _PRNService = new PRNService();
 
@@ -196,7 +180,7 @@ namespace PRNcompression.ViewModels
             };
 
             TypesInfo = new ObservableCollection<TypeInfo>();
-            for (int i = 0; i < 16; i++)
+            for (int i = 0; i <= 15; i++)
             {
                 var typeInfo = new TypeInfo();
                 typeInfo.TypeNum = i;
