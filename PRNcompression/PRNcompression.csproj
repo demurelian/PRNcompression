@@ -69,6 +69,10 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="Views\NumberFieldVisualizationView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Views\PRNGeneratorView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -87,16 +91,20 @@
     <Compile Include="Services\BytesGenerationService.cs" />
     <Compile Include="Services\Interfaces\IBytesFromBinService.cs" />
     <Compile Include="Services\Interfaces\IBytesGenerationService.cs" />
-    <Compile Include="Services\Interfaces\IPRNGenerationService.cs" />
-    <Compile Include="Services\PRNGenerationService.cs" />
+    <Compile Include="Services\Interfaces\IPRNService.cs" />
+    <Compile Include="Services\PRNService.cs" />
     <Compile Include="Services\ValidationHelper.cs" />
     <Compile Include="ViewModels\Base\ViewModel.cs" />
     <Compile Include="ViewModels\DirectoryViewModel.cs" />
     <Compile Include="ViewModels\InitialDataViewModel.cs" />
     <Compile Include="ViewModels\MainWindowViewModel.cs" />
+    <Compile Include="ViewModels\NumberFieldVisualizationViewModel.cs" />
     <Compile Include="ViewModels\PRNGeneratorViewModel.cs" />
     <Compile Include="Views\InitialDataView.xaml.cs">
       <DependentUpon>InitialDataView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\NumberFieldVisualizationView.xaml.cs">
+      <DependentUpon>NumberFieldVisualizationView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\PRNGeneratorView.xaml.cs">
       <DependentUpon>PRNGeneratorView.xaml</DependentUpon>
