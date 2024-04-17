@@ -18,31 +18,11 @@ namespace PRNcompression.Services
             var result = new CompressedInfo();
             //10 8 5 2 3 4 1 6 9 7
             Dictionary<byte, int> prns = new Dictionary<byte, int>();
-            if (numberLength % 2 == 0) // четное
+            for (byte i = 0; i <= 15; i++)
             {
-                prns.Add(10, PRNGeneration(10, numberLength));
-                prns.Add(8, PRNGeneration(8, numberLength));
-                prns.Add(5, PRNGeneration(5, numberLength));
-                var x = prns[5];
-                prns.Add(2, PRNGeneration(2, numberLength));
-                prns.Add(3, PRNGeneration(3, numberLength));
-                prns.Add(4, PRNGeneration(4, numberLength));
-                prns.Add(1, PRNGeneration(1, numberLength));
-                prns.Add(6, PRNGeneration(6, numberLength));
-                prns.Add(9, PRNGeneration(9, numberLength));
-                prns.Add(7, PRNGeneration(7, numberLength));
+                prns.Add(i, PRNGeneration(i, numberLength));
             }
-            else // нечетное
-            {
-                prns.Add(10, PRNGeneration(10, numberLength));
-                prns.Add(8, PRNGeneration(8, numberLength));
-                prns.Add(2, PRNGeneration(2, numberLength));
-                prns.Add(3, PRNGeneration(3, numberLength));
-                prns.Add(4, PRNGeneration(4, numberLength));
-                prns.Add(1, PRNGeneration(1, numberLength));
-                prns.Add(9, PRNGeneration(9, numberLength));
-                prns.Add(7, PRNGeneration(7, numberLength));
-            }
+
             foreach (var prn in prns)
             {
                 if (prn.Value == number)
@@ -58,7 +38,7 @@ namespace PRNcompression.Services
             if (number > prns[4])
             {
                 inversionList.Add(true);
-                int mask = prns[7];
+                int mask = prns[9];
                 newNumber = number ^ mask;
             } else
             {
