@@ -79,17 +79,18 @@ namespace PRNcompression.Services
         }
         /// <summary>Проверка числа на псевдорегулярную структуру и возврат типа числа</summary>
         /// <returns>тип ПРЧ 1-15, или 0 если число обычное</returns>
-        public int GetNumberType(int num)
+        public int GetNumberType(int num, int dimensionality)
         {
-            var bits = (num == 1) ? 1 : (int)Math.Floor(Math.Log(num, 2))+1;
-            for(int i = 0; i < 15; i++)
+            for (byte i = 0; i <= 15; i++)
             {
-                var x = PRNGeneration((byte)i, bits);
+                var x = PRNGeneration(i, dimensionality);
                 if (num == x)
                     return i;
             }
-            return 0;
+            return -1;
         }
+
+        public int GetNumberLength(int num) => (num == 1 || num == 0) ? 1 : (int)Math.Floor(Math.Log(num, 2)) + 1;
 
         /// <summary> Генерирует псевдорегулярное число </summary>
         /// <returns> ПРЧ или -1 в случае ошибки </returns>
@@ -104,14 +105,21 @@ namespace PRNcompression.Services
                     arr[0] = 0;
                     break;
                 case 1:
-                    for (int i = 0; i < size; i++)
-                        bits.Set(i, Convert.ToBoolean(i % 2 == 0));
+                    var flag1 = true;
+                    for (int i = size - 1; i >= 0; i--)
+                    {
+                        bits.Set(i, flag1);
+                        flag1 = !flag1;
+                    }
                     bits.CopyTo(arr, 0);
                     break;
                 case 2:
-
-                    for (int i = 0; i < size; i++)
-                        bits.Set(i, Convert.ToBoolean((i+1) % 2 == 0));
+                    var flag2 = false;
+                    for (int i = size - 1; i >= 0; i--)
+                    {
+                        bits.Set(i, flag2);
+                        flag2 = !flag2;
+                    }
                     bits.CopyTo(arr, 0);
                     break;
                 case 3:

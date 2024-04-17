@@ -12,7 +12,8 @@ namespace PRNcompression.Services.Interfaces
     internal interface IPRNService
     {
         int PRNGeneration(byte type, int size);
-        int GetNumberType(int num);
+        int GetNumberType(int num, int dimensionality);
+        int GetNumberLength(int num);
         byte[] FieldCharacterization(byte dimensionality);
         CompressedInfo Compression(int number, int numberLength, ref List<bool> list);
     }
