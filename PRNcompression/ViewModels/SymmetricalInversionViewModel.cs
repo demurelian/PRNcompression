@@ -43,7 +43,7 @@ namespace PRNcompression.ViewModels
             var number = ValidationHelper.ValidateNumberString(NumStr);
             var numberLength = (int)Math.Floor(Math.Log(number, 2)) + 1;
             CoreTypeValues = new ObservableCollection<TypeValue>();
-            for (byte i = 1; i <= 10; ++i)
+            for (byte i = 0; i <= 9; ++i)
             {
                 if (numberLength % 2 == 1)
                     if (i == 5 || i == 6)
@@ -60,7 +60,7 @@ namespace PRNcompression.ViewModels
             }
 
             SupTypeValues = new ObservableCollection<TypeValue>();
-            for (byte i = 11; i <= 15; i++)
+            for (byte i = 10; i <= 15; i++)
             {
                 var x = _prnService.PRNGeneration(i, numberLength);
 

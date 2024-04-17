@@ -100,6 +100,9 @@ namespace PRNcompression.Services
             arr[0] = -1;
             switch (type)
             {
+                case 0:
+                    arr[0] = 0;
+                    break;
                 case 1:
                     for (int i = 0; i < size; i++)
                         bits.Set(i, Convert.ToBoolean(i % 2 == 0));
@@ -157,8 +160,19 @@ namespace PRNcompression.Services
                         bits.Set(i, true);
                     bits.CopyTo(arr, 0);
                     break;
+                //supplementary types
                 case 10:
-                    arr[0] = 0;
+                    for (int i = 0; i < size; i++)
+                        bits.Set(i, true);
+                    if (size % 2 == 0)
+                    {
+                        var index = size / 2;
+                        bits.Set(index, false);
+                        bits.Set(index - 1, false);
+                    }
+                    else
+                        bits.Set(size / 2, false);
+                    bits.CopyTo(arr, 0);
                     break;
                 case 11:
                     bits.Set(0, true);
