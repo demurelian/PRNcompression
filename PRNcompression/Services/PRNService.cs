@@ -10,8 +10,73 @@ using System.Windows.Media;
 
 namespace PRNcompression.Services
 {
+    
     internal class PRNService : IPRNService
     {
+        public CompressedInfo Compression(int number, int numberLength, ref List<bool> inversionList)
+        {
+            var result = new CompressedInfo();
+            //10 8 5 2 3 4 1 6 9 7
+            Dictionary<byte, int> prns = new Dictionary<byte, int>();
+            if (numberLength % 2 == 0) // четное
+            {
+                prns.Add(10, PRNGeneration(10, numberLength));
+                prns.Add(8, PRNGeneration(8, numberLength));
+                prns.Add(5, PRNGeneration(5, numberLength));
+                var x = prns[5];
+                prns.Add(2, PRNGeneration(2, numberLength));
+                prns.Add(3, PRNGeneration(3, numberLength));
+                prns.Add(4, PRNGeneration(4, numberLength));
+                prns.Add(1, PRNGeneration(1, numberLength));
+                prns.Add(6, PRNGeneration(6, numberLength));
+                prns.Add(9, PRNGeneration(9, numberLength));
+                prns.Add(7, PRNGeneration(7, numberLength));
+            }
+            else // нечетное
+            {
+                prns.Add(10, PRNGeneration(10, numberLength));
+                prns.Add(8, PRNGeneration(8, numberLength));
+                prns.Add(2, PRNGeneration(2, numberLength));
+                prns.Add(3, PRNGeneration(3, numberLength));
+                prns.Add(4, PRNGeneration(4, numberLength));
+                prns.Add(1, PRNGeneration(1, numberLength));
+                prns.Add(9, PRNGeneration(9, numberLength));
+                prns.Add(7, PRNGeneration(7, numberLength));
+            }
+            foreach (var prn in prns)
+            {
+                if (prn.Value == number)
+                {
+                    result.Type = prn.Key;
+                    result.Length = numberLength;
+                    result.InversionInfo = inversionList;
+                    return result;
+                }
+            }
+            int newNumber;
+            int newLength = numberLength - 1;
+            if (number > prns[4])
+            {
+                inversionList.Add(true);
+                int mask = prns[7];
+                newNumber = number ^ mask;
+            } else
+            {
+                inversionList.Add(false);
+                newNumber = number;
+            }
+            return Compression(newNumber, newLength, ref inversionList);
+        }
+        int countSetBits(int n)
+        {
+            int count = 0;
+            while (n > 0)
+            {
+                count++;
+                n = n >> 1; // Сдвиг вправо на один бит
+            }
+            return count;
+        }
         /// <summary>Проверка числа на псевдорегулярную структуру и возврат типа числа</summary>
         /// <returns>тип ПРЧ 1-15, или 0 если число обычное</returns>
         public int GetNumberType(int num)
@@ -37,12 +102,13 @@ namespace PRNcompression.Services
             {
                 case 1:
                     for (int i = 0; i < size; i++)
-                        bits.Set(i, Convert.ToBoolean(i % 2));
+                        bits.Set(i, Convert.ToBoolean(i % 2 == 0));
                     bits.CopyTo(arr, 0);
                     break;
                 case 2:
+
                     for (int i = 0; i < size; i++)
-                        bits.Set(i, Convert.ToBoolean((i+1) % 2));
+                        bits.Set(i, Convert.ToBoolean((i+1) % 2 == 0));
                     bits.CopyTo(arr, 0);
                     break;
                 case 3:
@@ -92,45 +158,6 @@ namespace PRNcompression.Services
                     bits.CopyTo(arr, 0);
                     break;
                 case 10:
-                    bits.Set(0, true);
-                    for (int i = 1; i < size - 1; i++)
-                        bits.Set(i, false);
-                    bits.Set(size - 1, true);
-                    bits.CopyTo(arr, 0);
-                    break;
-                case 11:
-                    bits.Set(0, true);
-                    for (int i = 1; i < size - 2; i++)
-                        bits.Set(i, false);
-                    if(size > 1)
-                        bits.Set(size - 2, true);
-                    bits.Set(size - 1, true);
-                    bits.CopyTo(arr, 0);
-                    break;
-                case 12:
-                    for (int i = 0; i < size; i++)
-                        bits.Set(i, true);
-                    if (size > 1)
-                        bits.Set(size - 2, false);
-                    bits.CopyTo(arr, 0);
-                    break;
-                case 13:
-                    bits.Set(0, true);
-                    for (int i = 1; i < size - 2; i++)
-                        bits.Set(i, false);
-                    if (size > 1)
-                        bits.Set(size - 2, true);
-                    bits.Set(size - 1, false);
-                    bits.CopyTo(arr, 0);
-                    break;
-                case 14:
-                    for (int i = 0; i < size; i++)
-                        bits.Set(i, true);
-                    if (size > 1)
-                        bits.Set(1, false);
-                    bits.CopyTo(arr, 0);
-                    break;
-                case 15:
                     arr[0] = 0;
                     break;
             }

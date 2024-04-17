@@ -32,8 +32,11 @@
             <TabItem Header="Генератор ПРЧ">
                 <views:PRNGeneratorView/>
             </TabItem>-->
-            <TabItem Header="Визуализация поля">
+            <!--<TabItem Header="Визуализация поля">
                 <views:NumberFieldVisualizationView/>
+            </TabItem>-->
+            <TabItem Header="Таблица симметричной инверсии">
+                <views:SymmetricalInversionView/>
             </TabItem>
         </TabControl>
     </DockPanel>
