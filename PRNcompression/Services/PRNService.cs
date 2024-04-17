@@ -105,15 +105,16 @@ namespace PRNcompression.Services
                     arr[0] = 0;
                     break;
                 case 1:
-                    var flag1 = true;
-                    for (int i = size - 1; i >= 0; i--)
-                    {
-                        bits.Set(i, flag1);
-                        flag1 = !flag1;
-                    }
-                    bits.CopyTo(arr, 0);
+                    arr[0] = 1;
                     break;
                 case 2:
+                    for (int i = 0; i < size / 2; i++)
+                        bits.Set(i, true);
+                    for (int i = size / 2; i < size; i++)
+                        bits.Set(i, false);
+                    bits.CopyTo(arr, 0);
+                    break;
+                case 3:
                     var flag2 = false;
                     for (int i = size - 1; i >= 0; i--)
                     {
@@ -122,102 +123,107 @@ namespace PRNcompression.Services
                     }
                     bits.CopyTo(arr, 0);
                     break;
-                case 3:
-                    for (int i = 0; i < size-1; i++)
+                case 4:
+                    for (int i = 0; i < size - 1; i++)
                         bits.Set(i, true);
                     bits.Set(size - 1, false);
                     bits.CopyTo(arr, 0);
                     break;
-                case 4:
+                case 5:
                     for (int i = 0; i < size - 1; i++)
                         bits.Set(i, false);
                     bits.Set(size - 1, true);
                     bits.CopyTo(arr, 0);
                     break;
-                case 5:
-                    if (size % 2 == 0)
-                    {
-                        for (int i = 0; i < size/2; i++)
-                            bits.Set(i, true);
-                        for (int i = size/2; i < size; i++)
-                            bits.Set(i, false);
-                        bits.CopyTo(arr, 0);
-                    }
-                    break;
                 case 6:
-                    if (size % 2 == 0)
+                    var flag1 = true;
+                    for (int i = size - 1; i >= 0; i--)
                     {
-                        for (int i = 0; i < size / 2; i++)
-                            bits.Set(i, false);
-                        for (int i = size / 2; i < size; i++)
-                            bits.Set(i, true);
-                        bits.CopyTo(arr, 0);
+                        bits.Set(i, flag1);
+                        flag1 = !flag1;
                     }
+                    bits.CopyTo(arr, 0);
                     break;
                 case 7:
-                    for (int i = 0; i < size; i++)
+                    for (int i = 0; i < size / 2; i++)
+                        bits.Set(i, false);
+                    for (int i = size / 2; i < size; i++)
                         bits.Set(i, true);
                     bits.CopyTo(arr, 0);
                     break;
                 case 8:
-                    arr[0] = 1;
-                    break;
-                case 9:
                     bits.Set(0, false);
                     for (int i = 1; i < size; i++)
                         bits.Set(i, true);
                     bits.CopyTo(arr, 0);
                     break;
-                //supplementary types
-                case 10:
+                case 9:
                     for (int i = 0; i < size; i++)
                         bits.Set(i, true);
-                    if (size % 2 == 0)
-                    {
-                        var index = size / 2;
-                        bits.Set(index, false);
-                        bits.Set(index - 1, false);
-                    }
-                    else
-                        bits.Set(size / 2, false);
+                    bits.CopyTo(arr, 0);
+                    break;
+                //supplementary types
+                case 10:
+                    bits.Set(size/2 - 1, true);
                     bits.CopyTo(arr, 0);
                     break;
                 case 11:
-                    bits.Set(0, true);
-                    bits.Set(size - 1, true);
-                    for (int i = 1; i < size - 1; i++)
-                        bits.Set(i, false);
+                    bits.Set(size - 2, true);
                     bits.CopyTo(arr, 0);
                     break;
                 case 12:
-                    bits.Set(0, true);
-                    bits.Set(size - 1, true);
                     bits.Set(size - 2, true);
-                    for (int i = 1; i < size - 2; i++)
-                        bits.Set(i, false);
+                    var flag12 = true;
+                    for (int i = size - 3; i >= 0; i--)
+                    {
+                        bits.Set(i, flag12);
+                        flag12 = !flag12;
+                    }
                     bits.CopyTo(arr, 0);
                     break;
                 case 13:
                     bits.Set(size - 1, true);
-                    bits.Set(size - 2, false);
-                    for (int i = 0; i < size - 2; i++)
-                        bits.Set(i, true);
+                    var flag13 = true;
+                    for (int i = size - 4; i >= 0; i--)
+                    {
+                        bits.Set(i, flag13);
+                        flag13 = !flag13;
+                    }
                     bits.CopyTo(arr, 0);
                     break;
                 case 14:
-                    bits.Set(0, true);
-                    bits.Set(size - 2, true);
-                    for (int i = 1; i < size - 2; i++)
-                        bits.Set(i, false);
+                    for (int i = 0; i < size; i++)
+                        bits.Set(i, true);
+                    bits.Set(size - 2, false);
                     bits.CopyTo(arr, 0);
                     break;
                 case 15:
-                    bits.Set(0, true);
-                    bits.Set(1, false);
-                    for (int i = 2; i < size; i++)
+                    for (int i = 0; i < size; i++)
                         bits.Set(i, true);
+                    bits.Set(size/2 - 1, false);
                     bits.CopyTo(arr, 0);
                     break;
+                    //case 13:
+                    //    bits.Set(size - 1, true);
+                    //    bits.Set(size - 2, false);
+                    //    for (int i = 0; i < size - 2; i++)
+                    //        bits.Set(i, true);
+                    //    bits.CopyTo(arr, 0);
+                    //    break;
+                    //case 14:
+                    //    bits.Set(0, true);
+                    //    bits.Set(size - 2, true);
+                    //    for (int i = 1; i < size - 2; i++)
+                    //        bits.Set(i, false);
+                    //    bits.CopyTo(arr, 0);
+                    //    break;
+                    //case 15:
+                    //    bits.Set(0, true);
+                    //    bits.Set(1, false);
+                    //    for (int i = 2; i < size; i++)
+                    //        bits.Set(i, true);
+                    //    bits.CopyTo(arr, 0);
+                    //    break;
             }
             return arr[0];
         }
