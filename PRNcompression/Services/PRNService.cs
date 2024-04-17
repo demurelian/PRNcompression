@@ -160,6 +160,42 @@ namespace PRNcompression.Services
                 case 10:
                     arr[0] = 0;
                     break;
+                case 11:
+                    bits.Set(0, true);
+                    bits.Set(size - 1, true);
+                    for (int i = 1; i < size - 1; i++)
+                        bits.Set(i, false);
+                    bits.CopyTo(arr, 0);
+                    break;
+                case 12:
+                    bits.Set(0, true);
+                    bits.Set(size - 1, true);
+                    bits.Set(size - 2, true);
+                    for (int i = 1; i < size - 2; i++)
+                        bits.Set(i, false);
+                    bits.CopyTo(arr, 0);
+                    break;
+                case 13:
+                    bits.Set(size - 1, true);
+                    bits.Set(size - 2, false);
+                    for (int i = 0; i < size - 2; i++)
+                        bits.Set(i, true);
+                    bits.CopyTo(arr, 0);
+                    break;
+                case 14:
+                    bits.Set(0, true);
+                    bits.Set(size - 2, true);
+                    for (int i = 1; i < size - 2; i++)
+                        bits.Set(i, false);
+                    bits.CopyTo(arr, 0);
+                    break;
+                case 15:
+                    bits.Set(0, true);
+                    bits.Set(1, false);
+                    for (int i = 2; i < size; i++)
+                        bits.Set(i, true);
+                    bits.CopyTo(arr, 0);
+                    break;
             }
             return arr[0];
         }

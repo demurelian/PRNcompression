@@ -15,12 +15,13 @@
             <ColumnDefinition/>
             <ColumnDefinition/>
         </Grid.ColumnDefinitions>
-        <DockPanel>
-            <TextBox DockPanel.Dock="Top" Height="20" Text="{Binding NumStr, Mode=TwoWay}"/>
-            <Button DockPanel.Dock="Top" Height="20" Content="Составить таблицу" Command="{Binding CreateTableCommand}"/>
-            <DataGrid ItemsSource="{Binding PRNDictionary}" AutoGenerateColumns="False">
+        <StackPanel>
+            <TextBox Height="20" Text="{Binding NumStr, Mode=TwoWay}"/>
+            <Button Height="20" Content="Составить таблицу" Command="{Binding CreateTableCommand}"/>
+
+            <DataGrid Grid.Row="0" ItemsSource="{Binding CoreTypeValues}" AutoGenerateColumns="False" CanUserAddRows="False">
                 <DataGrid.Columns>
-                    <DataGridTextColumn IsReadOnly="True" Header="Тип ПРЧ" Binding="{Binding Key}" Width="*" TextBlock.TextAlignment="Center">
+                    <DataGridTextColumn IsReadOnly="True" Header="Тип ПРЧ" Binding="{Binding Type}" Width="1*" TextBlock.TextAlignment="Center">
                         <DataGridTextColumn.HeaderStyle>
                             <Style TargetType="{x:Type DataGridColumnHeader}">
                                 <Setter Property="HorizontalContentAlignment" Value="Center"/>
@@ -32,7 +33,19 @@
                             </Style>
                         </DataGridTextColumn.ElementStyle>
                     </DataGridTextColumn>
-                    <DataGridTextColumn IsReadOnly="True" Header="Значение" Binding="{Binding Value}" Width="*">
+                    <DataGridTextColumn IsReadOnly="True" Header="Значение" Binding="{Binding Number}" Width="2*">
+                        <DataGridTextColumn.HeaderStyle>
+                            <Style TargetType="{x:Type DataGridColumnHeader}">
+                                <Setter Property="HorizontalContentAlignment" Value="Center"/>
+                            </Style>
+                        </DataGridTextColumn.HeaderStyle>
+                        <DataGridTextColumn.ElementStyle>
+                            <Style>
+                                <Setter Property="TextBlock.TextAlignment" Value="Center"/>
+                            </Style>
+                        </DataGridTextColumn.ElementStyle>
+                    </DataGridTextColumn>
+                    <DataGridTextColumn IsReadOnly="True" Header="Двоичное представление" Binding="{Binding Binary}" Width="2*">
                         <DataGridTextColumn.HeaderStyle>
                             <Style TargetType="{x:Type DataGridColumnHeader}">
                                 <Setter Property="HorizontalContentAlignment" Value="Center"/>
@@ -46,6 +59,48 @@
                     </DataGridTextColumn>
                 </DataGrid.Columns>
             </DataGrid>
-        </DockPanel>
+            
+            <TextBlock Text="Дополнительные типы:" HorizontalAlignment="Center"/>
+            <DataGrid Grid.Row="0" ItemsSource="{Binding SupTypeValues}" AutoGenerateColumns="False" CanUserAddRows="False">
+                <DataGrid.Columns>
+                    <DataGridTextColumn IsReadOnly="True" Header="Тип ПРЧ" Binding="{Binding Type}" Width="1*" TextBlock.TextAlignment="Center">
+                        <DataGridTextColumn.HeaderStyle>
+                            <Style TargetType="{x:Type DataGridColumnHeader}">
+                                <Setter Property="HorizontalContentAlignment" Value="Center"/>
+                            </Style>
+                        </DataGridTextColumn.HeaderStyle>
+                        <DataGridTextColumn.ElementStyle>
+                            <Style>
+                                <Setter Property="TextBlock.TextAlignment" Value="Center"/>
+                            </Style>
+                        </DataGridTextColumn.ElementStyle>
+                    </DataGridTextColumn>
+                    <DataGridTextColumn IsReadOnly="True" Header="Значение" Binding="{Binding Number}" Width="2*">
+                        <DataGridTextColumn.HeaderStyle>
+                            <Style TargetType="{x:Type DataGridColumnHeader}">
+                                <Setter Property="HorizontalContentAlignment" Value="Center"/>
+                            </Style>
+                        </DataGridTextColumn.HeaderStyle>
+                        <DataGridTextColumn.ElementStyle>
+                            <Style>
+                                <Setter Property="TextBlock.TextAlignment" Value="Center"/>
+                            </Style>
+                        </DataGridTextColumn.ElementStyle>
+                    </DataGridTextColumn>
+                    <DataGridTextColumn IsReadOnly="True" Header="Двоичное представление" Binding="{Binding Binary}" Width="2*">
+                        <DataGridTextColumn.HeaderStyle>
+                            <Style TargetType="{x:Type DataGridColumnHeader}">
+                                <Setter Property="HorizontalContentAlignment" Value="Center"/>
+                            </Style>
+                        </DataGridTextColumn.HeaderStyle>
+                        <DataGridTextColumn.ElementStyle>
+                            <Style>
+                                <Setter Property="TextBlock.TextAlignment" Value="Center"/>
+                            </Style>
+                        </DataGridTextColumn.ElementStyle>
+                    </DataGridTextColumn>
+                </DataGrid.Columns>
+            </DataGrid>
+        </StackPanel>
     </Grid>
 </UserControl>
