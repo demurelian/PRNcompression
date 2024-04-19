@@ -17,10 +17,10 @@ namespace PRNcompression.ViewModels
         private bool CanGeneratePRNCommandExecute(object p) => true;
         private void OnGeneratePRNCommandExecute(object p)
         {
-            int result = -1;
+            long result = -1;
             var size = ValidationHelper.ValidateNumberString(BitNumStr);
-            if (size > 0 && size < 32)
-                result = _PRNGenerationService.PRNGeneration(SelectedType.Key, size);
+            if (size > 0 && size <= 64)
+                result = _PRNGenerationService.PRNGeneration(SelectedType.Key, (int)size);
             ResultStr = result.ToString();
         }
 

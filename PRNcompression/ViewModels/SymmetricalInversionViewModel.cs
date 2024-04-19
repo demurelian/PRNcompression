@@ -13,14 +13,19 @@ namespace PRNcompression.ViewModels
     class TypeValue
     {
         public byte Type {  get; set; }
-        public int Number { get; set; }
+        public long Number { get; set; }
         public string Binary { get; set; }
     }
     class TableValue
     {
         public string TypeString { get; set; }
-        public int Number { get; set; }
+        public long Number { get; set; }
         public string BinaryString { get; set; }
+    }
+    class ZoneInfo
+    {
+        public byte ZoneNumber { get; set; }
+        public long Quantity { get; set; }
     }
 
     internal class SymmetricalInversionViewModel : ViewModel
@@ -32,17 +37,11 @@ namespace PRNcompression.ViewModels
             get => _NumStr;
             set => Set(ref _NumStr, value);
         }
-        private ObservableCollection<TypeValue> _CoreTypeValues;
-        public ObservableCollection<TypeValue> CoreTypeValues
+        private ObservableCollection<TypeValue> _TypeValues;
+        public ObservableCollection<TypeValue> TypeValues
         {
-            get => _CoreTypeValues;
-            set => Set(ref _CoreTypeValues, value);
-        }
-        private ObservableCollection<TypeValue> _SupTypeValues;
-        public ObservableCollection<TypeValue> SupTypeValues
-        {
-            get => _SupTypeValues;
-            set => Set(ref _SupTypeValues, value);
+            get => _TypeValues;
+            set => Set(ref _TypeValues, value);
         }
 
         private ObservableCollection<TableValue> _GeneralTable;
@@ -58,6 +57,13 @@ namespace PRNcompression.ViewModels
             set => Set(ref _DimensionalityOptions, value);
         }
 
+        private ObservableCollection<ZoneInfo> _Zones;
+        public ObservableCollection<ZoneInfo> Zones
+        {
+            get => _Zones;
+            set => Set(ref _Zones, value);
+        }
+
         private int _Dimensionality;
         public int Dimensionality
         {
@@ -68,48 +74,14 @@ namespace PRNcompression.ViewModels
         private bool CanCreateGeneralTableCommandExecute(object p) => true;
         private void OnCreateGeneralTableCommandExecute(object p)
         {
-            GeneralTable = new ObservableCollection<TableValue>();
-            int maxNum = (int)Math.Pow(2, Dimensionality);
-
-            for (int i = 0; i < maxNum; i++)
-            {
-                var type = _prnService.GetNumberType(i, Dimensionality);
-
-                var item = new TableValue
-                {
-                    TypeString = (type == -1) ? "" : type.ToString(),
-                    Number = i,
-                    BinaryString = Convert.ToString(i, 2).PadLeft(Dimensionality, '0')
-                };
-
-                GeneralTable.Add(item);
-            }
         }
         public ICommand CreateTableCommand { get; }
         private bool CanCreateTableCommandExecute(object p) => true;
         private void OnCreateTableCommandExecute(object p)
         {
-            var number = ValidationHelper.ValidateNumberString(NumStr);
-            var numberLength = (int)Math.Floor(Math.Log(number, 2)) + 1;
-            CoreTypeValues = new ObservableCollection<TypeValue>();
-            for (byte i = 0; i <= 9; ++i)
-            {
-                if (numberLength % 2 == 1)
-                    if (i == 5 || i == 6)
-                        continue;
-                var x = _prnService.PRNGeneration(i, numberLength);
-
-                var item = new TypeValue
-                {
-                    Type = i,
-                    Number = x,
-                    Binary = Convert.ToString(x, 2).PadLeft(numberLength, '0')
-                };
-                CoreTypeValues.Add(item);
-            }
-
-            SupTypeValues = new ObservableCollection<TypeValue>();
-            for (byte i = 10; i <= 15; i++)
+            var numberLength = int.Parse(NumStr);
+            TypeValues = new ObservableCollection<TypeValue>();
+            for (byte i = 0; i <= 15; ++i)
             {
                 var x = _prnService.PRNGeneration(i, numberLength);
 
@@ -119,12 +91,39 @@ namespace PRNcompression.ViewModels
                     Number = x,
                     Binary = Convert.ToString(x, 2).PadLeft(numberLength, '0')
                 };
-                SupTypeValues.Add(item);
+                TypeValues.Add(item);
             }
 
+            GeneralTable = new ObservableCollection<TableValue>();
+            int maxNum = (int)Math.Pow(2, numberLength);
 
-            var list = new List<bool>();
-            var CompressionInfo = _prnService.Compression(number, numberLength, ref list);
+            for (int i = 0; i < maxNum; i++)
+            {
+                var type = _prnService.GetNumberType(i, numberLength);
+
+                var item = new TableValue
+                {
+                    TypeString = (type == -1) ? "" : type.ToString(),
+                    Number = i,
+                    BinaryString = Convert.ToString(i, 2).PadLeft(numberLength, '0')
+                };
+
+                GeneralTable.Add(item);
+            }
+
+            Zones = new ObservableCollection<ZoneInfo>();
+            for (byte i = 1; i <= 12; i++)
+            {
+                var item = new ZoneInfo
+                {
+                    ZoneNumber = i,
+                    Quantity = (i >= 7) ? TypeValues[i + 1 + 1].Number - TypeValues[i + 1].Number - 1 : TypeValues[i + 1].Number - TypeValues[i].Number - 1
+                };
+                Zones.Add(item);
+            }
+
+            //var list = new List<bool>();
+            //var CompressionInfo = _prnService.Compression(number, numberLength, ref list);
         }
         public SymmetricalInversionViewModel()
         {
