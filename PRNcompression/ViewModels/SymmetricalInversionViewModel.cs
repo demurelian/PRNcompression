@@ -70,11 +70,6 @@ namespace PRNcompression.ViewModels
             get => _Dimensionality;
             set => Set(ref _Dimensionality, value);
         }
-        public ICommand CreateGeneralTableCommand { get; }
-        private bool CanCreateGeneralTableCommandExecute(object p) => true;
-        private void OnCreateGeneralTableCommandExecute(object p)
-        {
-        }
         public ICommand CreateTableCommand { get; }
         private bool CanCreateTableCommandExecute(object p) => true;
         private void OnCreateTableCommandExecute(object p)
@@ -130,7 +125,6 @@ namespace PRNcompression.ViewModels
             DimensionalityOptions = new ObservableCollection<int> { 3,4,5,6,7,8 };
             _prnService = new PRNService();
             CreateTableCommand = new LambdaCommand(OnCreateTableCommandExecute, CanCreateTableCommandExecute);
-            CreateGeneralTableCommand = new LambdaCommand(OnCreateGeneralTableCommandExecute, CanCreateGeneralTableCommandExecute);
         }
     }
 }

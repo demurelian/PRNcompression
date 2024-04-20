@@ -16,10 +16,11 @@
             <ColumnDefinition/>
         </Grid.ColumnDefinitions>
         <StackPanel>
+            <TextBlock Text="Размерность:" Height="20" Padding="2"/>
             <TextBox Height="20" Text="{Binding NumStr, Mode=TwoWay}"/>
             <Button Height="20" Content="Составить таблицу" Command="{Binding CreateTableCommand}"/>
 
-            <DataGrid ItemsSource="{Binding TypeValues}" AutoGenerateColumns="False" CanUserAddRows="False">
+            <DataGrid Margin="0,20,0,0" ItemsSource="{Binding TypeValues}" AutoGenerateColumns="False" CanUserAddRows="False">
                 <DataGrid.Columns>
                     <DataGridTextColumn IsReadOnly="True" Header="Тип ПРЧ" Binding="{Binding Type}" Width="1*" TextBlock.TextAlignment="Center">
                         <DataGridTextColumn.HeaderStyle>
@@ -59,7 +60,7 @@
                     </DataGridTextColumn>
                 </DataGrid.Columns>
             </DataGrid>
-            <TextBlock Text="Зоны:" HorizontalAlignment="Center"/>
+            <TextBlock Height="20" Padding="2" Text="Зоны:" HorizontalAlignment="Center"/>
             <DataGrid ItemsSource="{Binding Zones}" AutoGenerateColumns="False" CanUserAddRows="False">
                 <DataGrid.Columns>
                     <DataGridTextColumn IsReadOnly="True" Header="Номер" Binding="{Binding ZoneNumber}" Width="1*" TextBlock.TextAlignment="Center">
@@ -91,9 +92,6 @@
         </StackPanel>
         <DockPanel Grid.Column="1">
             <StackPanel HorizontalAlignment="Center" DockPanel.Dock="Top" Orientation="Horizontal">
-                <TextBlock Height="20" Padding="2" Text="Размерность:"/>
-                <ComboBox Height="20"  Margin="5,0,0,0" ItemsSource="{Binding DimensionalityOptions}" SelectedItem="{Binding Dimensionality}" SelectedIndex="0"/>
-                <Button Content="Составить таблицу" Command="{Binding CreateGeneralTableCommand}"/>
             </StackPanel>
             <DataGrid Grid.Column="1" ItemsSource="{Binding GeneralTable}" AutoGenerateColumns="False" CanUserAddRows="False">
                 <DataGrid.Columns>
