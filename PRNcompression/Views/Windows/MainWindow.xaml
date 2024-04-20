@@ -8,7 +8,7 @@
         xmlns:vm="clr-namespace:PRNcompression.ViewModels" 
         xmlns:fa="http://schemas.fontawesome.io/icons/"
         mc:Ignorable="d"
-        Title="PRNcompression" Height="600" Width="800"
+        Title="PRNcompression" Height="800" Width="800"
         WindowStartupLocation="CenterScreen">
     <Window.DataContext>
         <vm:MainWindowViewModel/>
@@ -32,8 +32,11 @@
             <TabItem Header="Генератор ПРЧ">
                 <views:PRNGeneratorView/>
             </TabItem>-->
-            <TabItem Header="Визуализация поля">
+            <!--<TabItem Header="Визуализация поля">
                 <views:NumberFieldVisualizationView/>
+            </TabItem>-->
+            <TabItem Header="Таблица симметричной инверсии">
+                <views:SymmetricalInversionView/>
             </TabItem>
         </TabControl>
     </DockPanel>

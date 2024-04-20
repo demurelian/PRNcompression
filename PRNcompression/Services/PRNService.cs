@@ -10,131 +10,270 @@ using System.Windows.Media;
 
 namespace PRNcompression.Services
 {
+    
     internal class PRNService : IPRNService
     {
+        public CompressedInfo Compression(long number, int numberLength, ref List<bool> inversionList)
+        {
+            var result = new CompressedInfo();
+            //10 8 5 2 3 4 1 6 9 7
+            Dictionary<byte, long> prns = new Dictionary<byte, long>();
+            for (byte i = 0; i <= 15; i++)
+            {
+                prns.Add(i, PRNGeneration(i, numberLength));
+            }
+
+            foreach (var prn in prns)
+            {
+                if (prn.Value == number)
+                {
+                    result.Type = prn.Key;
+                    result.Length = numberLength;
+                    result.InversionInfo = inversionList;
+                    return result;
+                }
+            }
+            long newNumber;
+            int newLength = numberLength - 1;
+            if (number > prns[4])
+            {
+                inversionList.Add(true);
+                long mask = prns[9];
+                newNumber = number ^ mask;
+            } else
+            {
+                inversionList.Add(false);
+                newNumber = number;
+            }
+            return Compression(newNumber, newLength, ref inversionList);
+        }
+
         /// <summary>Проверка числа на псевдорегулярную структуру и возврат типа числа</summary>
         /// <returns>тип ПРЧ 1-15, или 0 если число обычное</returns>
-        public int GetNumberType(int num)
+        public int GetNumberType(int num, int dimensionality)
         {
-            var bits = (num == 1) ? 1 : (int)Math.Floor(Math.Log(num, 2))+1;
-            for(int i = 0; i < 15; i++)
+            for (byte i = 0; i <= 15; i++)
             {
-                var x = PRNGeneration((byte)i, bits);
+                var x = PRNGeneration(i, dimensionality);
                 if (num == x)
                     return i;
             }
-            return 0;
+            return -1;
+        }
+
+        public int GetNumberLength(int num) => (num == 1 || num == 0) ? 1 : (int)Math.Floor(Math.Log(num, 2)) + 1;
+
+        static long BitArrayToLong(BitArray bits)
+        {
+            if (bits.Count > 64)
+                throw new ArgumentException("BitArray должен содержать не более 64 бит");
+
+            byte[] bytes = new byte[8];
+            bits.CopyTo(bytes, 0);
+            // Если количество битов меньше 64, дополняем массив нулями
+            if (bits.Count < 64)
+            {
+                // Определяем количество нулевых битов для дополнения
+                int zeroBits = 64 - bits.Count;
+
+                // Устанавливаем нулевые биты
+                for (int i = bits.Count; i < 64; i++)
+                {
+                    bytes[i / 8] &= (byte)~(1 << (i % 8));
+                }
+            }
+            return BitConverter.ToInt64(bytes, 0);
         }
 
         /// <summary> Генерирует псевдорегулярное число </summary>
         /// <returns> ПРЧ или -1 в случае ошибки </returns>
-        public int PRNGeneration(byte type, int size)
+        public long PRNGeneration(byte type, int size)
         {
             var bits = new BitArray(size);
-            int[] arr = new int[1];
-            arr[0] = -1;
+            //long[] arr = new long[1];
+            //arr[0] = -1;
             switch (type)
             {
+                case 0:
+                    return 0;
                 case 1:
-                    for (int i = 0; i < size; i++)
-                        bits.Set(i, Convert.ToBoolean(i % 2));
-                    bits.CopyTo(arr, 0);
-                    break;
+                    return 1;
                 case 2:
-                    for (int i = 0; i < size; i++)
-                        bits.Set(i, Convert.ToBoolean((i+1) % 2));
-                    bits.CopyTo(arr, 0);
-                    break;
-                case 3:
-                    for (int i = 0; i < size-1; i++)
-                        bits.Set(i, true);
-                    bits.Set(size - 1, false);
-                    bits.CopyTo(arr, 0);
-                    break;
-                case 4:
-                    for (int i = 0; i < size - 1; i++)
-                        bits.Set(i, false);
-                    bits.Set(size - 1, true);
-                    bits.CopyTo(arr, 0);
-                    break;
-                case 5:
                     if (size % 2 == 0)
                     {
-                        for (int i = 0; i < size/2; i++)
-                            bits.Set(i, true);
-                        for (int i = size/2; i < size; i++)
-                            bits.Set(i, false);
-                        bits.CopyTo(arr, 0);
+                        bits.Set(0, false);
+                        bits.Set(1, true);
+                        var flag10 = false;
+                        for (int i = size - 3; i >= 2; i--)
+                        {
+                            bits.Set(i, flag10);
+                            flag10 = !flag10;
+                        }
+                        bits.Set(size - 2, false);
+                        bits.Set(size - 1, false);
+                    }
+                    else
+                    {
+                        bits.Set(0, true);
+                        bits.Set(1, true);
+                        var flag10 = false;
+                        for (int i = size - 3; i >= 2; i--)
+                        {
+                            bits.Set(i, flag10);
+                            flag10 = !flag10;
+                        }
+                        bits.Set(size - 2, false);
+                        bits.Set(size - 1, false);
+                    }
+                    break;
+                case 3:
+                    if (size % 2 == 0)
+                    {
+                        bits.Set(0, true);
+                        bits.Set(1, true);
+                        var flag2 = true;
+                        for (int i = size - 3; i >= 2; i--)
+                        {
+                            bits.Set(i, flag2);
+                            flag2 = !flag2;
+                        }
+                        bits.Set(size - 2, false);
+                        bits.Set(size - 1, false);
+                    }
+                    else
+                    {
+                        bits.Set(0, false);
+                        bits.Set(1, true);
+                        var flag2 = true;
+                        for (int i = size - 3; i >= 2; i--)
+                        {
+                            bits.Set(i, flag2);
+                            flag2 = !flag2;
+                        }
+                        bits.Set(size - 2, false);
+                        bits.Set(size - 1, false);
+                    }
+                    break;
+                case 4:
+                    bits.Set(size - 2, true);
+                    break;
+                case 5:
+                    var flag3 = false;
+                    for (int i = size - 1; i >= 0; i--)
+                    {
+                        bits.Set(i, flag3);
+                        flag3 = !flag3;
                     }
                     break;
                 case 6:
-                    if (size % 2 == 0)
+                    bits.Set(size - 2, true);
+                    var flag12 = true;
+                    for (int i = size - 3; i >= 0; i--)
                     {
-                        for (int i = 0; i < size / 2; i++)
-                            bits.Set(i, false);
-                        for (int i = size / 2; i < size; i++)
-                            bits.Set(i, true);
-                        bits.CopyTo(arr, 0);
+                        bits.Set(i, flag12);
+                        flag12 = !flag12;
                     }
                     break;
                 case 7:
-                    for (int i = 0; i < size; i++)
+                    for (int i = 0; i < size - 1; i++)
                         bits.Set(i, true);
-                    bits.CopyTo(arr, 0);
+                    bits.Set(size - 1, false);
                     break;
                 case 8:
-                    arr[0] = 1;
+                    for (int i = 0; i < size - 1; i++)
+                        bits.Set(i, false);
+                    bits.Set(size - 1, true);
                     break;
                 case 9:
+                    bits.Set(size - 1, true);
+                    var flag13 = true;
+                    for (int i = size - 4; i >= 0; i--)
+                    {
+                        bits.Set(i, flag13);
+                        flag13 = !flag13;
+                    }
+                    break;
+                //supplementary types
+                case 10:
+                    var flag1 = true;
+                    for (int i = size - 1; i >= 0; i--)
+                    {
+                        bits.Set(i, flag1);
+                        flag1 = !flag1;
+                    }
+                    break;
+                case 11:
+                    for (int i = 0; i < size; i++)
+                        bits.Set(i, true);
+                    bits.Set(size - 2, false);
+                    break;
+                case 12:
+                    if (size % 2 == 0)
+                    {
+                        bits.Set(0, false);
+                        bits.Set(1, false);
+                        var flag7 = false;
+                        for (int i = size - 3; i >= 2; i--)
+                        {
+                            bits.Set(i, flag7);
+                            flag7 = !flag7;
+                        }
+                        bits.Set(size - 2, true);
+                        bits.Set(size - 1, true);
+                    }
+                    else
+                    {
+                        bits.Set(0, true);
+                        bits.Set(1, false);
+                        var flag7 = false;
+                        for (int i = size - 3; i >= 2; i--)
+                        {
+                            bits.Set(i, flag7);
+                            flag7 = !flag7;
+                        }
+                        bits.Set(size - 2, true);
+                        bits.Set(size - 1, true);
+                    }
+                    break;
+                case 13:
+                    if (size % 2 == 0)
+                    {
+                        bits.Set(0, true);
+                        bits.Set(1, false);
+                        var flag15 = true;
+                        for (int i = size - 3; i >= 2; i--)
+                        {
+                            bits.Set(i, flag15);
+                            flag15 = !flag15;
+                        }
+                        bits.Set(size - 2, true);
+                        bits.Set(size - 1, true);
+                    }
+                    else
+                    {
+                        bits.Set(0, false);
+                        bits.Set(1, false);
+                        var flag15 = true;
+                        for (int i = size - 3; i >= 2; i--)
+                        {
+                            bits.Set(i, flag15);
+                            flag15 = !flag15;
+                        }
+                        bits.Set(size - 2, true);
+                        bits.Set(size - 1, true);
+                    }
+                    break;
+                case 14:
                     bits.Set(0, false);
                     for (int i = 1; i < size; i++)
                         bits.Set(i, true);
-                    bits.CopyTo(arr, 0);
-                    break;
-                case 10:
-                    bits.Set(0, true);
-                    for (int i = 1; i < size - 1; i++)
-                        bits.Set(i, false);
-                    bits.Set(size - 1, true);
-                    bits.CopyTo(arr, 0);
-                    break;
-                case 11:
-                    bits.Set(0, true);
-                    for (int i = 1; i < size - 2; i++)
-                        bits.Set(i, false);
-                    if(size > 1)
-                        bits.Set(size - 2, true);
-                    bits.Set(size - 1, true);
-                    bits.CopyTo(arr, 0);
-                    break;
-                case 12:
-                    for (int i = 0; i < size; i++)
-                        bits.Set(i, true);
-                    if (size > 1)
-                        bits.Set(size - 2, false);
-                    bits.CopyTo(arr, 0);
-                    break;
-                case 13:
-                    bits.Set(0, true);
-                    for (int i = 1; i < size - 2; i++)
-                        bits.Set(i, false);
-                    if (size > 1)
-                        bits.Set(size - 2, true);
-                    bits.Set(size - 1, false);
-                    bits.CopyTo(arr, 0);
-                    break;
-                case 14:
-                    for (int i = 0; i < size; i++)
-                        bits.Set(i, true);
-                    if (size > 1)
-                        bits.Set(1, false);
-                    bits.CopyTo(arr, 0);
                     break;
                 case 15:
-                    arr[0] = 0;
+                    for (int i = 0; i < size; i++)
+                        bits.Set(i, true);
                     break;
             }
-            return arr[0];
+            return BitArrayToLong(bits);
         }
 
         /// <summary>Индекс в массиве = число</summary>
