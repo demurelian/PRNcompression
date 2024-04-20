@@ -13,7 +13,7 @@ namespace PRNcompression.Services.Interfaces
     {
         long PRNGeneration(byte type, int size);
         int GetNumberType(int num, int dimensionality);
-        int GetNumberLength(int num);
+        int GetNumberLength(long num);
         byte[] FieldCharacterization(byte dimensionality);
         CompressedInfo Compression(long number, int numberLength, ref List<bool> list);
     }

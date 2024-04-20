@@ -1,0 +1,37 @@
+﻿<UserControl x:Class="PRNcompression.Views.CompressionView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:vm="clr-namespace:PRNcompression.ViewModels"
+             xmlns:local="clr-namespace:PRNcompression.Views"
+             mc:Ignorable="d" 
+             d:DesignHeight="450" d:DesignWidth="800">
+    <UserControl.DataContext>
+        <vm:CompressionViewModel/>
+    </UserControl.DataContext>
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition/>
+            <ColumnDefinition/>
+        </Grid.ColumnDefinitions>
+        <StackPanel Grid.Column="0">
+            <TextBlock Height="20" Padding="1" Text="Число:"/>
+            <TextBox Height="20" Text="{Binding NumStr,Mode=TwoWay}"/>
+            <Button Height="20" Content="Сжать" Command="{Binding CompressionStartCommand}"/>
+            <StackPanel Orientation="Horizontal" Height="20">
+                <TextBlock Height="20" Padding="1" FontWeight="Bold" Text="Результат:"/>
+                <TextBlock Height="20" Padding="1" Text="{Binding ResultStr}"/>
+            </StackPanel>
+            <DataGrid AutoGenerateColumns="False" ItemsSource="{Binding CompressionInfo}" CanUserAddRows="False">
+                <DataGrid.Columns>
+                    <DataGridTextColumn Width="*" Header="Число" Binding="{Binding InitialNumber}" />
+                    <DataGridTextColumn Width="*" Header="Длина" Binding="{Binding InitialLength}" />
+                    <DataGridTextColumn Width="*" Header="Тип ПРЧ" Binding="{Binding Type}" />
+                    <DataGridTextColumn Width="*" Header="Длина ПРЧ" Binding="{Binding Length}" />
+                    <DataGridTextColumn Width="*" Header="Кол-во инверсий" Binding="{Binding ListSize}" />
+                </DataGrid.Columns>
+            </DataGrid>
+        </StackPanel>
+    </Grid>
+</UserControl>

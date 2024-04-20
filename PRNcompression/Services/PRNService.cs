@@ -35,10 +35,10 @@ namespace PRNcompression.Services
             }
             long newNumber;
             int newLength = numberLength - 1;
-            if (number > prns[4])
+            if (number > prns[7])
             {
                 inversionList.Add(true);
-                long mask = prns[9];
+                long mask = prns[15];
                 newNumber = number ^ mask;
             } else
             {
@@ -61,7 +61,7 @@ namespace PRNcompression.Services
             return -1;
         }
 
-        public int GetNumberLength(int num) => (num == 1 || num == 0) ? 1 : (int)Math.Floor(Math.Log(num, 2)) + 1;
+        public int GetNumberLength(long num) => (num == 1 || num == 0) ? 1 : (int)Math.Floor(Math.Log(num, 2)) + 1;
 
         static long BitArrayToLong(BitArray bits)
         {
