@@ -29,17 +29,21 @@
             <TabItem Header="Исходные данные">
                 <views:InitialDataView/>
             </TabItem>
-            <TabItem Header="Генератор ПРЧ">
-                <views:PRNGeneratorView/>
-            </TabItem>
-            <TabItem Header="Визуализация поля">
-                <views:NumberFieldVisualizationView/>
-            </TabItem>
-            <TabItem Header="Таблица симметричной инверсии">
-                <views:SymmetricalInversionView/>
-            </TabItem>
-            <TabItem Header="Сжатие">
-                <views:CompressionView/>
+            <TabItem Header="Моделирование ПРЧ">
+                <TabControl>
+                    <TabItem Header="Генератор ПРЧ">
+                        <views:PRNGeneratorView/>
+                    </TabItem>
+                    <TabItem Header="Визуализация поля">
+                        <views:NumberFieldVisualizationView/>
+                    </TabItem>
+                    <TabItem Header="Таблица симметричной инверсии">
+                        <views:SymmetricalInversionView/>
+                    </TabItem>
+                    <TabItem Header="Сжатие\Распаковка">
+                        <views:CompressionView/>
+                    </TabItem>
+                </TabControl>
             </TabItem>
         </TabControl>
     </DockPanel>

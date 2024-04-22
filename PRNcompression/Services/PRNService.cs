@@ -47,6 +47,52 @@ namespace PRNcompression.Services
             }
             return Compression(newNumber, newLength, ref inversionList);
         }
+        
+        public DecompressedInfo Decompression(BitArray serviceInfo, BitArray data)
+        {
+            var item = new DecompressedInfo();
+            byte type;
+            int length;
+            SplitBitArray(serviceInfo, out type, out length);
+            item.Type = type;
+            item.Length = length;
+
+            var number = PRNGeneration(type, length);
+
+            for (int i = data.Length - 1; i >= 0; i--)
+            {
+                length++;
+                if (data[i])
+                {
+                    var mask = PRNGeneration(15, length);
+                    number = number ^ mask;
+                } 
+            }
+
+            item.ResultNumber = number;
+            return item;
+        }
+        
+
+        static void SplitBitArray(BitArray bits, out byte firstFourBits, out int remainingBits)
+        {
+            firstFourBits = 0;
+            remainingBits = 0;
+
+            // Получаем первые 4 бита как byte
+            for (int i = 0; i < 4; i++)
+            {
+                if (bits[i])
+                    firstFourBits |= (byte)(1 << (3 - i));
+            }
+
+            // Получаем остальные биты как int
+            for (int i = 4; i < bits.Length; i++)
+            {
+                if (bits[i])
+                    remainingBits |= (1 << (bits.Length - 1 - i));
+            }
+        }
 
         /// <summary>Проверка числа на псевдорегулярную структуру и возврат типа числа</summary>
         /// <returns>тип ПРЧ 1-15, или 0 если число обычное</returns>

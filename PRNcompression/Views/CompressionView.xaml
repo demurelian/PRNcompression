@@ -12,26 +12,34 @@
     </UserControl.DataContext>
     <Grid>
         <Grid.ColumnDefinitions>
-            <ColumnDefinition/>
+            <ColumnDefinition />
             <ColumnDefinition/>
         </Grid.ColumnDefinitions>
-        <StackPanel Grid.Column="0">
+        <StackPanel Margin="10" Grid.Column="0">
+            <TextBlock Height="25" Text="СЖАТИЕ ЧИСЛА" FontWeight="Bold" FontSize="15" Padding="2" HorizontalAlignment="Center"/>
             <TextBlock Height="20" Padding="1" Text="Число:"/>
             <TextBox Height="20" Text="{Binding NumStr,Mode=TwoWay}"/>
             <Button Height="20" Content="Сжать" Command="{Binding CompressionStartCommand}"/>
             <StackPanel Orientation="Horizontal" Height="20">
-                <TextBlock Height="20" Padding="1" FontWeight="Bold" Text="Результат:"/>
+                <TextBlock Height="20" Padding="1" Text="Результат:"/>
                 <TextBlock Height="20" Padding="1" Text="{Binding ResultStr}"/>
             </StackPanel>
             <DataGrid AutoGenerateColumns="False" ItemsSource="{Binding CompressionInfo}" CanUserAddRows="False">
                 <DataGrid.Columns>
-                    <DataGridTextColumn Width="*" Header="Число" Binding="{Binding InitialNumber}" />
-                    <DataGridTextColumn Width="*" Header="Длина" Binding="{Binding InitialLength}" />
-                    <DataGridTextColumn Width="*" Header="Тип ПРЧ" Binding="{Binding Type}" />
-                    <DataGridTextColumn Width="*" Header="Длина ПРЧ" Binding="{Binding Length}" />
-                    <DataGridTextColumn Width="*" Header="Кол-во инверсий" Binding="{Binding ListSize}" />
+                    <DataGridTextColumn Width="*" Header="Свойство" Binding="{Binding Property}" />
+                    <DataGridTextColumn Width="*" Header="Значение" Binding="{Binding ValueString}" />
+                    <DataGridTextColumn Width="2*" Header="Двоичное представление" Binding="{Binding BinaryString}" />
                 </DataGrid.Columns>
             </DataGrid>
+        </StackPanel>
+        <StackPanel Margin="10" Grid.Column="1">
+            <TextBlock Height="25" Text="РАСПАКОВКА" FontWeight="Bold" FontSize="15" Padding="2" HorizontalAlignment="Center"/>
+            <TextBlock Height="20" Padding="1" Text="Служебная информация:"/>
+            <TextBox Height="20" Text="{Binding ServiceInfoStr}"/>
+            <TextBlock Height="20" Padding="1" Text="Данные:"/>
+            <TextBox Height="20" Text="{Binding DataStr}"/>
+            <Button Height="20" Content="Распаковать" Command="{Binding DecompressionStartCommand}"/>
+            <TextBlock Height="20" Text="{Binding DecompressionResultStr}"/>
         </StackPanel>
     </Grid>
 </UserControl>

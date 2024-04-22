@@ -11,67 +11,78 @@
     <UserControl.DataContext>
         <vm:InitialDataViewModel/>
     </UserControl.DataContext>
-    <Grid>
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="1*"/>
-            <ColumnDefinition Width="3*"/>
-            <ColumnDefinition Width="1*"/>
-        </Grid.ColumnDefinitions>
-        <StackPanel Grid.Column="1">
-            <TextBlock HorizontalAlignment="Center" Foreground="Blue"
-                   FontWeight="Bold" FontSize="18"
-                   Text="Генерация исходных данных"/>
-            <Grid Margin="0,2,0,0">
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="140"/>
-                    <ColumnDefinition Width="*"/>
-                    <ColumnDefinition Width="45"/>
-                </Grid.ColumnDefinitions>
-                <TextBlock Padding="5" Grid.Column="0" Text="Размер данных:"
-                       FontSize="15" Foreground="Blue"/>
-                <TextBox Padding="5" Grid.Column="1" Foreground="Blue"
-                     Text="{Binding ByteNumberStr}"/>
-                <TextBlock Padding="5" Foreground="Blue"
-                       Grid.Column="2" Text="Байт"
-                       FontSize="15"
-                       HorizontalAlignment="Right"/>
-            </Grid>
-            <Button Margin="0,5,0,0" Style="{StaticResource CustomButton}"
-                Height="25" Content="Сгенерировать"
-                Command="{Binding GenerateDataCommand}"/>
-            <TextBlock HorizontalAlignment="Center" Text="ИЛИ"
-                   Foreground="Blue"
-                   FontWeight="Bold" FontSize="15"/>
-            <StackPanel Orientation="Horizontal">
-                <TextBlock Text="Выбор файла с данными:" Foreground="Blue"
-                   Padding="5" FontSize="15"/>
-                <TextBlock x:Name="FilePathBlock" Padding="5" FontSize="15"/>
-            </StackPanel>
+    <TabControl>
+        <TabItem Header="Генерация исходного файла">
             <Grid>
-                <StackPanel>
-                    <GroupBox Grid.Column="1" Height="180">
-                        <GroupBox.Resources>
-                            <HierarchicalDataTemplate DataType="{x:Type vm:DirectoryViewModel}"
-                              ItemsSource="{Binding DirectoryItems}">
-                                <StackPanel Orientation="Horizontal">
-                                    <fa:ImageAwesome Height="12" Icon="Folder" Foreground="Gold" Margin="0,0,3,0"/>
-                                    <TextBlock Text="{Binding Name}"/>
-                                </StackPanel>
-                            </HierarchicalDataTemplate>
-                            <DataTemplate DataType="{x:Type vm:FileViewModel}">
-                                <StackPanel Orientation="Horizontal">
-                                    <fa:ImageAwesome Height="12" Icon="File" Foreground="LightGray"/>
-                                    <TextBlock Text="{Binding Name}"/>
-                                </StackPanel>
-                            </DataTemplate>
-                        </GroupBox.Resources>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="1*"/>
+                    <ColumnDefinition Width="3*"/>
+                    <ColumnDefinition Width="1*"/>
+                </Grid.ColumnDefinitions>
+                <StackPanel Grid.Column="1">
+                    <TextBlock HorizontalAlignment="Center" Foreground="Blue"
+               FontWeight="Bold" FontSize="18"
+               Text="Генерация исходных данных"/>
+                    <Grid Margin="0,2,0,0">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="140"/>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="45"/>
+                        </Grid.ColumnDefinitions>
+                        <TextBlock Padding="5" Grid.Column="0" Text="Размер данных:"
+                   FontSize="15" Foreground="Blue"/>
+                        <TextBox Padding="5" Grid.Column="1" Foreground="Blue"
+                 Text="{Binding ByteNumberStr}"/>
+                        <TextBlock Padding="5" Foreground="Blue"
+                   Grid.Column="2" Text="Байт"
+                   FontSize="15"
+                   HorizontalAlignment="Right"/>
+                    </Grid>
+                    <Button Margin="0,5,0,0" Style="{StaticResource CustomButton}"
+            Height="25" Content="Сгенерировать"
+            Command="{Binding GenerateDataCommand}"/>
+                    <TextBlock HorizontalAlignment="Center" Text="ИЛИ"
+               Foreground="Blue"
+               FontWeight="Bold" FontSize="15"/>
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock Text="Выбор файла с данными:" Foreground="Blue"
+               Padding="5" FontSize="15"/>
+                        <TextBlock x:Name="FilePathBlock" Padding="5" FontSize="15"/>
+                    </StackPanel>
+                    <Grid>
+                        <StackPanel>
+                            <GroupBox Grid.Column="1" Height="180">
+                                <GroupBox.Resources>
+                                    <HierarchicalDataTemplate DataType="{x:Type vm:DirectoryViewModel}"
+                          ItemsSource="{Binding DirectoryItems}">
+                                        <StackPanel Orientation="Horizontal">
+                                            <fa:ImageAwesome Height="12" Icon="Folder" Foreground="Gold" Margin="0,0,3,0"/>
+                                            <TextBlock Text="{Binding Name}"/>
+                                        </StackPanel>
+                                    </HierarchicalDataTemplate>
+                                    <DataTemplate DataType="{x:Type vm:FileViewModel}">
+                                        <StackPanel Orientation="Horizontal">
+                                            <fa:ImageAwesome Height="12" Icon="File" Foreground="LightGray"/>
+                                            <TextBlock Text="{Binding Name}"/>
+                                        </StackPanel>
+                                    </DataTemplate>
+                                </GroupBox.Resources>
 
-                        <TreeView ItemsSource="{Binding Disks}" SelectedItemChanged="TreeView_SelectedItemChanged"/>
-                    </GroupBox>
-                    <Button Height="25" Style="{StaticResource CustomButton}"
-                        Content="Выбрать" Command="{Binding FileSelectedCommand}"/>
+                                <TreeView ItemsSource="{Binding Disks}" SelectedItemChanged="TreeView_SelectedItemChanged"/>
+                            </GroupBox>
+                            <Button Height="25" Style="{StaticResource CustomButton}"
+                    Content="Выбрать" Command="{Binding FileSelectedCommand}"/>
+                        </StackPanel>
+                    </Grid>
                 </StackPanel>
             </Grid>
-        </StackPanel>
-    </Grid>
+        </TabItem>
+        <TabItem Header="Генерация файла с регулярной структурой">
+            
+        </TabItem>
+        <TabItem Header="Выбор существующего файла">
+            
+        </TabItem>
+    </TabControl>
+    
 </UserControl>
