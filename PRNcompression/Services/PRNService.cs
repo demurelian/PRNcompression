@@ -13,11 +13,11 @@ namespace PRNcompression.Services
     
     internal class PRNService : IPRNService
     {
-        public CompressedInfo Compression(long number, int numberLength, ref List<bool> inversionList)
+        public CompressedInfo Compression(ulong number, int numberLength, ref List<bool> inversionList)
         {
             var result = new CompressedInfo();
             //10 8 5 2 3 4 1 6 9 7
-            Dictionary<byte, long> prns = new Dictionary<byte, long>();
+            var prns = new Dictionary<byte, ulong>();
             for (byte i = 0; i <= 15; i++)
             {
                 prns.Add(i, PRNGeneration(i, numberLength));
@@ -33,12 +33,12 @@ namespace PRNcompression.Services
                     return result;
                 }
             }
-            long newNumber;
+            ulong newNumber;
             int newLength = numberLength - 1;
             if (number > prns[7])
             {
                 inversionList.Add(true);
-                long mask = prns[15];
+                ulong mask = prns[15];
                 newNumber = number ^ mask;
             } else
             {
@@ -50,7 +50,7 @@ namespace PRNcompression.Services
 
         /// <summary>Проверка числа на псевдорегулярную структуру и возврат типа числа</summary>
         /// <returns>тип ПРЧ 1-15, или 0 если число обычное</returns>
-        public int GetNumberType(int num, int dimensionality)
+        public int GetNumberType(ulong num, int dimensionality)
         {
             for (byte i = 0; i <= 15; i++)
             {
@@ -61,9 +61,9 @@ namespace PRNcompression.Services
             return -1;
         }
 
-        public int GetNumberLength(long num) => (num == 1 || num == 0) ? 1 : (int)Math.Floor(Math.Log(num, 2)) + 1;
+        public int GetNumberLength(ulong num) => (num == 1 || num == 0) ? 1 : (int)Math.Floor(Math.Log(num, 2)) + 1;
 
-        static long BitArrayToLong(BitArray bits)
+        static ulong BitArrayToLong(BitArray bits)
         {
             if (bits.Count > 64)
                 throw new ArgumentException("BitArray должен содержать не более 64 бит");
@@ -82,12 +82,12 @@ namespace PRNcompression.Services
                     bytes[i / 8] &= (byte)~(1 << (i % 8));
                 }
             }
-            return BitConverter.ToInt64(bytes, 0);
+            return BitConverter.ToUInt64(bytes, 0);
         }
 
         /// <summary> Генерирует псевдорегулярное число </summary>
         /// <returns> ПРЧ или -1 в случае ошибки </returns>
-        public long PRNGeneration(byte type, int size)
+        public ulong PRNGeneration(byte type, int size)
         {
             var bits = new BitArray(size);
             //long[] arr = new long[1];

@@ -26,7 +26,7 @@
             </StatusBarItem>
         </StatusBar>
         <TabControl>
-            <!--<TabItem Header="Исходные данные">
+            <TabItem Header="Исходные данные">
                 <views:InitialDataView/>
             </TabItem>
             <TabItem Header="Генератор ПРЧ">
@@ -37,7 +37,7 @@
             </TabItem>
             <TabItem Header="Таблица симметричной инверсии">
                 <views:SymmetricalInversionView/>
-            </TabItem>-->
+            </TabItem>
             <TabItem Header="Сжатие">
                 <views:CompressionView/>
             </TabItem>

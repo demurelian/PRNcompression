@@ -13,19 +13,19 @@ namespace PRNcompression.ViewModels
     class TypeValue
     {
         public byte Type {  get; set; }
-        public long Number { get; set; }
+        public ulong Number { get; set; }
         public string Binary { get; set; }
     }
     class TableValue
     {
         public string TypeString { get; set; }
-        public long Number { get; set; }
+        public ulong Number { get; set; }
         public string BinaryString { get; set; }
     }
     class ZoneInfo
     {
         public byte ZoneNumber { get; set; }
-        public long Quantity { get; set; }
+        public ulong Quantity { get; set; }
     }
 
     internal class SymmetricalInversionViewModel : ViewModel
@@ -84,27 +84,27 @@ namespace PRNcompression.ViewModels
                 {
                     Type = i,
                     Number = x,
-                    Binary = Convert.ToString(x, 2).PadLeft(numberLength, '0')
+                    Binary = Convert.ToString((long)x, 2).PadLeft(numberLength, '0')
                 };
                 TypeValues.Add(item);
             }
 
-            GeneralTable = new ObservableCollection<TableValue>();
-            int maxNum = (int)Math.Pow(2, numberLength);
+            //GeneralTable = new ObservableCollection<TableValue>();
+            //var maxNum = (ulong)Math.Pow(2, numberLength);
 
-            for (int i = 0; i < maxNum; i++)
-            {
-                var type = _prnService.GetNumberType(i, numberLength);
+            //for (ulong i = 0; i < maxNum; i++)
+            //{
+            //    var type = _prnService.GetNumberType(i, numberLength);
 
-                var item = new TableValue
-                {
-                    TypeString = (type == -1) ? "" : type.ToString(),
-                    Number = i,
-                    BinaryString = Convert.ToString(i, 2).PadLeft(numberLength, '0')
-                };
+            //    var item = new TableValue
+            //    {
+            //        TypeString = (type == -1) ? "" : type.ToString(),
+            //        Number = i,
+            //        BinaryString = Convert.ToString((long)i, 2).PadLeft(numberLength, '0')
+            //    };
 
-                GeneralTable.Add(item);
-            }
+            //    GeneralTable.Add(item);
+            //}
 
             Zones = new ObservableCollection<ZoneInfo>();
             for (byte i = 1; i <= 12; i++)

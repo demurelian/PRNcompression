@@ -11,7 +11,7 @@ namespace PRNcompression.ViewModels
 {
     public class NewCompressedInfo : CompressedInfo
     {
-        public long InitialNumber { get; set; }
+        public ulong InitialNumber { get; set; }
         public int InitialLength { get; set; }
         public int ListSize { get; set; }
     }
@@ -40,10 +40,10 @@ namespace PRNcompression.ViewModels
         private bool CanCompressionStartCommandExecute(object p) => true;
         private void OnCompressionStartCommandExecute(object p)
         {
-            var number = ValidationHelper.ValidateNumberString(NumStr);
-            var Numbers = 10000;
+            var number = ulong.Parse(NumStr);
+            ulong Numbers = 10000;
             var EfficientNumbers = 0;
-            for (long i = number; i < number + Numbers; i++)
+            for (ulong i = number; i < number + Numbers; i++)
             {
                 var length = _prnService.GetNumberLength(i);
                 var list = new List<bool>();
@@ -58,7 +58,7 @@ namespace PRNcompression.ViewModels
                     InitialNumber = i,
                     ListSize = list.Count
                 };
-                var lengthOfLength = _prnService.GetNumberLength(item2.Length);
+                var lengthOfLength = _prnService.GetNumberLength((ulong)item2.Length);
                 if(item2.ListSize < length - 4 - lengthOfLength)
                 {
                     CompressionInfo.Add(item2);
