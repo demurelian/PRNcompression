@@ -89,22 +89,22 @@ namespace PRNcompression.ViewModels
                 TypeValues.Add(item);
             }
 
-            //GeneralTable = new ObservableCollection<TableValue>();
-            //var maxNum = (ulong)Math.Pow(2, numberLength);
+            GeneralTable = new ObservableCollection<TableValue>();
+            var maxNum = (ulong)Math.Pow(2, numberLength);
 
-            //for (ulong i = 0; i < maxNum; i++)
-            //{
-            //    var type = _prnService.GetNumberType(i, numberLength);
+            for (ulong i = 0; i < maxNum; i++)
+            {
+                var type = _prnService.GetNumberType(i, numberLength);
 
-            //    var item = new TableValue
-            //    {
-            //        TypeString = (type == -1) ? "" : type.ToString(),
-            //        Number = i,
-            //        BinaryString = Convert.ToString((long)i, 2).PadLeft(numberLength, '0')
-            //    };
+                var item = new TableValue
+                {
+                    TypeString = (type == -1) ? "" : type.ToString(),
+                    Number = i,
+                    BinaryString = Convert.ToString((long)i, 2).PadLeft(numberLength, '0')
+                };
 
-            //    GeneralTable.Add(item);
-            //}
+                GeneralTable.Add(item);
+            }
 
             Zones = new ObservableCollection<ZoneInfo>();
             for (byte i = 1; i <= 12; i++)

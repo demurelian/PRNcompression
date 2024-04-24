@@ -12,20 +12,13 @@ using System.Text;
 
 namespace PRNcompression.ViewModels
 {
-    public class StringThree
+    struct StringThree
     {
-        public string Property { get; set; }
+        public string Discription { get; set; }
         public string ValueString { get; set; }
         public string BinaryString { get; set; }
     }
-    //public class NewCompressedInfo
-    //{
-    //    public StringPair InitialNumber { get; set; }
-    //    public StringPair InitialLength { get; set; }
-    //    public StringPair Type { get; set; }
-    //    public StringPair TypeLength { get; set; }
-    //    public StringPair Inversion { get; set; }
-    //}
+
     internal class CompressionViewModel : ViewModel
     {
         private IPRNService _prnService;
@@ -48,20 +41,41 @@ namespace PRNcompression.ViewModels
             get => _CompressionInfo;
             set => Set(ref _CompressionInfo, value);
         }
+        private ObservableCollection<StringThree> _NumberWayInfo;
+        public ObservableCollection<StringThree> NumberWayInfo
+        {
+            get => _NumberWayInfo;
+            set => Set(ref _NumberWayInfo, value);
+        }
         public ICommand CompressionStartCommand { get; }
         private bool CanCompressionStartCommandExecute(object p) => true;
         private void OnCompressionStartCommandExecute(object p)
         {
             var number = ulong.Parse(NumStr);
             var length = _prnService.GetNumberLength(number);
-            var list = new List<bool>();
-            var item = _prnService.Compression(number, length, ref list);
+            var boolList = new List<bool>();
+            var ulongList = new List<ulong>();
+            var item = _prnService.Compression(number, length, ref boolList, ref ulongList);
+
+            NumberWayInfo = new ObservableCollection<StringThree>();
+            int i = 0;
+            foreach (var currentNumber in ulongList)
+            {
+                var currItem = new StringThree
+                {
+                    Discription = $"{i+1}",
+                    ValueString = currentNumber.ToString(),
+                    BinaryString = Convert.ToString((long)currentNumber, 2).PadLeft(length - i, '0')
+                };
+                i++;
+                NumberWayInfo.Add(currItem);
+            }
 
             CompressionInfo = new ObservableCollection<StringThree>();
 
             var item2 = new StringThree
             {
-                Property = "Число",
+                Discription = "Число",
                 ValueString = number.ToString(),
                 BinaryString = Convert.ToString((long)number, 2).PadLeft(length, '0')
             };
@@ -69,15 +83,15 @@ namespace PRNcompression.ViewModels
 
             var item3 = new StringThree
             {
-                Property = "Длина",
+                Discription = "Длина",
                 ValueString = length.ToString(),
-                BinaryString = ""
+                BinaryString = "-"
             };
             CompressionInfo.Add(item3);
 
             var item4 = new StringThree
             {
-                Property = "Тип ПРЧ",
+                Discription = "Тип ПРЧ",
                 ValueString = item.Type.ToString(),
                 BinaryString = Convert.ToString(item.Type, 2).PadLeft(4, '0')
             };
@@ -86,7 +100,7 @@ namespace PRNcompression.ViewModels
             var lengthOfTypeLength = _prnService.GetNumberLength((ulong)item.Length);
             var item5 = new StringThree
             {
-                Property = "Длина ПРЧ",
+                Discription = "Длина ПРЧ",
                 ValueString = item.Length.ToString(),
                 BinaryString = Convert.ToString(item.Length, 2).PadLeft(lengthOfTypeLength, '0')
             };
@@ -94,11 +108,30 @@ namespace PRNcompression.ViewModels
 
             var item6 = new StringThree
             {
-                Property = "Инверсии",
+                Discription = "Инверсии",
                 ValueString = item.InversionInfo.Count.ToString(),
                 BinaryString = ConvertBoolListToBinaryString(item.InversionInfo)
             };
             CompressionInfo.Add(item6);
+
+            var compressionFactor = (double)length / (4 + lengthOfTypeLength + item.InversionInfo.Count);
+            var item7 = new StringThree
+            {
+                Discription = "Фактор сжатия",
+                ValueString = compressionFactor.ToString(),
+                BinaryString = "-"
+            };
+            CompressionInfo.Add(item7);
+
+            var ration = (4 + lengthOfTypeLength + item.InversionInfo.Count) / (double)length;
+            var item8= new StringThree
+            {
+                Discription = "Коэффициент сжатия",
+                ValueString = ration.ToString(),
+                BinaryString = "-"
+            };
+            CompressionInfo.Add(item8);
+
         }
 
         public static string ConvertBoolListToBinaryString(List<bool> boolList)

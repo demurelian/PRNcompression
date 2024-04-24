@@ -12,7 +12,7 @@ namespace PRNcompression.Services
 {
     internal class PRNService : IPRNService
     {
-        public CompressedInfo Compression(ulong number, int numberLength, ref List<bool> inversionList)
+        public CompressedInfo Compression(ulong number, int numberLength, ref List<bool> inversionList, ref List<ulong> numbers)
         {
             var result = new CompressedInfo();
             //10 8 5 2 3 4 1 6 9 7
@@ -44,7 +44,8 @@ namespace PRNcompression.Services
                 inversionList.Add(false);
                 newNumber = number;
             }
-            return Compression(newNumber, newLength, ref inversionList);
+            numbers.Add(newNumber);
+            return Compression(newNumber, newLength, ref inversionList, ref numbers);
         }
         
         public DecompressedInfo Decompression(BitArray serviceInfo, BitArray data)
