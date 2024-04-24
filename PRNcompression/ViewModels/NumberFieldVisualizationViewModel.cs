@@ -83,11 +83,20 @@ namespace PRNcompression.ViewModels
         {
             var fieldTypes = _PRNService.FieldCharacterization((byte)Dimensionality);
 
-            var columnQuantity = (Dimensionality % 2 == 0) ? Math.Pow(2, Dimensionality / 2) : 2 * Math.Pow(2, Dimensionality / 2);
-            var rowQuantity = Math.Pow(2, Dimensionality / 2);
+            //var columnQuantity = (Dimensionality % 2 == 0) ? Math.Pow(2, Dimensionality / 2) : 2 * Math.Pow(2, Dimensionality / 2);
+            //var rowQuantity = Math.Pow(2, Dimensionality / 2);
+            var rowQuantity = 16;
+            var columnQuantity = Math.Pow(2, Dimensionality) / 16;
 
-            for (int i = 0; i <= 10; i++)
-                TypesInfo[i].Quantity = 0;
+            TypesInfo = new ObservableCollection<TypeInfo>();
+            for (int i = 0; i <= Dimensionality - 3; i++)
+            {
+                var typeInfo = new TypeInfo();
+                typeInfo.TypeNum = i;
+                typeInfo.Color = colorDictionary[i];
+                typeInfo.Quantity = 0;
+                TypesInfo.Add(typeInfo);
+            }
 
             Data = new ObservableCollection<RowInfo>();
             var currNum = 0;
@@ -113,6 +122,8 @@ namespace PRNcompression.ViewModels
             }
 
             MyDataGrid = new DataGrid();
+            MyDataGrid.EnableColumnVirtualization = true;
+            MyDataGrid.EnableRowVirtualization = true;
             MyDataGrid.IsReadOnly = true;
             MyDataGrid.AutoGenerateColumns = false;
             MyDataGrid.ItemsSource = Data;
@@ -153,7 +164,7 @@ namespace PRNcompression.ViewModels
 
         public NumberFieldVisualizationViewModel()
         {
-            DimensionalityOptions = new ObservableCollection<int> { 8, 9, 10, 11, 12, 13, 14, 15, 16};
+            DimensionalityOptions = new ObservableCollection<int> { 4,5,6,7,8, 9, 10, 11, 12, 13, 14, 15, 16};
 
             _PRNService = new PRNService();
 
@@ -162,7 +173,7 @@ namespace PRNcompression.ViewModels
             colorDictionary = new Dictionary<int, SolidColorBrush>
             {
                 { 0, Brushes.Transparent },
-                { 1, Brushes.Blue },
+                { 1, Brushes.Gray },
                 { 2, Brushes.DodgerBlue },
                 { 3, Brushes.DeepSkyBlue },
                 { 4, Brushes.LightBlue },
@@ -179,15 +190,6 @@ namespace PRNcompression.ViewModels
                 {15, Brushes.DarkGreen }
             };
 
-            TypesInfo = new ObservableCollection<TypeInfo>();
-            for (int i = 0; i <= 15; i++)
-            {
-                var typeInfo = new TypeInfo();
-                typeInfo.TypeNum = i;
-                typeInfo.Color = colorDictionary[i];
-                typeInfo.Quantity = 0;
-                TypesInfo.Add(typeInfo);
-            }
         }
     }
 }

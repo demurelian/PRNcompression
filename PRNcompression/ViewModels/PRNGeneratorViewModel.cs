@@ -12,15 +12,15 @@ namespace PRNcompression.ViewModels
 {
     internal class PRNGeneratorViewModel :  ViewModel
     {
-        private IPRNService _PRNGenerationService;
+        private IPRNService _prnService;
         public ICommand GeneratePRNCommand { get; }
         private bool CanGeneratePRNCommandExecute(object p) => true;
         private void OnGeneratePRNCommandExecute(object p)
         {
             var size = ValidationHelper.ValidateNumberString(BitNumStr);
-            if (size > 0 && size <= 64)
+            if (size > 0 && size > 64)
                 throw new InvalidDataException();
-            var result = _PRNGenerationService.PRNGeneration(SelectedType.Key, (int)size);
+            var result = _prnService.PRNGeneration(SelectedType.Key, (int)size);
             ResultStr = result.ToString();
         }
 
@@ -54,26 +54,27 @@ namespace PRNcompression.ViewModels
 
         public PRNGeneratorViewModel()
         {
-            _PRNGenerationService = new PRNService();
+            _prnService = new PRNService();
 
             GeneratePRNCommand = new LambdaCommand(OnGeneratePRNCommandExecute, CanGeneratePRNCommandExecute);
 
             TypesDiscriptions = new Dictionary<byte, string>();
-            TypesDiscriptions.Add(1, "10101010...");
-            TypesDiscriptions.Add(2, "01010101...");
-            TypesDiscriptions.Add(3, "01111111...");
-            TypesDiscriptions.Add(4, "10000000...");
-            TypesDiscriptions.Add(5, "...00001111...");
-            TypesDiscriptions.Add(6, "...11110000...");
-            TypesDiscriptions.Add(7, "11111111...");
-            TypesDiscriptions.Add(8, "...00000001");
-            TypesDiscriptions.Add(9, "...11111110");
-            TypesDiscriptions.Add(10, "10 000...01 (10 + тип 4)");
-            TypesDiscriptions.Add(11, "11 000...01 (11 + тип 4)");
-            TypesDiscriptions.Add(12, "10 111...11 (10 + тип 7)");
-            TypesDiscriptions.Add(13, "01 000...01 (01 + тип 4)");
-            TypesDiscriptions.Add(14, "11...111 01 (тип 7 + 01)");
-            TypesDiscriptions.Add(15, "000...000");
+            TypesDiscriptions.Add(0, "0...0");
+            TypesDiscriptions.Add(1, "0...0 + 1");
+            TypesDiscriptions.Add(2, "00 + 0101... + 10 (00 + 0101... + 11 для нечет)");
+            TypesDiscriptions.Add(3, "00 + 1010... + 11 (00 + 1010... + 10 для нечет)");
+            TypesDiscriptions.Add(4, "01 + 0...0");
+            TypesDiscriptions.Add(5, "0101...");
+            TypesDiscriptions.Add(6, "01 + 1010...");
+            TypesDiscriptions.Add(7, "01 + 1...1");
+            TypesDiscriptions.Add(8, "1 + 0...0");
+            TypesDiscriptions.Add(9, "10 + 0101...");
+            TypesDiscriptions.Add(10, "1010...");
+            TypesDiscriptions.Add(11, "10 + 1...1");
+            TypesDiscriptions.Add(12, "11 + 0101... + 00 (11 + 0101... + 01 для нечет)");
+            TypesDiscriptions.Add(13, "11 + 1010... + 01 (11 + 1010... + 00 для нечет)");
+            TypesDiscriptions.Add(14, "1...1 + 0");
+            TypesDiscriptions.Add(15, "1...1");
         }
     }
 }

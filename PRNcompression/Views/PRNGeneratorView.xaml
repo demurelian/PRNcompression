@@ -57,7 +57,7 @@
                             </Style>
                         </DataGridTextColumn.ElementStyle>
                     </DataGridTextColumn>
-                    <DataGridTextColumn IsReadOnly="True" Header="Вид ПРЧ" Binding="{Binding Value}" Width="*" CanUserSort="False">
+                    <DataGridTextColumn IsReadOnly="True" Header="Вид ПРЧ" Binding="{Binding Value}" Width="5*" CanUserSort="False">
                         <DataGridTextColumn.HeaderStyle>
                             <Style TargetType="{x:Type DataGridColumnHeader}">
                                 <Setter Property="HorizontalContentAlignment" Value="Center"/>
