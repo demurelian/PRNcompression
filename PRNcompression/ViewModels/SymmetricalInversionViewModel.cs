@@ -1,6 +1,5 @@
 ﻿using PRNcompression.Infrastructure.Commands;
-using PRNcompression.Services;
-using PRNcompression.Services.Interfaces;
+using PRNcompression.Model;
 using PRNcompression.ViewModels.Base;
 using System;
 using System.Collections.Generic;
@@ -30,7 +29,7 @@ namespace PRNcompression.ViewModels
 
     internal class SymmetricalInversionViewModel : ViewModel
     {
-        private IPRNService _prnService;
+        private PRNDataWorker _prnDataWorker;
         private string _NumStr;
         public string NumStr
         {
@@ -78,7 +77,7 @@ namespace PRNcompression.ViewModels
             TypeValues = new ObservableCollection<TypeValue>();
             for (byte i = 0; i <= 15; ++i)
             {
-                var x = _prnService.PRNGeneration(i, numberLength);
+                var x = _prnDataWorker.PRNGeneration(i, numberLength);
 
                 var item = new TypeValue
                 {
@@ -94,7 +93,7 @@ namespace PRNcompression.ViewModels
 
             for (ulong i = 0; i < maxNum; i++)
             {
-                var type = _prnService.GetNumberType(i, numberLength);
+                var type = _prnDataWorker.GetNumberType(i, numberLength);
 
                 var item = new TableValue
                 {
@@ -123,7 +122,7 @@ namespace PRNcompression.ViewModels
         public SymmetricalInversionViewModel()
         {
             DimensionalityOptions = new ObservableCollection<int> { 3,4,5,6,7,8 };
-            _prnService = new PRNService();
+            _prnDataWorker = new PRNDataWorker();
             CreateTableCommand = new LambdaCommand(OnCreateTableCommandExecute, CanCreateTableCommandExecute);
         }
     }

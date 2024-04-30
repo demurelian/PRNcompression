@@ -1,21 +1,30 @@
-﻿using PRNcompression.Services.Interfaces;
-using System;
+﻿using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.IO.Packaging;
-using System.IO.Ports;
-using System.Windows.Controls;
-using System.Windows.Documents;
-using System.Windows.Media;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 
-namespace PRNcompression.Services
+namespace PRNcompression.Model
 {
-    internal class PRNService : IPRNService
+    public class CompressedInfo
+    {
+        public byte Type { get; set; }
+        public int Length { get; set; }
+        public List<bool> InversionInfo { get; set; }
+    }
+    public class DecompressedInfo
+    {
+        public byte Type { get; set; }
+        public int Length { get; set; }
+        public ulong ResultNumber { get; set; }
+    }
+    
+    internal class PRNDataWorker
     {
         public CompressedInfo Compression(ulong number, int numberLength, ref List<bool> inversionList, ref List<ulong> numbers)
         {
             var result = new CompressedInfo();
-            //10 8 5 2 3 4 1 6 9 7
             var prns = new Dictionary<byte, ulong>();
             for (byte i = 0; i <= 15; i++)
             {
@@ -39,7 +48,8 @@ namespace PRNcompression.Services
                 inversionList.Add(true);
                 ulong mask = prns[15];
                 newNumber = number ^ mask;
-            } else
+            }
+            else
             {
                 inversionList.Add(false);
                 newNumber = number;
@@ -47,7 +57,7 @@ namespace PRNcompression.Services
             numbers.Add(newNumber);
             return Compression(newNumber, newLength, ref inversionList, ref numbers);
         }
-        
+
         public DecompressedInfo Decompression(BitArray serviceInfo, BitArray data, ref List<ulong> numbers)
         {
             var item = new DecompressedInfo();
@@ -67,13 +77,13 @@ namespace PRNcompression.Services
                     var mask = PRNGeneration(15, length);
                     number = number ^ mask;
                     numbers.Add(number);
-                } 
+                }
             }
 
             item.ResultNumber = number;
             return item;
         }
-        
+
 
         static void SplitBitArray(BitArray bits, out byte firstFourBits, out int remainingBits)
         {

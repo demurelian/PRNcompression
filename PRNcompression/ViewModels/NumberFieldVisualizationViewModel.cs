@@ -1,6 +1,5 @@
 ﻿using PRNcompression.Infrastructure.Commands;
-using PRNcompression.Services;
-using PRNcompression.Services.Interfaces;
+using PRNcompression.Model;
 using PRNcompression.ViewModels.Base;
 using System;
 using System.Collections.Generic;
@@ -54,7 +53,7 @@ namespace PRNcompression.ViewModels
 
     internal class NumberFieldVisualizationViewModel : ViewModel
     {
-        private IPRNService _PRNService;
+        private PRNDataWorker _prnDataWorker;
 
         private ObservableCollection<RowInfo> _Data;
         public ObservableCollection<RowInfo> Data
@@ -81,7 +80,7 @@ namespace PRNcompression.ViewModels
         private bool CanVisualizeFromNumberCommandExecute(object p) => true;
         private void OnVisualizeFromNumberCommandExecute(object p)
         {
-            var fieldTypes = _PRNService.FieldCharacterization((byte)Dimensionality);
+            var fieldTypes = _prnDataWorker.FieldCharacterization((byte)Dimensionality);
 
             //var columnQuantity = (Dimensionality % 2 == 0) ? Math.Pow(2, Dimensionality / 2) : 2 * Math.Pow(2, Dimensionality / 2);
             //var rowQuantity = Math.Pow(2, Dimensionality / 2);
@@ -166,7 +165,7 @@ namespace PRNcompression.ViewModels
         {
             DimensionalityOptions = new ObservableCollection<int> { 4,5,6,7,8, 9, 10, 11, 12, 13, 14, 15, 16};
 
-            _PRNService = new PRNService();
+            _prnDataWorker = new PRNDataWorker();
 
             VisualizeFromNumberCommand = new LambdaCommand(OnVisualizeFromNumberCommandExecute, CanVisualizeFromNumberCommandExecute);
 

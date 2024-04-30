@@ -1,6 +1,4 @@
 ﻿using PRNcompression.Infrastructure.Commands;
-using PRNcompression.Services;
-using PRNcompression.Services.Interfaces;
 using PRNcompression.ViewModels.Base;
 using System.Collections;
 using System;
@@ -10,6 +8,7 @@ using System.Windows.Documents;
 using System.Windows.Input;
 using System.Text;
 using System.Net;
+using PRNcompression.Model;
 
 namespace PRNcompression.ViewModels
 {
@@ -22,7 +21,7 @@ namespace PRNcompression.ViewModels
 
     internal class CompressionViewModel : ViewModel
     {
-        private IPRNService _prnService;
+        private PRNDataWorker _prnDataWorker;
         #region Compression
         private string _NumStr;
         public string NumStr
@@ -53,10 +52,10 @@ namespace PRNcompression.ViewModels
         private void OnCompressionStartCommandExecute(object p)
         {
             var number = ulong.Parse(NumStr);
-            var length = _prnService.GetNumberLength(number);
+            var length = _prnDataWorker.GetNumberLength(number);
             var boolList = new List<bool>();
             var ulongList = new List<ulong>();
-            var item = _prnService.Compression(number, length, ref boolList, ref ulongList);
+            var item = _prnDataWorker.Compression(number, length, ref boolList, ref ulongList);
 
             if (ulongList.Count > 0)
             NumberWayInfo = new ObservableCollection<StringThree>();
@@ -99,7 +98,7 @@ namespace PRNcompression.ViewModels
             };
             CompressionInfo.Add(item4);
 
-            var lengthOfTypeLength = _prnService.GetNumberLength((ulong)item.Length);
+            var lengthOfTypeLength = _prnDataWorker.GetNumberLength((ulong)item.Length);
             var item5 = new StringThree
             {
                 Discription = "Длина ПРЧ",
@@ -179,7 +178,7 @@ namespace PRNcompression.ViewModels
         private void OnDecompressionStartCommandExecute(object p)
         {
             var numbers = new List<ulong>();
-            var item = _prnService.Decompression(BitArrayFromBinaryString(ServiceInfoStr), BitArrayFromBinaryString(DataStr), ref numbers);
+            var item = _prnDataWorker.Decompression(BitArrayFromBinaryString(ServiceInfoStr), BitArrayFromBinaryString(DataStr), ref numbers);
 
             DecompressionNumbers = new ObservableCollection<StringThree>();
             int i = 1;
@@ -227,7 +226,7 @@ namespace PRNcompression.ViewModels
         #endregion
         public CompressionViewModel()
         {
-            _prnService = new PRNService();
+            _prnDataWorker = new PRNDataWorker();
 
             CompressionStartCommand = new LambdaCommand(OnCompressionStartCommandExecute, CanCompressionStartCommandExecute);
             DecompressionStartCommand = new LambdaCommand(OnDecompressionStartCommandExecute, CanDecompressionStartCommandExecute);
