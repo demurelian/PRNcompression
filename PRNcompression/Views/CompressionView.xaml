@@ -27,45 +27,76 @@
             <ColumnDefinition />
             <ColumnDefinition/>
         </Grid.ColumnDefinitions>
-        <StackPanel Margin="10" Grid.Column="0">
-            <TextBlock Height="25" Text="СЖАТИЕ ЧИСЛА" FontWeight="Bold" FontSize="15" Padding="2" HorizontalAlignment="Center"/>
-            <TextBlock Height="20" Padding="1" Text="Число:"/>
-            <TextBox Height="20" Text="{Binding NumStr,Mode=TwoWay}"/>
-            <Button Height="20" Content="Сжать" Command="{Binding CompressionStartCommand}"/>
-            <StackPanel Visibility="{Binding CompressionInfo, Converter={StaticResource CollectionEmptyToVisibilityConverter}}">
-                <TextBlock Height="20" Padding="1" Text="Результат:"/>
-                <DataGrid AutoGenerateColumns="False" ItemsSource="{Binding CompressionInfo}" CanUserAddRows="False">
+        <DockPanel>
+            <StackPanel DockPanel.Dock="Top" Margin="10" Grid.Column="0">
+                <TextBlock Height="25" Text="СЖАТИЕ ЧИСЛА" FontWeight="Bold" FontSize="15" Padding="2" HorizontalAlignment="Center"/>
+                <TextBlock Height="20" Padding="1" Text="Число:"/>
+                <TextBox Height="20" Text="{Binding NumStr,Mode=TwoWay}"/>
+                <Button Height="20" Content="Сжать" Command="{Binding CompressionStartCommand}"/>
+                <StackPanel Visibility="{Binding CompressionInfo, Converter={StaticResource CollectionEmptyToVisibilityConverter}}">
+                    <TextBlock Height="20" Padding="1" Text="Результат:"/>
+                    <DataGrid AutoGenerateColumns="False" ItemsSource="{Binding CompressionInfo}" CanUserAddRows="False">
+                        <DataGrid.Columns>
+                            <DataGridTextColumn Width="*" Header="Свойство" Binding="{Binding Discription}">
+                                <DataGridTextColumn.ElementStyle>
+                                    <Style TargetType="TextBlock" BasedOn="{StaticResource CenterTextBlockStyle}" />
+                                </DataGridTextColumn.ElementStyle>
+                            </DataGridTextColumn>
+                            <DataGridTextColumn Width="*" Header="Значение" Binding="{Binding ValueString}">
+                                <DataGridTextColumn.ElementStyle>
+                                    <Style TargetType="TextBlock" BasedOn="{StaticResource CenterTextBlockStyle}" />
+                                </DataGridTextColumn.ElementStyle>
+                            </DataGridTextColumn>
+                            <DataGridTextColumn Width="*" Header="Двоичное представление" Binding="{Binding BinaryString}">
+                                <DataGridTextColumn.ElementStyle>
+                                    <Style TargetType="TextBlock" BasedOn="{StaticResource CenterTextBlockStyle}" />
+                                </DataGridTextColumn.ElementStyle>
+                            </DataGridTextColumn>
+                        </DataGrid.Columns>
+                    </DataGrid>
+                </StackPanel>
+            </StackPanel>
+            <DataGrid Visibility="{Binding NumberWayInfo, Converter={StaticResource CollectionEmptyToVisibilityConverter}}"
+                      Margin="10" Grid.Column="1" AutoGenerateColumns="False" ItemsSource="{Binding NumberWayInfo}" CanUserAddRows="False">
+                <DataGrid.Columns>
+                    <DataGridTextColumn Width="*" Header="Шаг" Binding="{Binding Discription}">
+                        <DataGridTextColumn.ElementStyle>
+                            <Style TargetType="TextBlock" BasedOn="{StaticResource CenterTextBlockStyle}" />
+                        </DataGridTextColumn.ElementStyle>
+                    </DataGridTextColumn>
+                    <DataGridTextColumn Width="2*" Header="Значение" Binding="{Binding ValueString}">
+                        <DataGridTextColumn.ElementStyle>
+                            <Style TargetType="TextBlock" BasedOn="{StaticResource CenterTextBlockStyle}" />
+                        </DataGridTextColumn.ElementStyle>
+                    </DataGridTextColumn>
+                    <DataGridTextColumn Width="4*" Header="Двоичное представление" Binding="{Binding BinaryString}">
+                        <DataGridTextColumn.ElementStyle>
+                            <Style>
+                                <Setter Property="TextBlock.TextAlignment" Value="Right" />
+                            </Style>
+                        </DataGridTextColumn.ElementStyle>
+                    </DataGridTextColumn>
+                </DataGrid.Columns>
+            </DataGrid>
+        </DockPanel>
+
+        <DockPanel Grid.Column="1">
+            <StackPanel DockPanel.Dock="Top" Margin="10">
+                <TextBlock Height="25" Text="РАСПАКОВКА" FontWeight="Bold" FontSize="15" Padding="2" HorizontalAlignment="Center"/>
+                <TextBlock Height="20" Padding="1" Text="Служебная информация:"/>
+                <TextBox Height="20" Text="{Binding ServiceInfoStr}"/>
+                <TextBlock Height="20" Padding="1" Text="Данные:"/>
+                <TextBox Height="20" Text="{Binding DataStr}"/>
+                <Button Height="20" Content="Распаковать" Command="{Binding DecompressionStartCommand}"/>
+                <DataGrid Visibility="{Binding DecompressionInfo, Converter={StaticResource CollectionEmptyToVisibilityConverter}}"
+                          AutoGenerateColumns="False" ItemsSource="{Binding DecompressionInfo}">
                     <DataGrid.Columns>
-                        <DataGridTextColumn Width="*" Header="Свойство" Binding="{Binding Discription}">
+                        <DataGridTextColumn Width="2*" Header="Значение" Binding="{Binding ValueString}">
                             <DataGridTextColumn.ElementStyle>
                                 <Style TargetType="TextBlock" BasedOn="{StaticResource CenterTextBlockStyle}" />
                             </DataGridTextColumn.ElementStyle>
                         </DataGridTextColumn>
-                        <DataGridTextColumn Width="*" Header="Значение" Binding="{Binding ValueString}">
-                            <DataGridTextColumn.ElementStyle>
-                                <Style TargetType="TextBlock" BasedOn="{StaticResource CenterTextBlockStyle}" />
-                            </DataGridTextColumn.ElementStyle>
-                        </DataGridTextColumn>
-                        <DataGridTextColumn Width="*" Header="Двоичное представление" Binding="{Binding BinaryString}">
-                            <DataGridTextColumn.ElementStyle>
-                                <Style TargetType="TextBlock" BasedOn="{StaticResource CenterTextBlockStyle}" />
-                            </DataGridTextColumn.ElementStyle>
-                        </DataGridTextColumn>
-                    </DataGrid.Columns>
-                </DataGrid>
-                <!--<DataGrid VerticalScrollBarVisibility="Auto" AutoGenerateColumns="False" ItemsSource="{Binding NumberWayInfo}" CanUserAddRows="False">
-                    <DataGrid.Columns>
-                        <DataGridTextColumn Width="*" Header="Шаг" Binding="{Binding Discription}">
-                            <DataGridTextColumn.ElementStyle>
-                                <Style TargetType="TextBlock" BasedOn="{StaticResource CenterTextBlockStyle}" />
-                            </DataGridTextColumn.ElementStyle>
-                        </DataGridTextColumn>
-                        <DataGridTextColumn Width="*" Header="Значение" Binding="{Binding ValueString}">
-                            <DataGridTextColumn.ElementStyle>
-                                <Style TargetType="TextBlock" BasedOn="{StaticResource CenterTextBlockStyle}" />
-                            </DataGridTextColumn.ElementStyle>
-                        </DataGridTextColumn>
-                        <DataGridTextColumn Width="2*" Header="Двоичное представление" Binding="{Binding BinaryString}">
+                        <DataGridTextColumn Width="4*" Header="Двоичное представление" Binding="{Binding BinaryString}">
                             <DataGridTextColumn.ElementStyle>
                                 <Style>
                                     <Setter Property="TextBlock.TextAlignment" Value="Right" />
@@ -73,12 +104,10 @@
                             </DataGridTextColumn.ElementStyle>
                         </DataGridTextColumn>
                     </DataGrid.Columns>
-                </DataGrid>-->
+                </DataGrid>
             </StackPanel>
-        </StackPanel>
-        <DockPanel Grid.Column="1">
-            <TextBlock DockPanel.Dock="Top" Height="20" Padding="1" Text="Шаги сжатия:"/>
-            <DataGrid Grid.Column="1" AutoGenerateColumns="False" ItemsSource="{Binding NumberWayInfo}" CanUserAddRows="False">
+            <DataGrid Visibility="{Binding DecompressionNumbers, Converter={StaticResource CollectionEmptyToVisibilityConverter}}"
+                      Margin="10" AutoGenerateColumns="False" ItemsSource="{Binding DecompressionNumbers}">
                 <DataGrid.Columns>
                     <DataGridTextColumn Width="*" Header="Шаг" Binding="{Binding Discription}">
                         <DataGridTextColumn.ElementStyle>
@@ -101,14 +130,6 @@
             </DataGrid>
         </DockPanel>
         
-        <!--<StackPanel Margin="10" Grid.Column="1">
-            <TextBlock Height="25" Text="РАСПАКОВКА" FontWeight="Bold" FontSize="15" Padding="2" HorizontalAlignment="Center"/>
-            <TextBlock Height="20" Padding="1" Text="Служебная информация:"/>
-            <TextBox Height="20" Text="{Binding ServiceInfoStr}"/>
-            <TextBlock Height="20" Padding="1" Text="Данные:"/>
-            <TextBox Height="20" Text="{Binding DataStr}"/>
-            <Button Height="20" Content="Распаковать" Command="{Binding DecompressionStartCommand}"/>
-            <TextBlock Height="20" Text="{Binding DecompressionResultStr}"/>
-        </StackPanel>-->
+
     </Grid>
 </UserControl>

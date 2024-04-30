@@ -48,7 +48,7 @@ namespace PRNcompression.Services
             return Compression(newNumber, newLength, ref inversionList, ref numbers);
         }
         
-        public DecompressedInfo Decompression(BitArray serviceInfo, BitArray data)
+        public DecompressedInfo Decompression(BitArray serviceInfo, BitArray data, ref List<ulong> numbers)
         {
             var item = new DecompressedInfo();
             byte type;
@@ -66,6 +66,7 @@ namespace PRNcompression.Services
                 {
                     var mask = PRNGeneration(15, length);
                     number = number ^ mask;
+                    numbers.Add(number);
                 } 
             }
 

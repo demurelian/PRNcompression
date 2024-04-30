@@ -8,7 +8,7 @@
         xmlns:vm="clr-namespace:PRNcompression.ViewModels" 
         xmlns:fa="http://schemas.fontawesome.io/icons/"
         mc:Ignorable="d"
-        Title="PRNcompression" Height="800" Width="800"
+        Title="PRNcompression" Height="800" Width="820"
         WindowStartupLocation="CenterScreen">
     <Window.DataContext>
         <vm:MainWindowViewModel/>
@@ -40,7 +40,7 @@
                     <TabItem Header="Таблица симметричной инверсии">
                         <views:SymmetricalInversionView/>
                     </TabItem>
-                    <TabItem Header="Сжатие\Распаковка">
+                    <TabItem Header="Сжатие/Распаковка">
                         <views:CompressionView/>
                     </TabItem>
                 </TabControl>

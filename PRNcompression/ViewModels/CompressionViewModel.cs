@@ -9,6 +9,7 @@ using System.Collections.ObjectModel;
 using System.Windows.Documents;
 using System.Windows.Input;
 using System.Text;
+using System.Net;
 
 namespace PRNcompression.ViewModels
 {
@@ -57,6 +58,7 @@ namespace PRNcompression.ViewModels
             var ulongList = new List<ulong>();
             var item = _prnService.Compression(number, length, ref boolList, ref ulongList);
 
+            if (ulongList.Count > 0)
             NumberWayInfo = new ObservableCollection<StringThree>();
             int i = 0;
             foreach (var currentNumber in ulongList)
@@ -159,24 +161,48 @@ namespace PRNcompression.ViewModels
             get => _DataStr;
             set => Set(ref _DataStr, value);
         }
-        private string _DecompressionResultStr;
-        public string DecompressionResultStr
+
+        private ObservableCollection<StringThree> _DecompressionInfo;
+        public ObservableCollection<StringThree> DecompressionInfo
         {
-            get => _DecompressionResultStr;
-            set => Set(ref _DecompressionResultStr, value);
+            get => _DecompressionInfo;
+            set => Set(ref _DecompressionInfo, value);
         }
-        private DecompressedInfo _DecompressedInfo;
-        public DecompressedInfo DecompressedInfo
+        private ObservableCollection<StringThree> _DecompressionNumbers;
+        public ObservableCollection<StringThree> DecompressionNumbers
         {
-            get => _DecompressedInfo;
-            set => Set(ref _DecompressedInfo, value);
+            get => _DecompressionNumbers;
+            set => Set(ref _DecompressionNumbers, value);
         }
         public ICommand DecompressionStartCommand { get; }
         private bool CanDecompressionStartCommandExecute(object p) => true;
         private void OnDecompressionStartCommandExecute(object p)
         {
-            var item = _prnService.Decompression(BitArrayFromBinaryString(ServiceInfoStr), BitArrayFromBinaryString(DataStr));
-            DecompressionResultStr = item.Type.ToString() + " " + item.Length.ToString() + " " + item.ResultNumber.ToString();
+            var numbers = new List<ulong>();
+            var item = _prnService.Decompression(BitArrayFromBinaryString(ServiceInfoStr), BitArrayFromBinaryString(DataStr), ref numbers);
+
+            DecompressionNumbers = new ObservableCollection<StringThree>();
+            int i = 1;
+            foreach(var num in numbers)
+            {
+                var newItem = new StringThree
+                {
+                    ValueString = num.ToString(),
+                    BinaryString = Convert.ToString((long)num, 2),
+                    Discription = $"{i}"
+                };
+                i++;
+                DecompressionNumbers.Add(newItem);
+            }
+
+            DecompressionInfo = new ObservableCollection<StringThree>();
+            var item2 = new StringThree
+            {
+                Discription = "Результат",
+                ValueString = item.ResultNumber.ToString(),
+                BinaryString = Convert.ToString((long)item.ResultNumber, 2)
+            };
+            DecompressionInfo.Add(item2);
         }
 
         public static BitArray BitArrayFromBinaryString(string binaryString)

@@ -23,6 +23,6 @@ namespace PRNcompression.Services.Interfaces
         int GetNumberLength(ulong num);
         byte[] FieldCharacterization(byte dimensionality);
         CompressedInfo Compression(ulong number, int numberLength, ref List<bool> list, ref List<ulong> numbers);
-        DecompressedInfo Decompression(BitArray serviceInfo, BitArray data);
+        DecompressedInfo Decompression(BitArray serviceInfo, BitArray data, ref List<ulong> numbers);
     }
 }
