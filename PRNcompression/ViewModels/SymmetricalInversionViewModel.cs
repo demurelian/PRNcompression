@@ -77,7 +77,7 @@ namespace PRNcompression.ViewModels
             TypeValues = new ObservableCollection<TypeValue>();
             for (byte i = 0; i <= 15; ++i)
             {
-                var x = _prnDataWorker.PRNGeneration(i, numberLength);
+                var x = _prnDataWorker.BitArrayToLong(_prnDataWorker.PRNGeneration(i, numberLength));
 
                 var item = new TypeValue
                 {

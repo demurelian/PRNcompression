@@ -32,7 +32,7 @@
                         <views:InitialDataView/>
                     </TabItem>
                     <TabItem Header="Сжатие выбранного файла">
-                        
+                        <views:FileCompressionView/>
                     </TabItem>
                     <TabItem Header="Распаковка">
                         

@@ -22,7 +22,7 @@ namespace PRNcompression.ViewModels
                 var size = ulong.Parse(BitNumStr);
                 if (size > 0 && size > 64)
                     throw new InvalidDataException();
-                var result = _prnDataWorker.PRNGeneration(SelectedType.Key, (int)size);
+                var result = _prnDataWorker.BitArrayToLong(_prnDataWorker.PRNGeneration(SelectedType.Key, (int)size));
                 ResultStr = result.ToString();
             }
             catch (Exception e)

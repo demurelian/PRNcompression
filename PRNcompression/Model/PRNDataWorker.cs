@@ -103,7 +103,7 @@ namespace PRNcompression.Model
             var prns = new Dictionary<byte, ulong>();
             for (byte i = 0; i <= 15; i++)
             {
-                prns.Add(i, PRNGeneration(i, numberLength));
+                prns.Add(i, BitArrayToLong(PRNGeneration(i, numberLength)));
             }
 
             foreach (var prn in prns)
@@ -142,14 +142,14 @@ namespace PRNcompression.Model
             item.Type = type;
             item.Length = length;
 
-            var number = PRNGeneration(type, length);
+            var number = BitArrayToLong(PRNGeneration(type, length));
 
             for (int i = data.Length - 1; i >= 0; i--)
             {
                 length++;
                 if (data[i])
                 {
-                    var mask = PRNGeneration(15, length);
+                    var mask = BitArrayToLong(PRNGeneration(15, length));
                     number = number ^ mask;
                     numbers.Add(number);
                 }
@@ -186,7 +186,7 @@ namespace PRNcompression.Model
         {
             for (byte i = 0; i <= 15; i++)
             {
-                var x = PRNGeneration(i, dimensionality);
+                var x = BitArrayToLong(PRNGeneration(i, dimensionality));
                 if (num == x)
                     return i;
             }
@@ -195,7 +195,7 @@ namespace PRNcompression.Model
 
         public int GetNumberLength(ulong num) => (num == 1 || num == 0) ? 1 : (int)Math.Floor(Math.Log(num, 2)) + 1;
 
-        static ulong BitArrayToLong(BitArray bits)
+        public ulong BitArrayToLong(BitArray bits)
         {
             if (bits.Count > 64)
                 throw new ArgumentException("BitArray должен содержать не более 64 бит");
@@ -217,19 +217,23 @@ namespace PRNcompression.Model
             return BitConverter.ToUInt64(bytes, 0);
         }
 
+
         /// <summary> Генерирует псевдорегулярное число </summary>
         /// <returns> ПРЧ или -1 в случае ошибки </returns>
-        public ulong PRNGeneration(byte type, int size)
+        public BitArray PRNGeneration(byte type, int size)
         {
             var bits = new BitArray(size);
-            //long[] arr = new long[1];
-            //arr[0] = -1;
             switch (type)
             {
                 case 0:
-                    return 0;
+                    for (int i = 0; i < size; i++)
+                        bits.Set(i, false);
+                    break;
                 case 1:
-                    return 1;
+                    bits.Set(0, true);
+                    for (int i = 1; i < size; i++)
+                        bits.Set(i, false);
+                    break;
                 case 2:
                     if (size % 2 == 0)
                     {
@@ -405,7 +409,7 @@ namespace PRNcompression.Model
                         bits.Set(i, true);
                     break;
             }
-            return BitArrayToLong(bits);
+            return bits;
         }
 
         /// <summary>Индекс в массиве = число</summary>
@@ -419,7 +423,7 @@ namespace PRNcompression.Model
             {
                 for (byte j = 0; j <= 15; j++)
                 {
-                    var x = PRNGeneration(j, i);
+                    var x = BitArrayToLong(PRNGeneration(j, i));
                     if (types[x] == 0)
                         types[x] = (byte)(dimensionality - i + 1);
                 }

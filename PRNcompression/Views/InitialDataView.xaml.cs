@@ -15,12 +15,7 @@ namespace PRNcompression.Views
             {
                 InitialDataViewModel viewModel = DataContext as InitialDataViewModel;
 
-                if (e.NewValue is FileViewModel)
-                {
-                    var selectedItem = (FileViewModel)e.NewValue;
-                    viewModel.PathString = selectedItem.Path;
-                }
-                else if (e.NewValue is DirectoryViewModel)
+                if (e.NewValue is DirectoryViewModel)
                 {
                     var selectedItem = (DirectoryViewModel)e.NewValue;
                     viewModel.PathString = selectedItem.Path;
