@@ -4,7 +4,7 @@
     <DropShadowEffect x:Key="ButtonIconShadowEffect" ShadowDepth="1"/>
 
     <Style x:Key="CustomButton" TargetType="{x:Type Button}">
-        <Setter Property="Background" Value="Blue"/>
+        <Setter Property="Background" Value="Black"/>
         <Setter Property="BorderBrush" Value="Transparent"/>
         <Setter Property="Foreground" Value="White"/>
         <Setter Property="BorderThickness" Value="1"/>

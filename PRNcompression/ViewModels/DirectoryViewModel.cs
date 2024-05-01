@@ -10,6 +10,7 @@ namespace PRNcompression.ViewModels
     class DirectoryViewModel : ViewModel
     {
         private readonly DirectoryInfo _DirectoryInfo;
+        private bool _directoriesOnly = false;
         public IEnumerable<DirectoryViewModel> SubDirectories
         {
             get
@@ -18,7 +19,7 @@ namespace PRNcompression.ViewModels
                 {
                     return _DirectoryInfo
                         .EnumerateDirectories()
-                        .Select(dir => new DirectoryViewModel(dir.FullName));
+                        .Select(dir => new DirectoryViewModel(dir.FullName, this._directoriesOnly));
                 }
                 catch (UnauthorizedAccessException e)
                 {
@@ -31,6 +32,7 @@ namespace PRNcompression.ViewModels
         {
             get
             {
+                if (_directoriesOnly) { return Enumerable.Empty<FileViewModel>(); }
                 try
                 {
                     var files = _DirectoryInfo
@@ -63,8 +65,11 @@ namespace PRNcompression.ViewModels
         public string Name => _DirectoryInfo.Name;
         public string Path => _DirectoryInfo.FullName;
         public DateTime CreationTime => _DirectoryInfo.CreationTime;
-        public DirectoryViewModel(string path) => _DirectoryInfo = new DirectoryInfo(path);
-        
+        public DirectoryViewModel(string path, bool directoryOnly)
+        {
+            _directoriesOnly = directoryOnly;
+            _DirectoryInfo = new DirectoryInfo(path);
+        }
     }
 
     class FileViewModel : ViewModel

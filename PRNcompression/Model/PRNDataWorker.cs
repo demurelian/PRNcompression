@@ -22,6 +22,81 @@ namespace PRNcompression.Model
     
     internal class PRNDataWorker
     {
+        public byte[] PRNByteArrGenerator(byte type, int size)
+        {
+            byte[] data = new byte[size];
+            switch(type)
+            {
+                case 2:
+                    data[0] = 86; data[size - 1] = 21;
+                    for (int i = 1; i <= size - 2; i++)
+                        data[i] = 85;
+                    break;
+                case 3:
+                    data[0] = 171; data[size - 1] = 42;
+                    for (int i = 1; i <= size - 2; i++)
+                        data[i] = 170;
+                    break;
+                case 4:
+                    data[size - 1] = 64;
+                    for (int i = 0; i <= size - 2; i++)
+                        data[i] = 0;
+                    break;
+                case 5:
+                    for (int i = 0; i <= size - 1; i++)
+                        data[i] = 85;
+                    break;
+                case 6:
+                    data[size - 1] = 106;
+                    for (int i = 0; i <= size - 2; i++)
+                        data[i] = 170;
+                    break;
+                case 7:
+                    data[size - 1] = 127;
+                    for (int i = 0; i <= size - 2; i++)
+                        data[i] = 255;
+                    break;
+                case 8:
+                    data[size - 1] = 128;
+                    for (int i = 0; i <= size - 2; i++)
+                        data[i] = 0;
+                    break;
+                case 9:
+                    data[size - 1] = 149;
+                    for (int i = 0; i <= size - 2; i++)
+                        data[i] = 85;
+                    break;
+                case 10:
+                    for (int i = 0; i <= size - 1; i++)
+                        data[i] = 170;
+                    break;
+                case 11:
+                    data[size - 1] = 191;
+                    for (int i = 0; i <= size - 2; i++)
+                        data[i] = 255;
+                    break;
+                case 12:
+                    data[0] = 84; data[size - 1] = 213;
+                    for (int i = 1; i <= size - 2; i++)
+                        data[i] = 85;
+                    break;
+                case 13:
+                    data[0] = 169; data[size - 1] = 234;
+                    for (int i = 1; i <= size - 2; i++)
+                        data[i] = 170;
+                    break;
+                case 14:
+                    data[0] = 254;
+                    for (int i = 1; i <= size - 1; i++)
+                        data[i] = 255;
+                    break;
+                case 15:
+                    for (int i = 0; i <= size - 1; i++)
+                        data[i] = 255;
+                    break;
+            }
+            return data;
+        }
         public CompressedInfo Compression(ulong number, int numberLength, ref List<bool> inversionList, ref List<ulong> numbers)
         {
             var result = new CompressedInfo();

@@ -26,8 +26,18 @@
             </StatusBarItem>
         </StatusBar>
         <TabControl>
-            <TabItem Header="Исходные данные">
-                <views:InitialDataView/>
+            <TabItem Header="Работа с данными">
+                <TabControl>
+                    <TabItem Header="Генерация исходного файла">
+                        <views:InitialDataView/>
+                    </TabItem>
+                    <TabItem Header="Сжатие выбранного файла">
+                        
+                    </TabItem>
+                    <TabItem Header="Распаковка">
+                        
+                    </TabItem>
+                </TabControl>
             </TabItem>
             <TabItem Header="Моделирование ПРЧ">
                 <TabControl>
