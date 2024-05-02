@@ -91,6 +91,8 @@ namespace PRNcompression.ViewModels
                     byte[] bytes = _prnDataWorker.PRNByteArrGenerator(SelectedType.Key, size);
                     BytesToFile(bytes, path);
                 }
+
+                MessageBox.Show($"Файл успешно успешно сгенерирован {path}", "Результат генерации файла", MessageBoxButton.OK, MessageBoxImage.Information);
             }
             catch (Exception ex) { Console.WriteLine(ex.ToString()); }
             

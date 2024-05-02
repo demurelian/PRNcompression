@@ -45,7 +45,6 @@
                         </GroupBox.Resources>
                         <TreeView ItemsSource="{Binding Disks}" SelectedItemChanged="TreeView_SelectedItemChanged"/>
                     </GroupBox>
-                    <TextBlock Text="Путь к файлу:"/>
                     <TextBox IsReadOnly="True" Text="{Binding SelectedFileViewModel.Path, Mode=OneWay}"/>
                 </StackPanel>
             </Grid>

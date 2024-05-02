@@ -45,7 +45,6 @@
                         </GroupBox.Resources>
                         <TreeView ItemsSource="{Binding Disks1}" SelectedItemChanged="TreeView_SelectedItemChanged"/>
                     </GroupBox>
-                    <TextBlock Text="Путь к файлу 1:"/>
                     <TextBox IsReadOnly="True" Text="{Binding SelectedServiceFileViewModel.Path, Mode=OneWay}"/>
                 </StackPanel>
             </Grid>
@@ -76,7 +75,6 @@
                         </GroupBox.Resources>
                         <TreeView ItemsSource="{Binding Disks2}" SelectedItemChanged="TreeView_SelectedItemChanged_1"/>
                     </GroupBox>
-                    <TextBlock Text="Путь к файлу 2:"/>
                     <TextBox IsReadOnly="True" Text="{Binding SelectedCompressedFileViewModel.Path, Mode=OneWay}"/>
                 </StackPanel>
             </Grid>

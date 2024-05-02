@@ -6,6 +6,7 @@ using System.Collections;
 using System.Collections.ObjectModel;
 using System.IO;
 using System.Reflection;
+using System.Windows;
 using System.Windows.Input;
 
 namespace PRNcompression.ViewModels
@@ -111,6 +112,7 @@ namespace PRNcompression.ViewModels
             var fileInfo = new FileInfo(SelectedCompressedFileViewModel.Path);
             string newFilePath = fileInfo.FullName.Replace("_compressed.bin","_unpacked.bin");
             _prnDataWorker.WriteBitArrayToFile(newFilePath, prnBits);
+            MessageBox.Show($"Файл успешно распакован в {newFilePath}", "Результат распаковки файла", MessageBoxButton.OK, MessageBoxImage.Information);
         }
         //11110110100100011111100111010111111101000000010010100001010011110010000011001011
         //11110110100100011111100111010111111101000000010010100001010011110010000011001011

@@ -10,6 +10,7 @@ using System.Linq;
 using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
 using System.Windows.Input;
 
 namespace PRNcompression.ViewModels
@@ -102,6 +103,8 @@ namespace PRNcompression.ViewModels
             Console.WriteLine($"Новый путь: {serviceInfoPath}");
             Console.WriteLine($"Новый путь: {newFilePath}");
             Console.WriteLine("Число:" + _prnDataWorker.ByteArrayToInt(bytes));
+
+            MessageBox.Show($"Файл успешно преобразован в файлы {serviceInfoPath} и {newFilePath}", "Результат сжатия файла", MessageBoxButton.OK, MessageBoxImage.Information);
         }
         static void WriteBytesToFile(string filePath, byte[] byteArray, byte extraByte, byte sew = 0 /*сшить длину и тип в последний байт*/)
         {
