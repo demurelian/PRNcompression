@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -29,6 +30,22 @@ namespace PRNcompression.Model
     
     internal class PRNDataWorker
     {
+        public void WriteBitArrayToFile(string filePath, BitArray bits)
+        {
+            // Создаем массив байтов для хранения битов
+            byte[] bytes = new byte[(bits.Length + 7) / 8];
+
+            // Копируем биты из BitArray в массив байтов
+            bits.CopyTo(bytes, 0);
+
+            // Создаем FileStream для записи в файл
+            using (FileStream fs = new FileStream(filePath, FileMode.Create))
+            {
+                // Записываем массив байтов в файл
+                fs.Write(bytes, 0, bytes.Length);
+            }
+        }
+
         public byte[] PRNByteArrGenerator(byte type, int size)
         {
             byte[] data = new byte[size];
@@ -112,6 +129,20 @@ namespace PRNcompression.Model
                 if (arr1.Get(i) != arr2.Get(i)) return false;
             }
             return true;
+        }
+        public int ByteArrayToInt(byte[] bytes)
+        {
+            var list = new List<byte>();
+            for (int i = 0; i < 4; i++)
+            {
+                if (i >= bytes.Length)
+                    list.Add(0);
+                else
+                    list.Add(bytes[i]);
+            }
+            var arr = list.ToArray();
+
+            return BitConverter.ToInt32(arr, 0);
         }
         public FileCompressedInfo FileCompression(BitArray bits, int length, ref BitArray InversionInfo)
         {

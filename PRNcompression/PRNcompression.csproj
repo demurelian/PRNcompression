@@ -69,6 +69,10 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="Views\DecompressionView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Views\FileCompressionView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -104,6 +108,7 @@
     <Compile Include="Model\PRNDataWorker.cs" />
     <Compile Include="ViewModels\Base\ViewModel.cs" />
     <Compile Include="ViewModels\CompressionViewModel.cs" />
+    <Compile Include="ViewModels\DecompressionViewModel.cs" />
     <Compile Include="ViewModels\DirectoryViewModel.cs" />
     <Compile Include="ViewModels\FileCompressionViewModel.cs" />
     <Compile Include="ViewModels\InitialDataViewModel.cs" />
@@ -113,6 +118,9 @@
     <Compile Include="ViewModels\SymmetricalInversionViewModel.cs" />
     <Compile Include="Views\CompressionView.xaml.cs">
       <DependentUpon>CompressionView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\DecompressionView.xaml.cs">
+      <DependentUpon>DecompressionView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\FileCompressionView.xaml.cs">
       <DependentUpon>FileCompressionView.xaml</DependentUpon>

@@ -17,11 +17,11 @@ using System.Windows.Shapes;
 namespace PRNcompression.Views
 {
     /// <summary>
-    /// Логика взаимодействия для FileCompressionView.xaml
+    /// Логика взаимодействия для DecompressionView.xaml
     /// </summary>
-    public partial class FileCompressionView : UserControl
+    public partial class DecompressionView : UserControl
     {
-        public FileCompressionView()
+        public DecompressionView()
         {
             InitializeComponent();
         }
@@ -30,11 +30,28 @@ namespace PRNcompression.Views
         {
             try
             {
-                FileCompressionViewModel viewModel = DataContext as FileCompressionViewModel;
+                DecompressionViewModel viewModel = DataContext as DecompressionViewModel;
 
                 if (e.NewValue is FileViewModel)
                 {
-                    viewModel.SelectedFileViewModel = (FileViewModel)e.NewValue;
+                    viewModel.SelectedServiceFileViewModel = (FileViewModel)e.NewValue;
+                }
+            }
+            catch (InvalidCastException ex)
+            {
+
+            }
+        }
+
+        private void TreeView_SelectedItemChanged_1(object sender, RoutedPropertyChangedEventArgs<object> e)
+        {
+            try
+            {
+                DecompressionViewModel viewModel = DataContext as DecompressionViewModel;
+
+                if (e.NewValue is FileViewModel)
+                {
+                    viewModel.SelectedCompressedFileViewModel = (FileViewModel)e.NewValue;
                 }
             }
             catch (InvalidCastException ex)

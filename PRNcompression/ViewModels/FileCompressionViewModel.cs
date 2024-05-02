@@ -82,6 +82,10 @@ namespace PRNcompression.ViewModels
                 Console.Write(b + " ");
             }
 
+            var fileInfo = new FileInfo(SelectedFileViewModel.Path);
+            string serviceInfoPath = fileInfo.FullName.Replace(fileInfo.Extension, "_serviceInfo" + fileInfo.Extension);
+            WriteBytesToFile(serviceInfoPath, bytes, item.Type);
+
             if (lastByte < 16)
             {
                 byte type = (byte)(item.Type << 4);
@@ -89,45 +93,28 @@ namespace PRNcompression.ViewModels
                 byte sum = (byte)(type | lastByte);
                 Console.WriteLine($"Сумма: {sum}");
                 lastByte = sum;
+                WriteBytesToFile(serviceInfoPath, bytes, lastByte, 1);
             }
-            var fileInfo = new FileInfo(SelectedFileViewModel.Path);
-            string serviceInfoPath = fileInfo.FullName.Replace(fileInfo.Extension, "_serviceInfo" + fileInfo.Extension);
-            WriteBytesToFile(serviceInfoPath, bytes, item.Type);
 
             string newFilePath = fileInfo.FullName.Replace(fileInfo.Extension, "_compressed" + fileInfo.Extension);
-            WriteBitArrayToFile(newFilePath, correctInversion);
+            _prnDataWorker.WriteBitArrayToFile(newFilePath, correctInversion);
 
             Console.WriteLine($"Новый путь: {serviceInfoPath}");
             Console.WriteLine($"Новый путь: {newFilePath}");
-            Console.WriteLine("Число:" + ByteArrayToInt(bytes));
+            Console.WriteLine("Число:" + _prnDataWorker.ByteArrayToInt(bytes));
         }
-        static void WriteBytesToFile(string filePath, byte[] byteArray, byte extraByte)
+        static void WriteBytesToFile(string filePath, byte[] byteArray, byte extraByte, byte sew = 0 /*сшить длину и тип в последний байт*/)
         {
             // Создаем новый массив байтов с дополнительным байтом в конце
-            byte[] newArray = new byte[byteArray.Length + 1];
+            byte[] newArray = new byte[byteArray.Length + 1 - sew];
             Array.Copy(byteArray, newArray, byteArray.Length);
-            newArray[byteArray.Length] = extraByte;
+            newArray[byteArray.Length - sew] = extraByte;
 
             // Создаем FileStream для записи в файл
             using (FileStream fs = new FileStream(filePath, FileMode.Create))
             {
                 // Записываем новый массив байтов в файл
                 fs.Write(newArray, 0, newArray.Length);
-            }
-        }
-        static void WriteBitArrayToFile(string filePath, BitArray bits)
-        {
-            // Создаем массив байтов для хранения битов
-            byte[] bytes = new byte[(bits.Length + 7) / 8];
-
-            // Копируем биты из BitArray в массив байтов
-            bits.CopyTo(bytes, 0);
-
-            // Создаем FileStream для записи в файл
-            using (FileStream fs = new FileStream(filePath, FileMode.Create))
-            {
-                // Записываем массив байтов в файл
-                fs.Write(bytes, 0, bytes.Length);
             }
         }
         static BitArray InversionArrToCorrectLength(BitArray InversionInfo, int lengthOfPrn)
@@ -152,20 +139,7 @@ namespace PRNcompression.ViewModels
             }
             return list.ToArray();
         }
-        static int ByteArrayToInt(byte[] bytes)
-        {
-            var list = new List<byte>();
-            for (int i = 0; i < 4; i++)
-            {
-                if (i >= bytes.Length)
-                    list.Add(0);
-                else
-                    list.Add(bytes[i]);
-            }
-            var arr = list.ToArray();
-
-            return BitConverter.ToInt32(arr, 0);
-        }
+        
         public FileCompressionViewModel()
         {
             _prnDataWorker = new PRNDataWorker();
