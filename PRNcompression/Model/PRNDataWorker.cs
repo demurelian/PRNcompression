@@ -4,9 +4,16 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Media;
 
 namespace PRNcompression.Model
 {
+    public class FileCompressedInfo
+    {
+        public byte Type { get; set; }
+        public int Length { get; set; }
+        public BitArray InversionInfo { get; set; }
+    }
     public class CompressedInfo
     {
         public byte Type { get; set; }
@@ -97,6 +104,65 @@ namespace PRNcompression.Model
             }
             return data;
         }
+        private bool BitArrCompare(BitArray arr1, BitArray arr2)
+        {
+            if (arr1.Length != arr2.Length) return false;
+            for (int i = 0; i < arr1.Length; i++)
+            {
+                if (arr1.Get(i) != arr2.Get(i)) return false;
+            }
+            return true;
+        }
+        public FileCompressedInfo FileCompression(BitArray bits, int length, ref BitArray InversionInfo)
+        {
+            var result = new FileCompressedInfo();
+            Console.WriteLine("Биты:");
+            for (int j = 0; j < bits.Length; j++)
+            {
+                if (bits.Get(j))
+                    Console.Write(1);
+                else
+                    Console.Write(0);
+            }
+            Console.WriteLine();
+            for (byte i = 0; i <= 15; i++)
+            {
+                var prn = PRNGeneration(i, length);
+
+                if (BitArrCompare(bits, prn))
+                {
+                    result.Type = i;
+                    result.Length = length;
+                    result.InversionInfo = InversionInfo;
+                    return result;
+                }
+            }
+            int newLength = length - 1;
+            if (bits.Get(length - 1) == true)
+            {
+                InversionInfo.Set(length - 1, true);
+                bits.Not();
+            }
+            else
+            {
+                InversionInfo.Set(length - 1, false);
+            }
+            for (int j = 0; j < InversionInfo.Length; j++)
+            {
+                if (InversionInfo.Get(j))
+                    Console.Write(1);
+                else
+                    Console.Write(0);
+            }
+            Console.WriteLine();
+            var newBits = new BitArray(newLength);
+            for (int i = 0; i < newLength; i++)
+            {
+                newBits.Set(i, bits.Get(i));
+            }
+            return FileCompression(newBits, newLength, ref InversionInfo);
+        }
+
         public CompressedInfo Compression(ulong number, int numberLength, ref List<bool> inversionList, ref List<ulong> numbers)
         {
             var result = new CompressedInfo();

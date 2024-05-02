@@ -34,8 +34,9 @@ namespace PRNcompression.Views
 
                 if (e.NewValue is FileViewModel)
                 {
-                    var selectedItem = (FileViewModel)e.NewValue;
-                    viewModel.PathString = selectedItem.Path;
+                    viewModel.SelectedFileViewModel = (FileViewModel)e.NewValue;
+                    //var selectedItem = (FileViewModel)e.NewValue;
+                    //viewModel.PathString = selectedItem.Path;
                 }
             }
             catch (InvalidCastException ex)

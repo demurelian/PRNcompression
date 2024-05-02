@@ -46,7 +46,7 @@
                         <TreeView ItemsSource="{Binding Disks}" SelectedItemChanged="TreeView_SelectedItemChanged"/>
                     </GroupBox>
                     <TextBlock Text="Путь к файлу:"/>
-                    <TextBox x:Name="PathTextBox" IsReadOnly="True" Text="{Binding PathString, Mode=TwoWay}"/>
+                    <TextBox x:Name="PathTextBox" IsReadOnly="True" Text="{Binding SelectedFileViewModel.Path, Mode=OneWay}"/>
                 </StackPanel>
             </Grid>
             <Button Margin="0,5,0,0" Style="{StaticResource CustomButton}" Height="25" Content="Сжать" Command="{Binding CompressFileCommand}"/>

@@ -106,6 +106,8 @@ namespace PRNcompression.ViewModels
             // Заполняем массив случайными байтами
             rand.NextBytes(bytes);
 
+            if (bytes[size - 1] < 128)
+                bytes[size - 1] += 128;
             return bytes;
         }
 
