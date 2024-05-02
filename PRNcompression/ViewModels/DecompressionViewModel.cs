@@ -111,44 +111,6 @@ namespace PRNcompression.ViewModels
             var fileInfo = new FileInfo(SelectedCompressedFileViewModel.Path);
             string newFilePath = fileInfo.FullName.Replace("_compressed.bin","_unpacked.bin");
             _prnDataWorker.WriteBitArrayToFile(newFilePath, prnBits);
-
-            string oldFilePath = fileInfo.FullName.Replace("_compressed.bin", ".bin");
-
-
-            CompareFiles(newFilePath, oldFilePath);
-        }
-        static void CompareFiles(string filePath1, string filePath2)
-        {
-            // Считываем содержимое обоих файлов в массивы байтов
-            byte[] file1Bytes = File.ReadAllBytes(filePath1);
-            byte[] file2Bytes = File.ReadAllBytes(filePath2);
-
-            // Проверяем, одинаковы ли размеры файлов
-            if (file1Bytes.Length != file2Bytes.Length)
-            {
-                Console.WriteLine("Файлы различаются по размеру");
-                return;
-            }
-
-            // Сравниваем содержимое файлов
-            bool areEqual = true;
-            for (int i = 0; i < file1Bytes.Length; i++)
-            {
-                if (file1Bytes[i] != file2Bytes[i])
-                {
-                    areEqual = false;
-                    break;
-                }
-            }
-
-            if (areEqual)
-            {
-                Console.WriteLine("Файлы идентичны");
-            }
-            else
-            {
-                Console.WriteLine("Файлы различаются по содержимому");
-            }
         }
         //11110110100100011111100111010111111101000000010010100001010011110010000011001011
         //11110110100100011111100111010111111101000000010010100001010011110010000011001011

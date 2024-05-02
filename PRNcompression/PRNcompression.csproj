@@ -73,6 +73,10 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="Views\FileCompareView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Views\FileCompressionView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -110,6 +114,7 @@
     <Compile Include="ViewModels\CompressionViewModel.cs" />
     <Compile Include="ViewModels\DecompressionViewModel.cs" />
     <Compile Include="ViewModels\DirectoryViewModel.cs" />
+    <Compile Include="ViewModels\FileCompareViewModel.cs" />
     <Compile Include="ViewModels\FileCompressionViewModel.cs" />
     <Compile Include="ViewModels\InitialDataViewModel.cs" />
     <Compile Include="ViewModels\MainWindowViewModel.cs" />
@@ -121,6 +126,9 @@
     </Compile>
     <Compile Include="Views\DecompressionView.xaml.cs">
       <DependentUpon>DecompressionView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\FileCompareView.xaml.cs">
+      <DependentUpon>FileCompareView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\FileCompressionView.xaml.cs">
       <DependentUpon>FileCompressionView.xaml</DependentUpon>

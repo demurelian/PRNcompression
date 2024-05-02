@@ -37,6 +37,9 @@
                     <TabItem Header="Распаковка">
                         <views:DecompressionView/>
                     </TabItem>
+                    <TabItem Header="Проверка идентичности файлов">
+                        <views:FileCompareView/>
+                    </TabItem>
                 </TabControl>
             </TabItem>
             <TabItem Header="Моделирование ПРЧ">
