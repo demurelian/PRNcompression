@@ -15,11 +15,11 @@
             <ColumnDefinition/>
             <ColumnDefinition/>
         </Grid.ColumnDefinitions>
-        <StackPanel Grid.Column="0">
+        <StackPanel Margin="10" Grid.Column="0">
             <TextBlock Text="Генерация псевдорегулярного числа" HorizontalAlignment="Center" FontWeight="Bold"/>
             <DockPanel Margin="0,5,0,0" Height="23">
                 <TextBlock Text="Тип ПРЧ:" Padding="2"/>
-                <ComboBox ItemsSource="{Binding TypesDiscriptions}" SelectedItem="{Binding SelectedType}" Margin="28,0,5,0">
+                <ComboBox ItemsSource="{Binding TypesDiscriptions}" SelectedItem="{Binding SelectedType}" Margin="5,0,0,0">
                     <ComboBox.ItemTemplate>
                         <DataTemplate>
                             <TextBlock>
@@ -35,13 +35,14 @@
                 </ComboBox>
             </DockPanel>
             <DockPanel Margin="0,5,0,0" Height="23">
-                <TextBlock DockPanel.Dock="Left" Text="Размер (бит):" Padding="2"/>
-                <TextBox Text="{Binding BitNumStr, Mode=TwoWay}" Margin="5,0,5,0"/>
+                <TextBlock DockPanel.Dock="Left" Text="Размер - бит (не более 64):" Padding="2"/>
+                <TextBox Text="{Binding BitNumStr, Mode=TwoWay}" Margin="5,0,0,0" Padding="2"/>
             </DockPanel>
-            <Button Margin="0,5,5,0" Height="23" Content="Сгенерировать" Command="{Binding GeneratePRNCommand}"/>
-            <TextBlock Text="{Binding ResultStr}"/>
+            <Button Margin="0,5,0,0" Height="23" Content="Сгенерировать" Command="{Binding GeneratePRNCommand}"/>
+            <TextBlock Text="Результат:" Height="20" Padding="2"/>
+            <TextBox IsReadOnly="True" Text="{Binding ResultStr}" Height="23" Padding="2"/>
         </StackPanel>
-        <StackPanel Grid.Column="1">
+        <StackPanel Margin="10" Grid.Column="1">
             <TextBlock Text="Типы ПРЧ и их структура:" HorizontalAlignment="Center" FontWeight="Bold"/>
             <DataGrid ItemsSource="{Binding TypesDiscriptions}" AutoGenerateColumns="False" Margin="0,5,0,0">
                 <DataGrid.Columns>

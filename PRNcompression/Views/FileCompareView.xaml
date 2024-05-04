@@ -21,7 +21,7 @@
             <Grid>
                 <StackPanel>
                     <DockPanel>
-                        <TextBlock Text="Выбор 1 файла:"/>
+                        <TextBlock Text="Выбор файла 1:"/>
                         <Button HorizontalAlignment="Right" Height="15" Width="15" Command="{Binding Update1Command}">
                             <Button.Content>
                                 <fa:ImageAwesome Icon="Refresh"/>

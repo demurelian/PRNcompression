@@ -26,22 +26,6 @@
             </StatusBarItem>
         </StatusBar>
         <TabControl>
-            <TabItem Header="Работа с данными">
-                <TabControl>
-                    <TabItem Header="Генерация исходного файла">
-                        <views:InitialDataView/>
-                    </TabItem>
-                    <TabItem Header="Сжатие выбранного файла">
-                        <views:FileCompressionView/>
-                    </TabItem>
-                    <TabItem Header="Распаковка">
-                        <views:DecompressionView/>
-                    </TabItem>
-                    <TabItem Header="Проверка идентичности файлов">
-                        <views:FileCompareView/>
-                    </TabItem>
-                </TabControl>
-            </TabItem>
             <TabItem Header="Моделирование ПРЧ">
                 <TabControl>
                     <TabItem Header="Генератор ПРЧ">
@@ -55,6 +39,22 @@
                     </TabItem>
                     <TabItem Header="Сжатие/Распаковка">
                         <views:CompressionView/>
+                    </TabItem>
+                </TabControl>
+            </TabItem>
+            <TabItem Header="Работа с файлами">
+                <TabControl>
+                    <TabItem Header="Генерация исходного файла">
+                        <views:InitialDataView/>
+                    </TabItem>
+                    <TabItem Header="Сжатие выбранного файла">
+                        <views:FileCompressionView/>
+                    </TabItem>
+                    <TabItem Header="Распаковка">
+                        <views:DecompressionView/>
+                    </TabItem>
+                    <TabItem Header="Проверка идентичности файлов">
+                        <views:FileCompareView/>
                     </TabItem>
                 </TabControl>
             </TabItem>
