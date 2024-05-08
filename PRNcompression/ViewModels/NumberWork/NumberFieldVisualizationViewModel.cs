@@ -9,7 +9,6 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
 using System.Windows.Input;
-using System.Windows.Markup;
 using System.Windows.Media;
 
 namespace PRNcompression.ViewModels
@@ -27,7 +26,7 @@ namespace PRNcompression.ViewModels
 
     public class TypeInfo : INotifyPropertyChanged
     {
-        public int TypeNum { get; set; }
+        public string Discription { get; set; }
         public SolidColorBrush Color { get; set; }
         private int _Quantity;
 
@@ -91,9 +90,17 @@ namespace PRNcompression.ViewModels
             for (int i = 0; i <= Dimensionality - 3; i++)
             {
                 var typeInfo = new TypeInfo();
-                typeInfo.TypeNum = i;
-                typeInfo.Color = colorDictionary[i];
-                typeInfo.Quantity = 0;
+                if (i == 0)
+                {
+                    typeInfo.Discription = $"Обычное";
+                    typeInfo.Color = colorDictionary[i];
+                    typeInfo.Quantity = 0;
+                } else
+                {
+                    typeInfo.Discription = $"ПРЧ {Dimensionality - i + 1} бит:";
+                    typeInfo.Color = colorDictionary[i];
+                    typeInfo.Quantity = 0;
+                }
                 TypesInfo.Add(typeInfo);
             }
 

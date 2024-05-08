@@ -2,10 +2,8 @@
 using PRNcompression.Model;
 using PRNcompression.ViewModels.Base;
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.IO;
-using System.Windows.Controls;
 using System.Windows.Input;
 
 namespace PRNcompression.ViewModels
@@ -24,6 +22,7 @@ namespace PRNcompression.ViewModels
                     throw new InvalidDataException();
                 var result = _prnDataWorker.BitArrayToLong(_prnDataWorker.PRNGeneration(SelectedType.Key, (int)size));
                 ResultStr = result.ToString();
+                ResultBinaryStr = Convert.ToString((long)result, 2);
             }
             catch (Exception e)
             {
@@ -50,6 +49,13 @@ namespace PRNcompression.ViewModels
         {
             get => _ResultStr;
             set => Set(ref _ResultStr, value);
+        }
+
+        private string _ResultBinaryStr;
+        public string ResultBinaryStr
+        {
+            get => _ResultBinaryStr;
+            set => Set(ref _ResultBinaryStr, value);
         }
 
         private Dictionary<byte, string> _TypesDiscriptions;

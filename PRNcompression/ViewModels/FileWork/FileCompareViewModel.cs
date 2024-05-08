@@ -1,6 +1,5 @@
 ﻿using PRNcompression.Infrastructure.Commands;
 using PRNcompression.ViewModels.Base;
-using System;
 using System.Collections.ObjectModel;
 using System.IO;
 using System.Windows;

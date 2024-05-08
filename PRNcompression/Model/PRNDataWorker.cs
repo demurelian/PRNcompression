@@ -240,6 +240,7 @@ namespace PRNcompression.Model
             item.Length = length;
 
             var number = BitArrayToLong(PRNGeneration(type, length));
+            numbers.Add(number);
 
             for (int i = data.Length - 1; i >= 0; i--)
             {

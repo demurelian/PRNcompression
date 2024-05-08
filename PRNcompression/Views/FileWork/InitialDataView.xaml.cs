@@ -3,7 +3,7 @@ using System;
 using System.Windows;
 using System.Windows.Controls;
 
-namespace PRNcompression.Views
+namespace PRNcompression.Views.FileWork
 {
     public partial class InitialDataView : UserControl
     {

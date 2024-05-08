@@ -67,35 +67,35 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Views\CompressionView.xaml">
+    <Page Include="Views\NumberWork\CompressionView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Views\DecompressionView.xaml">
+    <Page Include="Views\FileWork\DecompressionView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Views\FileCompareView.xaml">
+    <Page Include="Views\FileWork\FileCompareView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Views\FileCompressionView.xaml">
+    <Page Include="Views\FileWork\FileCompressionView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Views\InitialDataView.xaml">
+    <Page Include="Views\FileWork\InitialDataView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Views\NumberFieldVisualizationView.xaml">
+    <Page Include="Views\NumberWork\NumberFieldVisualizationView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Views\PRNGeneratorView.xaml">
+    <Page Include="Views\NumberWork\PRNGeneratorView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Views\SymmetricalInversionView.xaml">
+    <Page Include="Views\NumberWork\NumbersTableView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -113,39 +113,39 @@
     <Compile Include="Infrastructure\Converters\CollectionEmptyToVisibilityConverter.cs" />
     <Compile Include="Model\PRNDataWorker.cs" />
     <Compile Include="ViewModels\Base\ViewModel.cs" />
-    <Compile Include="ViewModels\CompressionViewModel.cs" />
-    <Compile Include="ViewModels\DecompressionViewModel.cs" />
+    <Compile Include="ViewModels\NumberWork\CompressionViewModel.cs" />
+    <Compile Include="ViewModels\FileWork\DecompressionViewModel.cs" />
     <Compile Include="ViewModels\DirectoryViewModel.cs" />
-    <Compile Include="ViewModels\FileCompareViewModel.cs" />
-    <Compile Include="ViewModels\FileCompressionViewModel.cs" />
-    <Compile Include="ViewModels\InitialDataViewModel.cs" />
+    <Compile Include="ViewModels\FileWork\FileCompareViewModel.cs" />
+    <Compile Include="ViewModels\FileWork\FileCompressionViewModel.cs" />
+    <Compile Include="ViewModels\FileWork\InitialDataViewModel.cs" />
     <Compile Include="ViewModels\MainWindowViewModel.cs" />
-    <Compile Include="ViewModels\NumberFieldVisualizationViewModel.cs" />
-    <Compile Include="ViewModels\PRNGeneratorViewModel.cs" />
-    <Compile Include="ViewModels\SymmetricalInversionViewModel.cs" />
-    <Compile Include="Views\CompressionView.xaml.cs">
+    <Compile Include="ViewModels\NumberWork\NumberFieldVisualizationViewModel.cs" />
+    <Compile Include="ViewModels\NumberWork\PRNGeneratorViewModel.cs" />
+    <Compile Include="ViewModels\NumberWork\NumbersTableViewModel.cs" />
+    <Compile Include="Views\NumberWork\CompressionView.xaml.cs">
       <DependentUpon>CompressionView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Views\DecompressionView.xaml.cs">
+    <Compile Include="Views\FileWork\DecompressionView.xaml.cs">
       <DependentUpon>DecompressionView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Views\FileCompareView.xaml.cs">
+    <Compile Include="Views\FileWork\FileCompareView.xaml.cs">
       <DependentUpon>FileCompareView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Views\FileCompressionView.xaml.cs">
+    <Compile Include="Views\FileWork\FileCompressionView.xaml.cs">
       <DependentUpon>FileCompressionView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Views\InitialDataView.xaml.cs">
+    <Compile Include="Views\FileWork\InitialDataView.xaml.cs">
       <DependentUpon>InitialDataView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Views\NumberFieldVisualizationView.xaml.cs">
+    <Compile Include="Views\NumberWork\NumberFieldVisualizationView.xaml.cs">
       <DependentUpon>NumberFieldVisualizationView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Views\PRNGeneratorView.xaml.cs">
+    <Compile Include="Views\NumberWork\PRNGeneratorView.xaml.cs">
       <DependentUpon>PRNGeneratorView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Views\SymmetricalInversionView.xaml.cs">
-      <DependentUpon>SymmetricalInversionView.xaml</DependentUpon>
+    <Compile Include="Views\NumberWork\NumbersTableView.xaml.cs">
+      <DependentUpon>NumbersTableView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\Windows\MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>

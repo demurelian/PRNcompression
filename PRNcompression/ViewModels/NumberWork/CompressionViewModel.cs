@@ -4,10 +4,8 @@ using System.Collections;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Windows.Documents;
 using System.Windows.Input;
 using System.Text;
-using System.Net;
 using PRNcompression.Model;
 
 namespace PRNcompression.ViewModels
@@ -55,6 +53,68 @@ namespace PRNcompression.ViewModels
             var length = _prnDataWorker.GetNumberLength(number);
             var boolList = new List<bool>();
             var ulongList = new List<ulong>();
+
+            int bit1more = 0;
+            int bit2more = 0;
+            int bit3more = 0;
+            int howMany = 0;
+            int orEqual = 0;
+            int bit1compress = 0;
+            int bit2compress = 0;
+            int bit3compress = 0;
+            int bit4compress = 0;
+            int bit5compress = 0;
+            int bit6compress = 0;
+            int bit7compress = 0;
+            int bit8compress = 0;
+            for (int j = 1; j <= 10000; j++)
+            {
+                var newNum = number + (ulong)j;
+                var newLen = _prnDataWorker.GetNumberLength(newNum);
+                var newBoolList = new List<bool>();
+                var newUlongList = new List<ulong>();
+                var newItem = _prnDataWorker.Compression(newNum, newLen, ref newBoolList, ref newUlongList);
+                var lenOfLen = _prnDataWorker.GetNumberLength((ulong)newItem.Length);
+                var resultSize = 4 + lenOfLen + newItem.InversionInfo.Count;
+                if (resultSize == newLen + 1)
+                    bit1more++;
+                if (resultSize == newLen + 2)
+                    bit2more++;
+                if (resultSize == newLen + 3)
+                    bit3more++;
+                if (resultSize == newLen)
+                    orEqual++;
+                if (resultSize < newLen)
+                {
+                    if (resultSize + 1 == newLen)
+                        bit1compress++;
+                    if (resultSize + 2 == newLen)
+                        bit2compress++;
+                    if (resultSize + 3 == newLen)
+                        bit3compress++;
+                    if (resultSize + 4 == newLen)
+                        bit4compress++;
+                    if (resultSize + 5 == newLen)
+                        bit5compress++;
+                    if (resultSize + 6 == newLen)
+                        bit6compress++;
+                    if (resultSize + 7 == newLen)
+                        bit7compress++;
+                    if (resultSize + 8 == newLen)
+                        bit8compress++;
+
+
+                    howMany++;
+                }
+            }
+
+            var percantage = howMany + orEqual + bit1more + bit2more + bit3more;
+            var compression = bit1compress + bit2compress + bit3compress + bit4compress + bit5compress + bit6compress + bit7compress + bit8compress;
+            var bit9_53 = howMany + orEqual + bit1more + bit2more + bit3more - percantage + bit1compress + bit2compress + bit3compress + bit4compress + bit5compress + bit6compress + bit7compress + bit8compress - compression + howMany - compression;
+            if (bit9_53 == 0)
+            {
+
+            }
             var item = _prnDataWorker.Compression(number, length, ref boolList, ref ulongList);
 
             if (ulongList.Count > 0)
@@ -74,65 +134,57 @@ namespace PRNcompression.ViewModels
 
             CompressionInfo = new ObservableCollection<StringThree>();
 
+
+
             var item2 = new StringThree
-            {
-                Discription = "Число",
-                ValueString = number.ToString(),
-                BinaryString = Convert.ToString((long)number, 2).PadLeft(length, '0')
-            };
-            CompressionInfo.Add(item2);
-
-            var item3 = new StringThree
-            {
-                Discription = "Длина",
-                ValueString = length.ToString(),
-                BinaryString = "-"
-            };
-            CompressionInfo.Add(item3);
-
-            var item4 = new StringThree
             {
                 Discription = "Тип ПРЧ",
                 ValueString = item.Type.ToString(),
                 BinaryString = Convert.ToString(item.Type, 2).PadLeft(4, '0')
             };
-            CompressionInfo.Add(item4);
+            CompressionInfo.Add(item2);
 
             var lengthOfTypeLength = _prnDataWorker.GetNumberLength((ulong)item.Length);
-            var item5 = new StringThree
+            var item3 = new StringThree
             {
                 Discription = "Длина ПРЧ",
                 ValueString = item.Length.ToString(),
                 BinaryString = Convert.ToString(item.Length, 2).PadLeft(lengthOfTypeLength, '0')
             };
-            CompressionInfo.Add(item5);
+            CompressionInfo.Add(item3);
 
-            var item6 = new StringThree
+            var item4 = new StringThree
             {
                 Discription = "Инверсии",
                 ValueString = item.InversionInfo.Count.ToString(),
                 BinaryString = ConvertBoolListToBinaryString(item.InversionInfo)
             };
-            CompressionInfo.Add(item6);
+            CompressionInfo.Add(item4);
 
-            var compressionFactor = (double)length / (4 + lengthOfTypeLength + item.InversionInfo.Count);
-            var item7 = new StringThree
-            {
-                Discription = "Фактор сжатия",
-                ValueString = compressionFactor.ToString(),
-                BinaryString = "-"
-            };
-            CompressionInfo.Add(item7);
-
-            var ration = (4 + lengthOfTypeLength + item.InversionInfo.Count) / (double)length;
-            var item8= new StringThree
+            var ration = (double)length / (4 + lengthOfTypeLength + item.InversionInfo.Count);
+            var item5 = new StringThree
             {
                 Discription = "Коэффициент сжатия",
                 ValueString = ration.ToString(),
                 BinaryString = "-"
             };
-            CompressionInfo.Add(item8);
+            CompressionInfo.Add(item5);
 
+            var item6 = new StringThree
+            {
+                Discription = "Длина числа",
+                ValueString = length.ToString(),
+                BinaryString = "-"
+            };
+            CompressionInfo.Add(item6);
+
+            var item7 = new StringThree
+            {
+                Discription = "Число",
+                ValueString = number.ToString(),
+                BinaryString = Convert.ToString((long)number, 2).PadLeft(length, '0')
+            };
+            CompressionInfo.Add(item7);
         }
 
         public static string ConvertBoolListToBinaryString(List<bool> boolList)
