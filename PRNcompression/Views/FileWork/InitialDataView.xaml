@@ -43,7 +43,7 @@
                         <TreeView ItemsSource="{Binding Disks}" SelectedItemChanged="TreeView_SelectedItemChanged"/>
                     </GroupBox>
                     <TextBlock Text="Выбранный путь:"/>
-                    <TextBox x:Name="PathTextBox" IsReadOnly="True" Text="{Binding PathString, Mode=TwoWay}"/>
+                    <TextBox Height="25" Padding="2" x:Name="PathTextBox" IsReadOnly="True" Text="{Binding PathString, Mode=TwoWay}"/>
                 </StackPanel>
             </Grid>
             <StackPanel>
@@ -51,16 +51,16 @@
                 <RadioButton GroupName="GenerateOptions" Content="Случайная генерация" IsChecked="{Binding GenerateOption1, Mode=TwoWay}"/>
                 <RadioButton GroupName="GenerateOptions" Content="Генерация файла с регулярной структурой" IsChecked="{Binding GenerateOption2, Mode=TwoWay}"/>
                 <DockPanel Margin="0,2,0,0">
-                    <TextBlock DockPanel.Dock="Left" Text="Размер данных (байт):"/>
-                    <TextBox Text="{Binding ByteNumberStr}" Margin="5,0,0,0"/>
+                    <TextBlock DockPanel.Dock="Left" Text="Размер данных (байт):" Padding="4"/>
+                    <TextBox Height="25" Padding="2" Text="{Binding ByteNumberStr}" Margin="5,0,0,0"/>
                 </DockPanel>
                 <DockPanel Margin="0,2,0,0">
-                    <TextBlock DockPanel.Dock="Left" Text="Имя файла:"/>
-                    <TextBox Text="{Binding FileName, Mode=TwoWay}" Margin="5,2,0,0"/>
+                    <TextBlock DockPanel.Dock="Left" Text="Имя файла:" Padding="4"/>
+                    <TextBox Height="25" Padding="2" Text="{Binding FileName, Mode=TwoWay}" Margin="5,2,0,0"/>
                 </DockPanel>
                 <DockPanel Margin="0,4,0,0" Visibility="{Binding GenerateOption2, Converter={StaticResource BooleanToVisibilityConverter}}">
                     <TextBlock DockPanel.Dock="Left" Text="Тип ПРЧ:" Margin="0,2,0,0"/>
-                    <ComboBox Margin="5,0,0,0" ItemsSource="{Binding TypesDiscriptions}" SelectedItem="{Binding SelectedType, Mode=TwoWay}" SelectedIndex="0"/>
+                    <ComboBox Height="25" Padding="4" Margin="5,0,0,0" ItemsSource="{Binding TypesDiscriptions}" SelectedItem="{Binding SelectedType, Mode=TwoWay}" SelectedIndex="0"/>
                 </DockPanel>
                 <Button Margin="0,5,0,0" Style="{StaticResource CustomButton}" Height="25" Content="Сгенерировать" Command="{Binding GenerateDataCommand}"/>
             </StackPanel>

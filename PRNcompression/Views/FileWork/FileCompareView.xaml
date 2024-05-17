@@ -22,9 +22,9 @@
                 <StackPanel>
                     <DockPanel>
                         <TextBlock Text="Выбор файла 1:"/>
-                        <Button HorizontalAlignment="Right" Height="15" Width="15" Command="{Binding Update1Command}">
+                        <Button HorizontalAlignment="Right" Height="15" Width="15" Command="{Binding Update1Command}" BorderBrush="Transparent" Background="Transparent">
                             <Button.Content>
-                                <fa:ImageAwesome Icon="Refresh"/>
+                                <fa:ImageAwesome Icon="Refresh"  Foreground="Blue"/>
                             </Button.Content>
                         </Button>
                     </DockPanel>
@@ -45,16 +45,16 @@
                         </GroupBox.Resources>
                         <TreeView ItemsSource="{Binding Disks1}" SelectedItemChanged="TreeView_SelectedItemChanged"/>
                     </GroupBox>
-                    <TextBox IsReadOnly="True" Text="{Binding SelectedServiceFileViewModel.Path, Mode=OneWay}"/>
+                    <TextBox Height="25" Padding="2" IsReadOnly="True" Text="{Binding SelectedServiceFileViewModel.Path, Mode=OneWay}"/>
                 </StackPanel>
             </Grid>
             <Grid>
                 <StackPanel>
                     <DockPanel>
                         <TextBlock Text="Выбор файла 2:"/>
-                        <Button HorizontalAlignment="Right" Height="15" Width="15" Command="{Binding Update2Command}">
+                        <Button HorizontalAlignment="Right" Height="15" Width="15" Command="{Binding Update2Command}" BorderBrush="Transparent" Background="Transparent">
                             <Button.Content>
-                                <fa:ImageAwesome Icon="Refresh"/>
+                                <fa:ImageAwesome Icon="Refresh"  Foreground="Blue"/>
                             </Button.Content>
                         </Button>
                     </DockPanel>
@@ -75,7 +75,7 @@
                         </GroupBox.Resources>
                         <TreeView ItemsSource="{Binding Disks2}" SelectedItemChanged="TreeView_SelectedItemChanged_1"/>
                     </GroupBox>
-                    <TextBox IsReadOnly="True" Text="{Binding SelectedCompressedFileViewModel.Path, Mode=OneWay}"/>
+                    <TextBox Height="25" Padding="2" IsReadOnly="True" Text="{Binding SelectedCompressedFileViewModel.Path, Mode=OneWay}"/>
                 </StackPanel>
             </Grid>
             <Button Margin="0,5,0,0" Style="{StaticResource CustomButton}" Height="25" Content="Сравнить" Command="{Binding CompareCommand}"/>

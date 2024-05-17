@@ -14,6 +14,7 @@
     <Window.DataContext>
         <vm:MainWindowViewModel/>
     </Window.DataContext>
+
     <DockPanel>
         <Menu DockPanel.Dock="Top">
 

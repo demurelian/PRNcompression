@@ -17,14 +17,14 @@
         </Grid.ColumnDefinitions>
         <StackPanel Margin="10" Grid.Column="0">
             <TextBlock Text="Размерность поля:"/>
-            <StackPanel Orientation="Horizontal">
+            <StackPanel Orientation="Horizontal" Margin="0,5,0,0" HorizontalAlignment="Center">
                 <ComboBox ItemsSource="{Binding DimensionalityOptions}" SelectedItem="{Binding Dimensionality}" SelectedIndex="0"/>
                 <TextBlock Padding="3" Margin ="5,0,0,0" Text="бит"/>
             </StackPanel>
-            <Button Content="Отобразить" Command="{Binding VisualizeFromNumberCommand}"/>
+            <Button Content="Отобразить" Command="{Binding VisualizeFromNumberCommand}" Style="{StaticResource CustomButton}" Margin="0,5,0,0"/>
             <TextBlock/>
             <TextBlock Text="Сведения:"/>
-            <ListView ItemsSource="{Binding TypesInfo}">
+            <ListView Margin="0,5,0,0" ItemsSource="{Binding TypesInfo}">
                 <ListView.ItemTemplate>
                     <DataTemplate>
                         <StackPanel Orientation="Horizontal">

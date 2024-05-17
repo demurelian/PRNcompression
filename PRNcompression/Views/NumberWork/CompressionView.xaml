@@ -31,8 +31,8 @@
             <StackPanel DockPanel.Dock="Top" Margin="10" Grid.Column="0">
                 <TextBlock Height="25" Text="СЖАТИЕ ЧИСЛА" FontWeight="Bold" FontSize="15" Padding="2" HorizontalAlignment="Center"/>
                 <TextBlock Height="20" Padding="1" Text="Число:"/>
-                <TextBox Height="20" Text="{Binding NumStr,Mode=TwoWay}"/>
-                <Button Height="20" Content="Сжать" Command="{Binding CompressionStartCommand}"/>
+                <TextBox Height="25" Text="{Binding NumStr,Mode=TwoWay}" Margin="0,5,0,0" Padding="2"/>
+                <Button Height="25" Content="Сжать" Command="{Binding CompressionStartCommand}" Style="{StaticResource CustomButton}" Margin="0,5,0,0"/>
                 <StackPanel Visibility="{Binding CompressionInfo, Converter={StaticResource CollectionEmptyToVisibilityConverter}}">
                     <TextBlock Height="20" Padding="1" Text="Результат:"/>
                     <DataGrid AutoGenerateColumns="False" ItemsSource="{Binding CompressionInfo}" CanUserAddRows="False">
@@ -84,10 +84,10 @@
             <StackPanel DockPanel.Dock="Top" Margin="10">
                 <TextBlock Height="25" Text="РАСПАКОВКА" FontWeight="Bold" FontSize="15" Padding="2" HorizontalAlignment="Center"/>
                 <TextBlock Height="20" Padding="1" Text="Служебная информация:"/>
-                <TextBox Height="20" Text="{Binding ServiceInfoStr}"/>
+                <TextBox Height="25" Text="{Binding ServiceInfoStr}" Margin="0,5,0,0"  Padding="2"/>
                 <TextBlock Height="20" Padding="1" Text="Данные:"/>
-                <TextBox Height="20" Text="{Binding DataStr}"/>
-                <Button Height="20" Content="Распаковать" Command="{Binding DecompressionStartCommand}"/>
+                <TextBox Height="25" Text="{Binding DataStr}" Margin="0,5,0,0"  Padding="2"/>
+                <Button Height="25" Content="Распаковать" Command="{Binding DecompressionStartCommand}" Style="{StaticResource CustomButton}"  Margin="0,5,0,0"/>
                 <DataGrid Visibility="{Binding DecompressionInfo, Converter={StaticResource CollectionEmptyToVisibilityConverter}}"
                           AutoGenerateColumns="False" ItemsSource="{Binding DecompressionInfo}">
                     <DataGrid.Columns>

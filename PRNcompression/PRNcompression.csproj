@@ -67,6 +67,10 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="Resources\OtherStyles.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Views\NumberWork\CompressionView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>

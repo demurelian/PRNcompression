@@ -22,7 +22,7 @@ namespace PRNcompression.ViewModels
                     throw new InvalidDataException();
                 var result = _prnDataWorker.BitArrayToLong(_prnDataWorker.PRNGeneration(SelectedType.Key, (int)size));
                 ResultStr = result.ToString();
-                ResultBinaryStr = Convert.ToString((long)result, 2);
+                ResultBinaryStr = Convert.ToString((long)result, 2).PadLeft((int)size, '0');
             }
             catch (Exception e)
             {
@@ -73,20 +73,20 @@ namespace PRNcompression.ViewModels
 
             TypesDiscriptions = new Dictionary<byte, string>();
             TypesDiscriptions.Add(0, "0...0");
-            TypesDiscriptions.Add(1, "0...0 + 1");
-            TypesDiscriptions.Add(2, "00 + 0101... + 10 (00 + 0101... + 11 для нечет)");
-            TypesDiscriptions.Add(3, "00 + 1010... + 11 (00 + 1010... + 10 для нечет)");
-            TypesDiscriptions.Add(4, "01 + 0...0");
-            TypesDiscriptions.Add(5, "0101...");
-            TypesDiscriptions.Add(6, "01 + 1010...");
-            TypesDiscriptions.Add(7, "01 + 1...1");
-            TypesDiscriptions.Add(8, "1 + 0...0");
-            TypesDiscriptions.Add(9, "10 + 0101...");
-            TypesDiscriptions.Add(10, "1010...");
-            TypesDiscriptions.Add(11, "10 + 1...1");
-            TypesDiscriptions.Add(12, "11 + 0101... + 00 (11 + 0101... + 01 для нечет)");
-            TypesDiscriptions.Add(13, "11 + 1010... + 01 (11 + 1010... + 00 для нечет)");
-            TypesDiscriptions.Add(14, "1...1 + 0");
+            TypesDiscriptions.Add(1, "0001 + 1...1");
+            TypesDiscriptions.Add(2, "0010 + 0...0");
+            TypesDiscriptions.Add(3, "0011 + 1...1");
+            TypesDiscriptions.Add(4, "0100 + 0...0");
+            TypesDiscriptions.Add(5, "0010 + 1...1");
+            TypesDiscriptions.Add(6, "0110 + 0...0");
+            TypesDiscriptions.Add(7, "0111 + 1...1");
+            TypesDiscriptions.Add(8, "1000 + 0...0");
+            TypesDiscriptions.Add(9, "1001 + 1...1");
+            TypesDiscriptions.Add(10, "1010 + 0...0");
+            TypesDiscriptions.Add(11, "1011 + 1...1");
+            TypesDiscriptions.Add(12, "1100 + 0...0");
+            TypesDiscriptions.Add(13, "1101 + 1...1");
+            TypesDiscriptions.Add(14, "1110 + 0...0");
             TypesDiscriptions.Add(15, "1...1");
         }
     }

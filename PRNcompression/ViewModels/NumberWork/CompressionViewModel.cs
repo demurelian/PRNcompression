@@ -54,6 +54,7 @@ namespace PRNcompression.ViewModels
             var boolList = new List<bool>();
             var ulongList = new List<ulong>();
 
+            #region testing
             int bit1more = 0;
             int bit2more = 0;
             int bit3more = 0;
@@ -67,13 +68,14 @@ namespace PRNcompression.ViewModels
             int bit6compress = 0;
             int bit7compress = 0;
             int bit8compress = 0;
-            for (int j = 1; j <= 10000; j++)
+            for (int j = 0; j <= 10000; j++)
             {
                 var newNum = number + (ulong)j;
                 var newLen = _prnDataWorker.GetNumberLength(newNum);
                 var newBoolList = new List<bool>();
                 var newUlongList = new List<ulong>();
                 var newItem = _prnDataWorker.Compression(newNum, newLen, ref newBoolList, ref newUlongList);
+
                 var lenOfLen = _prnDataWorker.GetNumberLength((ulong)newItem.Length);
                 var resultSize = 4 + lenOfLen + newItem.InversionInfo.Count;
                 if (resultSize == newLen + 1)
@@ -115,6 +117,7 @@ namespace PRNcompression.ViewModels
             {
 
             }
+            #endregion
             var item = _prnDataWorker.Compression(number, length, ref boolList, ref ulongList);
 
             if (ulongList.Count > 0)
@@ -126,7 +129,7 @@ namespace PRNcompression.ViewModels
                 {
                     Discription = $"{i+1}",
                     ValueString = currentNumber.ToString(),
-                    BinaryString = Convert.ToString((long)currentNumber, 2).PadLeft(length - i, '0')
+                    BinaryString = Convert.ToString((long)currentNumber, 2).PadLeft(length - i-1, '0')
                 };
                 i++;
                 NumberWayInfo.Add(currItem);
@@ -232,14 +235,16 @@ namespace PRNcompression.ViewModels
             var numbers = new List<ulong>();
             var item = _prnDataWorker.Decompression(BitArrayFromBinaryString(ServiceInfoStr), BitArrayFromBinaryString(DataStr), ref numbers);
 
+            var length = item.Length;
+
             DecompressionNumbers = new ObservableCollection<StringThree>();
-            int i = 1;
+            int i = 0;
             foreach(var num in numbers)
             {
                 var newItem = new StringThree
                 {
                     ValueString = num.ToString(),
-                    BinaryString = Convert.ToString((long)num, 2),
+                    BinaryString = Convert.ToString((long)num, 2).PadLeft(length + i , '0'),
                     Discription = $"{i}"
                 };
                 i++;
@@ -259,7 +264,7 @@ namespace PRNcompression.ViewModels
         public static BitArray BitArrayFromBinaryString(string binaryString)
         {
             if (binaryString == null)
-                throw new ArgumentNullException(nameof(binaryString));
+                return null;
 
             var result = new BitArray(binaryString.Length);
 

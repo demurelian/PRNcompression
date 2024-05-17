@@ -1,10 +1,13 @@
-﻿using System;
+﻿using PRNcompression.ViewModels;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Security.Policy;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Markup;
 using System.Windows.Media;
 
 namespace PRNcompression.Model
@@ -14,6 +17,12 @@ namespace PRNcompression.Model
         public byte Type { get; set; }
         public int Length { get; set; }
         public BitArray InversionInfo { get; set; }
+    }
+    public class NewCompressedInfo
+    {
+        public byte Type { get; set; }
+        public int Length { get; set; }
+        public List<bool> Data { get; set; }
     }
     public class CompressedInfo
     {
@@ -27,7 +36,7 @@ namespace PRNcompression.Model
         public int Length { get; set; }
         public ulong ResultNumber { get; set; }
     }
-    
+
     internal class PRNDataWorker
     {
         public void WriteBitArrayToFile(string filePath, BitArray bits)
@@ -51,15 +60,20 @@ namespace PRNcompression.Model
             byte[] data = new byte[size];
             switch(type)
             {
+                case 1:
+                    data[size - 1] = 31;
+                    for (int i = 0; i <= size - 2; i++)
+                        data[i] = 255;
+                    break;
                 case 2:
-                    data[0] = 86; data[size - 1] = 21;
-                    for (int i = 1; i <= size - 2; i++)
-                        data[i] = 85;
+                    data[size - 1] = 32;
+                    for (int i = 0; i <= size - 2; i++)
+                        data[i] = 0;
                     break;
                 case 3:
-                    data[0] = 171; data[size - 1] = 42;
-                    for (int i = 1; i <= size - 2; i++)
-                        data[i] = 170;
+                    data[size - 1] = 63;
+                    for (int i = 0; i <= size - 2; i++)
+                        data[i] = 255;
                     break;
                 case 4:
                     data[size - 1] = 64;
@@ -67,13 +81,14 @@ namespace PRNcompression.Model
                         data[i] = 0;
                     break;
                 case 5:
-                    for (int i = 0; i <= size - 1; i++)
-                        data[i] = 85;
+                    data[size - 1] = 95;
+                    for (int i = 0; i <= size - 2; i++)
+                        data[i] = 255;
                     break;
                 case 6:
-                    data[size - 1] = 106;
+                    data[size - 1] = 96;
                     for (int i = 0; i <= size - 2; i++)
-                        data[i] = 170;
+                        data[i] = 0;
                     break;
                 case 7:
                     data[size - 1] = 127;
@@ -86,13 +101,14 @@ namespace PRNcompression.Model
                         data[i] = 0;
                     break;
                 case 9:
-                    data[size - 1] = 149;
+                    data[size - 1] = 159;
                     for (int i = 0; i <= size - 2; i++)
-                        data[i] = 85;
+                        data[i] = 255;
                     break;
                 case 10:
-                    for (int i = 0; i <= size - 1; i++)
-                        data[i] = 170;
+                    data[size - 1] = 160;
+                    for (int i = 0; i <= size - 2; i++)
+                        data[i] = 0;
                     break;
                 case 11:
                     data[size - 1] = 191;
@@ -100,19 +116,19 @@ namespace PRNcompression.Model
                         data[i] = 255;
                     break;
                 case 12:
-                    data[0] = 84; data[size - 1] = 213;
-                    for (int i = 1; i <= size - 2; i++)
-                        data[i] = 85;
+                    data[size - 1] = 192;
+                    for (int i = 0; i <= size - 2; i++)
+                        data[i] = 0;
                     break;
                 case 13:
-                    data[0] = 169; data[size - 1] = 234;
-                    for (int i = 1; i <= size - 2; i++)
-                        data[i] = 170;
+                    data[size - 1] = 223;
+                    for (int i = 0; i <= size - 2; i++)
+                        data[i] = 255;
                     break;
                 case 14:
-                    data[0] = 254;
-                    for (int i = 1; i <= size - 1; i++)
-                        data[i] = 255;
+                    data[size - 1] = 224;
+                    for (int i = 0; i <= size - 2; i++)
+                        data[i] = 0;
                     break;
                 case 15:
                     for (int i = 0; i <= size - 1; i++)
@@ -194,6 +210,106 @@ namespace PRNcompression.Model
             return FileCompression(newBits, newLength, ref InversionInfo);
         }
 
+        public ulong GetIndexInZone(ulong number, int length)
+        {
+            var prns = new Dictionary<byte, ulong>();
+            for (byte i = 0; i <= 15; i++)
+            {
+                prns.Add(i, BitArrayToLong(PRNGeneration(i, length)));
+            }
+            int zone = -1;
+            for (byte i = 0; i <= 7; i++)
+            {
+                byte firstPrn = (byte)(i * 2);
+                byte secondPrn = (byte)(i * 2 + 1);
+                if (number <= prns[secondPrn] && number >= prns[firstPrn])
+                {
+                    zone = i;
+                    return number - prns[firstPrn];
+                }
+            }
+            return ulong.MaxValue;
+        }
+
+        public ulong GetZoneSize(int length) => (ulong)Math.Pow(2, length - 3);
+
+        //public NewCompressedInfo NewCompression(ulong number, int numberLength, ref List<bool> data, ref List<ulong> numbers)
+        //{
+        //    var result = new NewCompressedInfo();
+        //    var prns = new Dictionary<byte, ulong>();
+        //    for (byte i = 0; i <= 15; i++)
+        //    {
+        //        prns.Add(i, BitArrayToLong(PRNGeneration(i, numberLength)));
+        //    }
+
+        //    foreach (var prn in prns)
+        //    {
+        //        if (prn.Value == number)
+        //        {
+        //            result.Type = prn.Key;
+        //            result.Length = numberLength;
+        //            result.Data = data;
+        //            return result;
+        //        }
+        //    }
+        //    ulong newNumber;
+        //    int newLength = numberLength - 1;
+        //    if (number > prns[7])
+        //    {
+        //        data.Add(true);
+        //        ulong mask = prns[15];
+        //        newNumber = number ^ mask;
+        //    }
+        //    else
+        //    {
+        //        data.Add(false);
+        //        newNumber = number;
+        //    }
+        //    Console.WriteLine("Before stopping 1");
+        //    var zoneIndex = GetIndexInZone(newNumber, numberLength);
+        //    Console.WriteLine("Before stopping 2");
+        //    var zoneSize = GetZoneSize(numberLength);
+        //    bool up = false;
+        //    Console.WriteLine("Before stopping 3");
+        //    if (zoneIndex % 8 == 2 || zoneIndex % 8 == 3 || zoneIndex % 8 == 6 || zoneIndex % 8 == 7)
+        //        up = true;
+        //    if (up)
+        //        newNumber++;
+        //    else
+        //        newNumber--;
+        //    //data.Add(up);
+        //    numbers.Add(newNumber);
+        //    Console.WriteLine("Something happening");
+        //    return NewCompression(newNumber, newLength, ref data, ref numbers);
+        //}
+        //public DecompressedInfo NewDecompression(BitArray serviceInfo, BitArray data, ref List<ulong> numbers)
+        //{
+        //    var item = new DecompressedInfo();
+        //    byte type;
+        //    int length;
+        //    SplitBitArray(serviceInfo, out type, out length);
+        //    item.Type = type;
+        //    item.Length = length;
+
+        //    var number = BitArrayToLong(PRNGeneration(type, length));
+        //    numbers.Add(number);
+
+        //    for (int i = data.Length - 1; i >= 0; i--)
+        //    {
+        //        length++;
+        //        if (data[i])
+        //        {
+        //            var mask = BitArrayToLong(PRNGeneration(15, length));
+        //            number = number ^ mask;
+        //            numbers.Add(number);
+        //        }
+        //    }
+
+        //    item.ResultNumber = number;
+        //    return item;
+        //}
+
+
         public CompressedInfo Compression(ulong number, int numberLength, ref List<bool> inversionList, ref List<ulong> numbers)
         {
             var result = new CompressedInfo();
@@ -219,12 +335,12 @@ namespace PRNcompression.Model
             {
                 inversionList.Add(true);
                 ulong mask = prns[15];
-                newNumber = number ^ mask;
+                newNumber = ++number ^ mask;
             }
             else
             {
                 inversionList.Add(false);
-                newNumber = number;
+                newNumber = --number;
             }
             numbers.Add(newNumber);
             return Compression(newNumber, newLength, ref inversionList, ref numbers);
@@ -242,16 +358,22 @@ namespace PRNcompression.Model
             var number = BitArrayToLong(PRNGeneration(type, length));
             numbers.Add(number);
 
-            for (int i = data.Length - 1; i >= 0; i--)
-            {
-                length++;
-                if (data[i])
+            if (data != null)
+                for (int i = data.Length - 1; i >= 0; i--)
                 {
-                    var mask = BitArrayToLong(PRNGeneration(15, length));
-                    number = number ^ mask;
-                    numbers.Add(number);
+                    length++;
+                    if (data[i])
+                    {
+                        var mask = BitArrayToLong(PRNGeneration(15, length));
+                        number = number ^ mask;
+                        number--;
+                        numbers.Add(number);
+                    } else
+                    {
+                        number++;
+                        numbers.Add(number);
+                    }
                 }
-            }
 
             item.ResultNumber = number;
             return item;
@@ -328,184 +450,286 @@ namespace PRNcompression.Model
                         bits.Set(i, false);
                     break;
                 case 1:
-                    bits.Set(0, true);
-                    for (int i = 1; i < size; i++)
-                        bits.Set(i, false);
+                    bits.Set(size - 1, false);
+                    bits.Set(size - 2, false);
+                    bits.Set(size - 3, false);
+                    for (int i = size - 4; i >= 0; i--)
+                        bits.Set(i, true);
                     break;
                 case 2:
-                    if (size % 2 == 0)
-                    {
-                        bits.Set(0, false);
-                        bits.Set(1, true);
-                        var flag10 = false;
-                        for (int i = size - 3; i >= 2; i--)
-                        {
-                            bits.Set(i, flag10);
-                            flag10 = !flag10;
-                        }
-                        bits.Set(size - 2, false);
-                        bits.Set(size - 1, false);
-                    }
-                    else
-                    {
-                        bits.Set(0, true);
-                        bits.Set(1, true);
-                        var flag10 = false;
-                        for (int i = size - 3; i >= 2; i--)
-                        {
-                            bits.Set(i, flag10);
-                            flag10 = !flag10;
-                        }
-                        bits.Set(size - 2, false);
-                        bits.Set(size - 1, false);
-                    }
+                    bits.Set(size - 1, false);
+                    bits.Set(size - 2, false);
+                    bits.Set(size - 3, true);
+                    for (int i = size - 4; i >= 0; i--)
+                        bits.Set(i, false);
                     break;
                 case 3:
-                    if (size % 2 == 0)
-                    {
-                        bits.Set(0, true);
-                        bits.Set(1, true);
-                        var flag2 = true;
-                        for (int i = size - 3; i >= 2; i--)
-                        {
-                            bits.Set(i, flag2);
-                            flag2 = !flag2;
-                        }
-                        bits.Set(size - 2, false);
-                        bits.Set(size - 1, false);
-                    }
-                    else
-                    {
-                        bits.Set(0, false);
-                        bits.Set(1, true);
-                        var flag2 = true;
-                        for (int i = size - 3; i >= 2; i--)
-                        {
-                            bits.Set(i, flag2);
-                            flag2 = !flag2;
-                        }
-                        bits.Set(size - 2, false);
-                        bits.Set(size - 1, false);
-                    }
+                    bits.Set(size - 1, false);
+                    bits.Set(size - 2, false);
+                    bits.Set(size - 3, true);
+                    for (int i = size - 4; i >= 0; i--)
+                        bits.Set(i, true);
                     break;
                 case 4:
+                    bits.Set(size - 1, false);
                     bits.Set(size - 2, true);
+                    bits.Set(size - 3, false);
+                    for (int i = size - 4; i >= 0; i--)
+                        bits.Set(i, false);
                     break;
                 case 5:
-                    var flag3 = false;
-                    for (int i = size - 1; i >= 0; i--)
-                    {
-                        bits.Set(i, flag3);
-                        flag3 = !flag3;
-                    }
+                    bits.Set(size - 1, false);
+                    bits.Set(size - 2, true);
+                    bits.Set(size - 3, false);
+                    for (int i = size - 4; i >= 0; i--)
+                        bits.Set(i, true);
                     break;
                 case 6:
+                    bits.Set(size - 1, false);
                     bits.Set(size - 2, true);
-                    var flag12 = true;
-                    for (int i = size - 3; i >= 0; i--)
-                    {
-                        bits.Set(i, flag12);
-                        flag12 = !flag12;
-                    }
+                    bits.Set(size - 3, true);
+                    for (int i = size - 4; i >= 0; i--)
+                        bits.Set(i, false);
                     break;
                 case 7:
-                    for (int i = 0; i < size - 1; i++)
-                        bits.Set(i, true);
                     bits.Set(size - 1, false);
+                    for (int i = size - 2; i >= 0; i--)
+                        bits.Set(i, true);
                     break;
                 case 8:
-                    for (int i = 0; i < size - 1; i++)
-                        bits.Set(i, false);
                     bits.Set(size - 1, true);
+                    for (int i = size - 2; i >= 0; i--)
+                        bits.Set(i, false);
                     break;
                 case 9:
                     bits.Set(size - 1, true);
-                    var flag13 = true;
+                    bits.Set(size - 2, false);
+                    bits.Set(size - 3, false);
                     for (int i = size - 4; i >= 0; i--)
-                    {
-                        bits.Set(i, flag13);
-                        flag13 = !flag13;
-                    }
+                        bits.Set(i, true);
                     break;
-                //supplementary types
                 case 10:
-                    var flag1 = true;
-                    for (int i = size - 1; i >= 0; i--)
-                    {
-                        bits.Set(i, flag1);
-                        flag1 = !flag1;
-                    }
+                    bits.Set(size - 1, true);
+                    bits.Set(size - 2, false);
+                    bits.Set(size - 3, true);
+                    for (int i = size - 4; i >= 0; i--)
+                        bits.Set(i, false);
                     break;
                 case 11:
-                    for (int i = 0; i < size; i++)
-                        bits.Set(i, true);
+                    bits.Set(size - 1, true);
                     bits.Set(size - 2, false);
+                    bits.Set(size - 3, true);
+                    for (int i = size - 4; i >= 0; i--)
+                        bits.Set(i, true);
                     break;
                 case 12:
-                    if (size % 2 == 0)
-                    {
-                        bits.Set(0, false);
-                        bits.Set(1, false);
-                        var flag7 = false;
-                        for (int i = size - 3; i >= 2; i--)
-                        {
-                            bits.Set(i, flag7);
-                            flag7 = !flag7;
-                        }
-                        bits.Set(size - 2, true);
-                        bits.Set(size - 1, true);
-                    }
-                    else
-                    {
-                        bits.Set(0, true);
-                        bits.Set(1, false);
-                        var flag7 = false;
-                        for (int i = size - 3; i >= 2; i--)
-                        {
-                            bits.Set(i, flag7);
-                            flag7 = !flag7;
-                        }
-                        bits.Set(size - 2, true);
-                        bits.Set(size - 1, true);
-                    }
+                    bits.Set(size - 1, true);
+                    bits.Set(size - 2, true);
+                    bits.Set(size - 3, false);
+                    for (int i = size - 4; i >= 0; i--)
+                        bits.Set(i, false);
                     break;
                 case 13:
-                    if (size % 2 == 0)
-                    {
-                        bits.Set(0, true);
-                        bits.Set(1, false);
-                        var flag15 = true;
-                        for (int i = size - 3; i >= 2; i--)
-                        {
-                            bits.Set(i, flag15);
-                            flag15 = !flag15;
-                        }
-                        bits.Set(size - 2, true);
-                        bits.Set(size - 1, true);
-                    }
-                    else
-                    {
-                        bits.Set(0, false);
-                        bits.Set(1, false);
-                        var flag15 = true;
-                        for (int i = size - 3; i >= 2; i--)
-                        {
-                            bits.Set(i, flag15);
-                            flag15 = !flag15;
-                        }
-                        bits.Set(size - 2, true);
-                        bits.Set(size - 1, true);
-                    }
+                    bits.Set(size - 1, true);
+                    bits.Set(size - 2, true);
+                    bits.Set(size - 3, false);
+                    for (int i = size - 4; i >= 0; i--)
+                        bits.Set(i, true);
                     break;
                 case 14:
-                    bits.Set(0, false);
-                    for (int i = 1; i < size; i++)
-                        bits.Set(i, true);
+                    bits.Set(size - 1, true);
+                    bits.Set(size - 2, true);
+                    bits.Set(size - 3, true);
+                    for (int i = size - 4; i >= 0; i--)
+                        bits.Set(i, false);
                     break;
                 case 15:
                     for (int i = 0; i < size; i++)
                         bits.Set(i, true);
-                    break;
+                    break; 
+                    //case 0:
+                    //    for (int i = 0; i < size; i++)
+                    //        bits.Set(i, false);
+                    //    break;
+                    //case 1:
+                    //    bits.Set(0, true);
+                    //    for (int i = 1; i < size; i++)
+                    //        bits.Set(i, false);
+                    //    break;
+                    //case 2:
+                    //    if (size % 2 == 0)
+                    //    {
+                    //        bits.Set(0, false);
+                    //        bits.Set(1, true);
+                    //        var flag10 = false;
+                    //        for (int i = size - 3; i >= 2; i--)
+                    //        {
+                    //            bits.Set(i, flag10);
+                    //            flag10 = !flag10;
+                    //        }
+                    //        bits.Set(size - 2, false);
+                    //        bits.Set(size - 1, false);
+                    //    }
+                    //    else
+                    //    {
+                    //        bits.Set(0, true);
+                    //        bits.Set(1, true);
+                    //        var flag10 = false;
+                    //        for (int i = size - 3; i >= 2; i--)
+                    //        {
+                    //            bits.Set(i, flag10);
+                    //            flag10 = !flag10;
+                    //        }
+                    //        bits.Set(size - 2, false);
+                    //        bits.Set(size - 1, false);
+                    //    }
+                    //    break;
+                    //case 3:
+                    //    if (size % 2 == 0)
+                    //    {
+                    //        bits.Set(0, true);
+                    //        bits.Set(1, true);
+                    //        var flag2 = true;
+                    //        for (int i = size - 3; i >= 2; i--)
+                    //        {
+                    //            bits.Set(i, flag2);
+                    //            flag2 = !flag2;
+                    //        }
+                    //        bits.Set(size - 2, false);
+                    //        bits.Set(size - 1, false);
+                    //    }
+                    //    else
+                    //    {
+                    //        bits.Set(0, false);
+                    //        bits.Set(1, true);
+                    //        var flag2 = true;
+                    //        for (int i = size - 3; i >= 2; i--)
+                    //        {
+                    //            bits.Set(i, flag2);
+                    //            flag2 = !flag2;
+                    //        }
+                    //        bits.Set(size - 2, false);
+                    //        bits.Set(size - 1, false);
+                    //    }
+                    //    break;
+                    //case 4:
+                    //    bits.Set(size - 2, true);
+                    //    break;
+                    //case 5:
+                    //    var flag3 = false;
+                    //    for (int i = size - 1; i >= 0; i--)
+                    //    {
+                    //        bits.Set(i, flag3);
+                    //        flag3 = !flag3;
+                    //    }
+                    //    break;
+                    //case 6:
+                    //    bits.Set(size - 2, true);
+                    //    var flag12 = true;
+                    //    for (int i = size - 3; i >= 0; i--)
+                    //    {
+                    //        bits.Set(i, flag12);
+                    //        flag12 = !flag12;
+                    //    }
+                    //    break;
+                    //case 7:
+                    //    for (int i = 0; i < size - 1; i++)
+                    //        bits.Set(i, true);
+                    //    bits.Set(size - 1, false);
+                    //    break;
+                    //case 8:
+                    //    for (int i = 0; i < size - 1; i++)
+                    //        bits.Set(i, false);
+                    //    bits.Set(size - 1, true);
+                    //    break;
+                    //case 9:
+                    //    bits.Set(size - 1, true);
+                    //    var flag13 = true;
+                    //    for (int i = size - 4; i >= 0; i--)
+                    //    {
+                    //        bits.Set(i, flag13);
+                    //        flag13 = !flag13;
+                    //    }
+                    //    break;
+                    ////supplementary types
+                    //case 10:
+                    //    var flag1 = true;
+                    //    for (int i = size - 1; i >= 0; i--)
+                    //    {
+                    //        bits.Set(i, flag1);
+                    //        flag1 = !flag1;
+                    //    }
+                    //    break;
+                    //case 11:
+                    //    for (int i = 0; i < size; i++)
+                    //        bits.Set(i, true);
+                    //    bits.Set(size - 2, false);
+                    //    break;
+                    //case 12:
+                    //    if (size % 2 == 0)
+                    //    {
+                    //        bits.Set(0, false);
+                    //        bits.Set(1, false);
+                    //        var flag7 = false;
+                    //        for (int i = size - 3; i >= 2; i--)
+                    //        {
+                    //            bits.Set(i, flag7);
+                    //            flag7 = !flag7;
+                    //        }
+                    //        bits.Set(size - 2, true);
+                    //        bits.Set(size - 1, true);
+                    //    }
+                    //    else
+                    //    {
+                    //        bits.Set(0, true);
+                    //        bits.Set(1, false);
+                    //        var flag7 = false;
+                    //        for (int i = size - 3; i >= 2; i--)
+                    //        {
+                    //            bits.Set(i, flag7);
+                    //            flag7 = !flag7;
+                    //        }
+                    //        bits.Set(size - 2, true);
+                    //        bits.Set(size - 1, true);
+                    //    }
+                    //    break;
+                    //case 13:
+                    //    if (size % 2 == 0)
+                    //    {
+                    //        bits.Set(0, true);
+                    //        bits.Set(1, false);
+                    //        var flag15 = true;
+                    //        for (int i = size - 3; i >= 2; i--)
+                    //        {
+                    //            bits.Set(i, flag15);
+                    //            flag15 = !flag15;
+                    //        }
+                    //        bits.Set(size - 2, true);
+                    //        bits.Set(size - 1, true);
+                    //    }
+                    //    else
+                    //    {
+                    //        bits.Set(0, false);
+                    //        bits.Set(1, false);
+                    //        var flag15 = true;
+                    //        for (int i = size - 3; i >= 2; i--)
+                    //        {
+                    //            bits.Set(i, flag15);
+                    //            flag15 = !flag15;
+                    //        }
+                    //        bits.Set(size - 2, true);
+                    //        bits.Set(size - 1, true);
+                    //    }
+                    //    break;
+                    //case 14:
+                    //    bits.Set(0, false);
+                    //    for (int i = 1; i < size; i++)
+                    //        bits.Set(i, true);
+                    //    break;
+                    //case 15:
+                    //    for (int i = 0; i < size; i++)
+                    //        bits.Set(i, true);
+                    //    break;
             }
             return bits;
         }
